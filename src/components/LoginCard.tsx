@@ -1,9 +1,10 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 import { User, Shield, Users } from 'lucide-react';
 
 interface LoginCardProps {
@@ -16,12 +17,27 @@ interface LoginCardProps {
 const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(`${userType} login attempt:`, { email, password });
-    // Mock login - in real app this would call an API
-    alert(`${title} login successful! (Mock)`);
+    
+    // Mock login success
+    toast({
+      title: "Login Successful",
+      description: `Welcome back, ${title}!`,
+    });
+
+    // Redirect based on user type
+    if (userType === 'admin') {
+      navigate('/admin/dashboard');
+    } else if (userType === 'coach') {
+      navigate('/coach/dashboard');
+    } else if (userType === 'parent') {
+      navigate('/parent/dashboard');
+    }
   };
 
   const getCardStyles = () => {
