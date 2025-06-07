@@ -82,7 +82,7 @@ const StudentAttendanceManager = () => {
         return (
           <Button 
             onClick={onClick}
-            className="bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-1 rounded-lg font-medium h-8"
+            className="bg-green-500 text-white hover:bg-green-600 px-3 py-1 rounded-lg font-medium h-8"
           >
             Present
           </Button>
@@ -91,8 +91,7 @@ const StudentAttendanceManager = () => {
         return (
           <Button 
             onClick={onClick}
-            variant="destructive"
-            className="px-3 py-1 rounded-lg font-medium h-8"
+            className="bg-red-500 text-white hover:bg-red-600 px-3 py-1 rounded-lg font-medium h-8"
           >
             Absent
           </Button>
@@ -101,8 +100,7 @@ const StudentAttendanceManager = () => {
         return (
           <Button 
             onClick={onClick}
-            variant="secondary"
-            className="px-3 py-1 rounded-lg font-medium h-8"
+            className="bg-yellow-500 text-white hover:bg-yellow-600 px-3 py-1 rounded-lg font-medium h-8"
           >
             Late
           </Button>
