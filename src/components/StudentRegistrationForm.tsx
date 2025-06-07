@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -76,6 +75,11 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
     
     onSuccess(credentials);
   };
+
+  // Calculate date range: 3 years ago to today
+  const today = new Date();
+  const threeYearsAgo = new Date();
+  threeYearsAgo.setFullYear(today.getFullYear() - 3);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4">
@@ -166,7 +170,7 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                             selected={field.value}
                             onSelect={field.onChange}
                             disabled={(date) =>
-                              date > new Date() || date < new Date("1900-01-01")
+                              date > today || date < threeYearsAgo
                             }
                             initialFocus
                             className="pointer-events-auto"
