@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -449,8 +450,15 @@ const AdminDashboard = () => {
                             <Calendar
                               mode="single"
                               selected={dateRange.from}
-                              onSelect={handleStartDateSelect}
-                              disabled={(date) => date > new Date()}
+                              onSelect={(date) => {
+                                if (date) {
+                                  setDateRange(prev => ({
+                                    ...prev,
+                                    from: date
+                                  }));
+                                  setIsStartDatePickerOpen(false);
+                                }
+                              }}
                               initialFocus
                             />
                           </PopoverContent>
@@ -474,8 +482,16 @@ const AdminDashboard = () => {
                             <Calendar
                               mode="single"
                               selected={dateRange.to}
-                              onSelect={handleEndDateSelect}
-                              disabled={(date) => date > new Date() || date < dateRange.from}
+                              onSelect={(date) => {
+                                if (date) {
+                                  setDateRange(prev => ({
+                                    ...prev,
+                                    to: date
+                                  }));
+                                  setIsEndDatePickerOpen(false);
+                                }
+                              }}
+                              disabled={(date) => date < dateRange.from}
                               initialFocus
                             />
                           </PopoverContent>
