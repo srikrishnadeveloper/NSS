@@ -17,7 +17,7 @@ interface Student {
 }
 
 const StudentAttendanceManager = () => {
-  const [selectedBatch, setSelectedBatch] = useState<string>('');
+  const [selectedBatch, setSelectedBatch] = useState<string>('all');
   const [editingStudent, setEditingStudent] = useState<string | null>(null);
   const { toast } = useToast();
 
@@ -32,9 +32,9 @@ const StudentAttendanceManager = () => {
 
   const batches = ['Morning Batch A', 'Evening Batch B', 'Weekend Batch C'];
 
-  const filteredStudents = selectedBatch 
-    ? students.filter(student => student.batch === selectedBatch)
-    : students;
+  const filteredStudents = selectedBatch === 'all'
+    ? students
+    : students.filter(student => student.batch === selectedBatch);
 
   const updateStudentStatus = (studentId: string, newStatus: 'present' | 'absent' | 'late') => {
     setStudents(prev => 
@@ -85,7 +85,7 @@ const StudentAttendanceManager = () => {
                 <SelectValue placeholder="Select a batch" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Batches</SelectItem>
+                <SelectItem value="all">All Batches</SelectItem>
                 {batches.map((batch) => (
                   <SelectItem key={batch} value={batch}>
                     {batch}
