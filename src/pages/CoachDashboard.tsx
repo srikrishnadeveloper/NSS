@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { User } from 'lucide-react';
 import CoachAttendanceCard from '@/components/CoachAttendanceCard';
 import StudentAttendanceManager from '@/components/StudentAttendanceManager';
 import ActivityUpdateCard from '@/components/ActivityUpdateCard';
@@ -11,14 +10,8 @@ const CoachDashboard = () => {
       {/* Mobile App Header */}
       <div className="sticky top-0 z-50 bg-white shadow-sm border-b border-gray-200 px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-primary rounded-lg">
-              <User className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Coach Portal</h1>
-              <p className="text-sm text-muted-foreground">Monday, June 7</p>
-            </div>
+          <div>
+            <h1 className="text-xl font-bold text-foreground">Coach Portal</h1>
           </div>
         </div>
       </div>
