@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { format, subDays, isWithinInterval } from 'date-fns';
 import { cn } from '@/lib/utils';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 import StudentRegistrationForm from '@/components/StudentRegistrationForm';
 import ParentCredentialsCard from '@/components/ParentCredentialsCard';
 
@@ -177,8 +178,8 @@ const AdminDashboard = () => {
       record.batch
     ]);
     
-    // Add table
-    (pdf as any).autoTable({
+    // Add table using autoTable
+    autoTable(pdf, {
       head: [['Student Name', 'Date', 'Status', 'Sport', 'Batch']],
       body: tableData,
       startY: 45,
