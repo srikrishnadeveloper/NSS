@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Shield, MessageSquare, Calendar as CalendarIcon, UserPlus, CreditCard, Phone, Users, MapPin, Clock, Download } from 'lucide-react';
+import { Shield, MessageSquare, Calendar as CalendarIcon, UserPlus, CreditCard, Phone, Users, MapPin, Clock, Download, Activity } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format, subDays, isWithinInterval } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -14,6 +13,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import StudentRegistrationForm from '@/components/StudentRegistrationForm';
 import ParentCredentialsCard from '@/components/ParentCredentialsCard';
+import DrillActivityCard from '@/components/DrillActivityCard';
 
 // Mock data
 const mockStudents = [
@@ -83,6 +83,76 @@ const mockCoachAttendance = [
   },
 ];
 
+// Mock data for drill activities
+const mockDrillActivities = [
+  {
+    id: 1,
+    title: 'Advanced Soccer Dribbling Drills',
+    description: 'Intensive dribbling practice focusing on ball control, quick turns, and speed. Students practiced cone weaving and 1v1 scenarios.',
+    image: 'photo-1431576901776-e539bd916ba2',
+    date: '2024-01-24',
+    sport: 'Soccer',
+    participants: 12,
+    duration: '45 mins',
+    instructor: 'Coach Michael'
+  },
+  {
+    id: 2,
+    title: 'Basketball Shooting Fundamentals',
+    description: 'Free throw practice and 3-point shooting drills. Focus on proper form, follow-through, and consistency.',
+    image: 'photo-1546519638-68e109498ffc',
+    date: '2024-01-23',
+    sport: 'Basketball',
+    participants: 8,
+    duration: '60 mins',
+    instructor: 'Coach Sarah'
+  },
+  {
+    id: 3,
+    title: 'Tennis Backhand Technique',
+    description: 'Working on two-handed backhand strokes, footwork positioning, and cross-court rallies.',
+    image: 'photo-1622279457486-62dcc4a431d6',
+    date: '2024-01-22',
+    sport: 'Tennis',
+    participants: 6,
+    duration: '50 mins',
+    instructor: 'Coach David'
+  },
+  {
+    id: 4,
+    title: 'Swimming Stroke Improvement',
+    description: 'Freestyle and backstroke technique refinement. Focus on breathing patterns and stroke efficiency.',
+    image: 'photo-1530549387789-4c1017266635',
+    date: '2024-01-21',
+    sport: 'Swimming',
+    participants: 10,
+    duration: '55 mins',
+    instructor: 'Coach Lisa'
+  },
+  {
+    id: 5,
+    title: 'Soccer Tactical Positioning',
+    description: 'Team formation drills, defensive positioning, and offensive strategies for game situations.',
+    image: 'photo-1551698618-1dfe5d97d256',
+    date: '2024-01-20',
+    sport: 'Soccer',
+    participants: 15,
+    duration: '70 mins',
+    instructor: 'Coach Michael'
+  },
+  {
+    id: 6,
+    title: 'Basketball Defense Drills',
+    description: 'Man-to-man defense, help defense concepts, and defensive slides practice.',
+    image: 'photo-1505666287802-931dc83948e9',
+    date: '2024-01-19',
+    sport: 'Basketball',
+    participants: 9,
+    duration: '40 mins',
+    instructor: 'Coach Sarah'
+  }
+];
+
 // Extended mock data for 45 days attendance
 const generateMockAttendanceData = () => {
   const students = ['John Smith', 'Sarah Johnson', 'Mike Davis', 'Emma Wilson', 'Alex Brown', 'Lisa Chen', 'David Wilson', 'Sophie Taylor'];
@@ -116,6 +186,7 @@ const AdminDashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [parentCredentials, setParentCredentials] = useState(null);
   const [attendanceView, setAttendanceView] = useState('student');
+  const [showDrillHistory, setShowDrillHistory] = useState(false);
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
     from: new Date(),
     to: new Date()
@@ -385,7 +456,7 @@ const AdminDashboard = () => {
             <Card className="shadow-sm">
               <CardHeader className="pb-3">
                 <CardTitle className="flex items-center text-base sm:text-lg">
-                  <MessageSquare className="h-4 w-4 mr-2" />
+                  <MessageSquare className="h-4 w-4 mr-1" />
                   WhatsApp Messages
                 </CardTitle>
                 <CardDescription className="text-xs sm:text-sm">View automated message logs</CardDescription>
@@ -500,120 +571,151 @@ const AdminDashboard = () => {
                     </div>
                     
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500">
-                        ({filteredAttendanceData.length} records)
-                      </span>
-                      
-                      <Button 
-                        onClick={downloadAttendancePDF}
-                        size="sm"
-                        className="bg-green-600 hover:bg-green-700 text-xs"
-                      >
-                        <Download className="h-3 w-3 mr-1" />
-                        Download PDF
-                      </Button>
+                      <div className="flex space-x-2">
+                        <Button 
+                          onClick={() => setShowDrillHistory(!showDrillHistory)}
+                          size="sm"
+                          variant={showDrillHistory ? "default" : "outline"}
+                          className="text-xs"
+                        >
+                          <Activity className="h-3 w-3 mr-1" />
+                          Drill History
+                        </Button>
+                        
+                        <Button 
+                          onClick={downloadAttendancePDF}
+                          size="sm"
+                          className="bg-green-600 hover:bg-green-700 text-xs"
+                        >
+                          <Download className="h-3 w-3 mr-1" />
+                          Download PDF
+                        </Button>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex space-x-2">
-                    <Button 
-                      variant={attendanceView === 'student' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setAttendanceView('student')}
-                      className="flex-1 text-xs"
-                    >
-                      <Users className="h-3 w-3 mr-1" />
-                      Students
-                    </Button>
-                    <Button 
-                      variant={attendanceView === 'coach' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setAttendanceView('coach')}
-                      className="flex-1 text-xs"
-                    >
-                      <Clock className="h-3 w-3 mr-1" />
-                      Coaches
-                    </Button>
-                  </div>
+                  {!showDrillHistory && (
+                    <div className="flex space-x-2">
+                      <Button 
+                        variant={attendanceView === 'student' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setAttendanceView('student')}
+                        className="flex-1 text-xs"
+                      >
+                        <Users className="h-3 w-3 mr-1" />
+                        Students
+                      </Button>
+                      <Button 
+                        variant={attendanceView === 'coach' ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => setAttendanceView('coach')}
+                        className="flex-1 text-xs"
+                      >
+                        <Clock className="h-3 w-3 mr-1" />
+                        Coaches
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </CardHeader>
               <CardContent className="space-y-3 px-3 sm:px-6">
-                {attendanceView === 'student' ? (
-                  <>
-                    {filteredAttendanceData.slice(0, 20).map((record) => (
-                      <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
-                        <div className="flex justify-between items-start mb-3">
-                          <div>
-                            <h3 className="font-semibold text-gray-900 text-sm">{record.studentName}</h3>
-                            <p className="text-xs text-gray-600">{format(new Date(record.date), 'MMM dd, yyyy')}</p>
-                          </div>
-                          {getAttendanceStatusBadge(record.status)}
-                        </div>
-                        <div className="space-y-2 text-xs text-gray-600">
-                          <div className="flex justify-between items-center">
-                            <span>Batch/Group:</span>
-                            <span className="font-medium text-right">{record.batch}</span>
-                          </div>
-                          <div className="flex justify-between items-center">
-                            <span>Sport:</span>
-                            <span className="font-medium">{record.sport}</span>
-                          </div>
-                        </div>
-                      </Card>
-                    ))}
-                    {filteredAttendanceData.length > 20 && (
-                      <div className="text-center text-xs text-gray-500 py-2">
-                        Showing 20 of {filteredAttendanceData.length} records. Download PDF for full report.
-                      </div>
-                    )}
-                  </>
+                {showDrillHistory ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-sm font-medium text-gray-900">Recent Drill Activities</h3>
+                      <span className="text-xs text-gray-500">({mockDrillActivities.length} activities)</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {mockDrillActivities.map((activity) => (
+                        <DrillActivityCard key={activity.id} activity={activity} />
+                      ))}
+                    </div>
+                  </div>
                 ) : (
                   <>
-                    {mockCoachAttendance.map((record) => (
-                      <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
-                        <div className="flex justify-between items-start mb-3">
-                          <div>
-                            <h3 className="font-semibold text-gray-900 text-sm">{record.coachName}</h3>
-                            <p className="text-xs text-gray-600">{record.date}</p>
-                          </div>
-                          <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">{record.sport}</Badge>
+                    {attendanceView === 'student' ? (
+                      <>
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs text-gray-500">
+                            ({filteredAttendanceData.length} records)
+                          </span>
                         </div>
-                        <div className="space-y-3 text-xs text-gray-600">
-                          <div className="flex justify-between items-center">
-                            <span>Batch:</span>
-                            <span className="font-medium text-right">{record.batch}</span>
-                          </div>
-                          <div className="space-y-2">
-                            <div className="bg-gray-50 p-2 rounded">
-                              <div className="flex items-center justify-between mb-1">
-                                <div className="flex items-center space-x-1">
-                                  <Clock className="h-3 w-3 text-green-600" />
-                                  <span className="font-medium text-green-600">Entry</span>
-                                </div>
-                                <span className="font-medium">{record.entryTime}</span>
+                        {filteredAttendanceData.slice(0, 20).map((record) => (
+                          <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <h3 className="font-semibold text-gray-900 text-sm">{record.studentName}</h3>
+                                <p className="text-xs text-gray-600">{format(new Date(record.date), 'MMM dd, yyyy')}</p>
                               </div>
-                              <div className="flex items-center space-x-1 text-gray-500">
-                                <MapPin className="h-3 w-3" />
-                                <span>{record.entryLocation}</span>
+                              {getAttendanceStatusBadge(record.status)}
+                            </div>
+                            <div className="space-y-2 text-xs text-gray-600">
+                              <div className="flex justify-between items-center">
+                                <span>Batch/Group:</span>
+                                <span className="font-medium text-right">{record.batch}</span>
+                              </div>
+                              <div className="flex justify-between items-center">
+                                <span>Sport:</span>
+                                <span className="font-medium">{record.sport}</span>
                               </div>
                             </div>
-                            <div className="bg-gray-50 p-2 rounded">
-                              <div className="flex items-center justify-between mb-1">
-                                <div className="flex items-center space-x-1">
-                                  <Clock className="h-3 w-3 text-red-600" />
-                                  <span className="font-medium text-red-600">Exit</span>
-                                </div>
-                                <span className="font-medium">{record.exitTime}</span>
+                          </Card>
+                        ))}
+                        {filteredAttendanceData.length > 20 && (
+                          <div className="text-center text-xs text-gray-500 py-2">
+                            Showing 20 of {filteredAttendanceData.length} records. Download PDF for full report.
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {mockCoachAttendance.map((record) => (
+                          <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
+                            <div className="flex justify-between items-start mb-3">
+                              <div>
+                                <h3 className="font-semibold text-gray-900 text-sm">{record.coachName}</h3>
+                                <p className="text-xs text-gray-600">{record.date}</p>
                               </div>
-                              <div className="flex items-center space-x-1 text-gray-500">
-                                <MapPin className="h-3 w-3" />
-                                <span>{record.exitLocation}</span>
+                              <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 text-xs">{record.sport}</Badge>
+                            </div>
+                            <div className="space-y-3 text-xs text-gray-600">
+                              <div className="flex justify-between items-center">
+                                <span>Batch:</span>
+                                <span className="font-medium text-right">{record.batch}</span>
+                              </div>
+                              <div className="space-y-2">
+                                <div className="bg-gray-50 p-2 rounded">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <div className="flex items-center space-x-1">
+                                      <Clock className="h-3 w-3 text-green-600" />
+                                      <span className="font-medium text-green-600">Entry</span>
+                                    </div>
+                                    <span className="font-medium">{record.entryTime}</span>
+                                  </div>
+                                  <div className="flex items-center space-x-1 text-gray-500">
+                                    <MapPin className="h-3 w-3" />
+                                    <span>{record.entryLocation}</span>
+                                  </div>
+                                </div>
+                                <div className="bg-gray-50 p-2 rounded">
+                                  <div className="flex items-center justify-between mb-1">
+                                    <div className="flex items-center space-x-1">
+                                      <Clock className="h-3 w-3 text-red-600" />
+                                      <span className="font-medium text-red-600">Exit</span>
+                                    </div>
+                                    <span className="font-medium">{record.exitTime}</span>
+                                  </div>
+                                  <div className="flex items-center space-x-1 text-gray-500">
+                                    <MapPin className="h-3 w-3" />
+                                    <span>{record.exitLocation}</span>
+                                  </div>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                      </Card>
-                    ))}
+                          </Card>
+                        ))}
+                      </>
+                    )}
                   </>
                 )}
               </CardContent>
