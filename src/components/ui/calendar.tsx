@@ -14,6 +14,10 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const today = new Date();
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -56,6 +60,15 @@ function Calendar({
         IconLeft: ({ ..._props }) => <ChevronLeft className="h-4 w-4" />,
         IconRight: ({ ..._props }) => <ChevronRight className="h-4 w-4" />,
       }}
+      disabled={(date) => date > today}
+      onMonthChange={(month) => {
+        // Prevent navigation to future months
+        if (month.getFullYear() > currentYear || 
+            (month.getFullYear() === currentYear && month.getMonth() > currentMonth)) {
+          return false;
+        }
+      }}
+      toMonth={new Date(currentYear, currentMonth)}
       {...props}
     />
   );
