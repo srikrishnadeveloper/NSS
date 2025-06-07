@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -117,11 +116,11 @@ const AdminDashboard = () => {
   const [parentCredentials, setParentCredentials] = useState(null);
   const [attendanceView, setAttendanceView] = useState('student');
   const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
-    from: subDays(new Date(), 45),
+    from: new Date(),
     to: new Date()
   });
-  const [selectedDate, setSelectedDate] = useState<Date>();
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
+  const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false);
   const { toast } = useToast();
 
   // Filter attendance data based on date range
@@ -210,14 +209,23 @@ const AdminDashboard = () => {
     });
   };
 
-  const handleDateSelect = (date: Date | undefined) => {
+  const handleStartDateSelect = (date: Date | undefined) => {
     if (date) {
-      setDateRange({
-        from: subDays(date, 45),
+      setDateRange(prev => ({
+        ...prev,
+        from: date
+      }));
+      setIsStartDatePickerOpen(false);
+    }
+  };
+
+  const handleEndDateSelect = (date: Date | undefined) => {
+    if (date) {
+      setDateRange(prev => ({
+        ...prev,
         to: date
-      });
-      setSelectedDate(date);
-      setIsDatePickerOpen(false);
+      }));
+      setIsEndDatePickerOpen(false);
     }
   };
 
@@ -417,47 +425,78 @@ const AdminDashboard = () => {
                       Attendance Management
                     </CardTitle>
                     <CardDescription className="text-xs sm:text-sm">
-                      View attendance records for the last 45 days
+                      Select date range to view attendance records
                     </CardDescription>
                   </div>
                   
-                  {/* Date Range Picker and Download Controls */}
-                  <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-                    <div className="flex items-center space-x-2">
-                      <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
-                        <PopoverTrigger asChild>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="text-xs"
-                          >
-                            <CalendarIcon className="h-3 w-3 mr-1" />
-                            {selectedDate ? format(selectedDate, 'MMM dd, yyyy') : 'Select End Date'}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={selectedDate}
-                            onSelect={handleDateSelect}
-                            initialFocus
-                            className={cn("p-3 pointer-events-auto")}
-                          />
-                        </PopoverContent>
-                      </Popover>
+                  {/* Date Range Picker Controls */}
+                  <div className="space-y-3">
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="space-y-1">
+                        <label className="text-xs font-medium text-gray-700">Start Date</label>
+                        <Popover open={isStartDatePickerOpen} onOpenChange={setIsStartDatePickerOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full text-xs justify-start"
+                            >
+                              <CalendarIcon className="h-3 w-3 mr-1" />
+                              {format(dateRange.from, 'MMM dd, yyyy')}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={dateRange.from}
+                              onSelect={handleStartDateSelect}
+                              disabled={(date) => date > new Date()}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                      
+                      <div className="space-y-1">
+                        <label className="text-xs font-medium text-gray-700">End Date</label>
+                        <Popover open={isEndDatePickerOpen} onOpenChange={setIsEndDatePickerOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="w-full text-xs justify-start"
+                            >
+                              <CalendarIcon className="h-3 w-3 mr-1" />
+                              {format(dateRange.to, 'MMM dd, yyyy')}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={dateRange.to}
+                              onSelect={handleEndDateSelect}
+                              disabled={(date) => date > new Date() || date < dateRange.from}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-500">
                         ({filteredAttendanceData.length} records)
                       </span>
+                      
+                      <Button 
+                        onClick={downloadAttendancePDF}
+                        size="sm"
+                        className="bg-green-600 hover:bg-green-700 text-xs"
+                      >
+                        <Download className="h-3 w-3 mr-1" />
+                        Download PDF
+                      </Button>
                     </div>
-                    
-                    <Button 
-                      onClick={downloadAttendancePDF}
-                      size="sm"
-                      className="bg-green-600 hover:bg-green-700 text-xs"
-                    >
-                      <Download className="h-3 w-3 mr-1" />
-                      Download PDF
-                    </Button>
                   </div>
 
                   <div className="flex space-x-2">
