@@ -1,7 +1,7 @@
 
 import React from 'react';
 import Header from '@/components/Header';
-import LoginCard from '@/components/LoginCard';
+import UserTypeCard from '@/components/UserTypeCard';
 import { Shield, Users, User } from 'lucide-react';
 
 const Index = () => {
@@ -11,25 +11,28 @@ const Index = () => {
         <Header />
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <LoginCard
+          <UserTypeCard
             userType="admin"
             title="Administrator"
             description="Full system access and management capabilities"
-            icon={<Shield className="h-8 w-8 text-red-600" />}
+            icon={<Shield className="h-12 w-12 text-red-600" />}
+            href="/login/admin"
           />
           
-          <LoginCard
+          <UserTypeCard
             userType="coach"
             title="Coach"
             description="Manage teams, training sessions, and athlete progress"
-            icon={<User className="h-8 w-8 text-blue-600" />}
+            icon={<User className="h-12 w-12 text-blue-600" />}
+            href="/login/coach"
           />
           
-          <LoginCard
+          <UserTypeCard
             userType="parent"
             title="Parent"
             description="Track your child's progress and school communications"
-            icon={<Users className="h-8 w-8 text-green-600" />}
+            icon={<Users className="h-12 w-12 text-green-600" />}
+            href="/login/parent"
           />
         </div>
         
