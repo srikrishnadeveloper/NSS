@@ -54,100 +54,104 @@ const StudentAttendanceManager = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'present':
-        return <Badge className="bg-green-100 text-green-700 hover:bg-green-100 text-xs px-2 py-1">Present</Badge>;
+        return <Badge className="bg-green-100 text-green-700 hover:bg-green-100 px-3 py-1 rounded-xl font-medium">Present</Badge>;
       case 'absent':
-        return <Badge className="bg-red-100 text-red-700 hover:bg-red-100 text-xs px-2 py-1">Absent</Badge>;
+        return <Badge className="bg-red-100 text-red-700 hover:bg-red-100 px-3 py-1 rounded-xl font-medium">Absent</Badge>;
       case 'late':
-        return <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100 text-xs px-2 py-1">Late</Badge>;
+        return <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100 px-3 py-1 rounded-xl font-medium">Late</Badge>;
       default:
-        return <Badge variant="secondary" className="text-xs px-2 py-1">Unknown</Badge>;
+        return <Badge variant="secondary" className="px-3 py-1 rounded-xl font-medium">Unknown</Badge>;
     }
   };
 
   return (
-    <Card className="shadow-sm border-0 bg-white rounded-2xl overflow-hidden">
-      <CardHeader className="pb-4 px-4 pt-4">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      {/* Header */}
+      <div className="px-5 py-4 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-50 rounded-xl">
-              <Users className="h-5 w-5 text-purple-600" />
+            <div className="p-3 bg-purple-100 rounded-2xl">
+              <Users className="h-6 w-6 text-purple-600" />
             </div>
             <div>
-              <CardTitle className="text-lg font-semibold">Student Attendance</CardTitle>
-              <CardDescription className="text-sm text-gray-500">Manage batch attendance</CardDescription>
+              <h3 className="text-lg font-bold text-gray-900">Student Attendance</h3>
+              <p className="text-sm text-gray-500">Manage batch attendance</p>
             </div>
           </div>
-          <Badge variant="secondary" className="text-xs px-2 py-1 bg-gray-100 text-gray-600">
+          <Badge variant="secondary" className="px-3 py-1 rounded-xl font-medium bg-gray-100 text-gray-600">
             {filteredStudents.length} students
           </Badge>
         </div>
-      </CardHeader>
+      </div>
       
-      <CardContent className="px-4 pb-4 space-y-4">
+      {/* Content */}
+      <div className="px-5 py-5 space-y-5">
         {/* Batch Filter */}
-        <div className="flex items-center gap-2">
-          <Filter className="h-4 w-4 text-gray-400" />
-          <Select value={selectedBatch} onValueChange={setSelectedBatch}>
-            <SelectTrigger className="flex-1 h-10 rounded-xl border-gray-200">
-              <SelectValue placeholder="Filter by batch" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Batches</SelectItem>
-              {batches.map((batch) => (
-                <SelectItem key={batch} value={batch}>
-                  {batch}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="bg-gray-50 rounded-2xl p-4">
+          <div className="flex items-center gap-3">
+            <Filter className="h-5 w-5 text-gray-400" />
+            <Select value={selectedBatch} onValueChange={setSelectedBatch}>
+              <SelectTrigger className="flex-1 h-12 rounded-xl border-gray-200 bg-white shadow-sm">
+                <SelectValue placeholder="Filter by batch" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Batches</SelectItem>
+                {batches.map((batch) => (
+                  <SelectItem key={batch} value={batch}>
+                    {batch}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Attendance Summary */}
-        <div className="grid grid-cols-3 gap-3 p-3 bg-gray-50 rounded-xl">
-          <div className="text-center">
-            <div className="text-xl font-bold text-green-600">
+        <div className="grid grid-cols-3 gap-4">
+          <div className="text-center p-4 bg-green-50 rounded-2xl border border-green-100">
+            <div className="text-2xl font-bold text-green-600">
               {filteredStudents.filter(s => s.status === 'present').length}
             </div>
-            <div className="text-xs text-gray-600">Present</div>
+            <div className="text-sm text-green-600 font-medium">Present</div>
           </div>
-          <div className="text-center">
-            <div className="text-xl font-bold text-red-600">
+          <div className="text-center p-4 bg-red-50 rounded-2xl border border-red-100">
+            <div className="text-2xl font-bold text-red-600">
               {filteredStudents.filter(s => s.status === 'absent').length}
             </div>
-            <div className="text-xs text-gray-600">Absent</div>
+            <div className="text-sm text-red-600 font-medium">Absent</div>
           </div>
-          <div className="text-center">
-            <div className="text-xl font-bold text-yellow-600">
+          <div className="text-center p-4 bg-yellow-50 rounded-2xl border border-yellow-100">
+            <div className="text-2xl font-bold text-yellow-600">
               {filteredStudents.filter(s => s.status === 'late').length}
             </div>
-            <div className="text-xs text-gray-600">Late</div>
+            <div className="text-sm text-yellow-600 font-medium">Late</div>
           </div>
         </div>
 
         {/* Students List */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           {filteredStudents.map((student) => (
-            <div key={student.id} className="bg-gray-50 rounded-xl p-3">
+            <div key={student.id} className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
               <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-white rounded-lg p-2 min-w-fit">
-                      <span className="text-xs font-mono text-gray-600">{student.rollNumber}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-4">
+                    <div className="bg-white rounded-xl p-3 border border-gray-200">
+                      <span className="text-sm font-bold text-gray-700">{student.rollNumber}</span>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-medium text-gray-900 text-sm truncate">{student.name}</div>
-                      <div className="text-xs text-gray-500 truncate">{student.batch}</div>
+                      <div className="font-bold text-gray-900 text-base truncate">{student.name}</div>
+                      <div className="text-sm text-gray-500 truncate font-medium">{student.batch}</div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3 ml-4">
                   {editingStudent === student.id ? (
                     <Select 
                       value={student.status} 
                       onValueChange={(value) => updateStudentStatus(student.id, value as any)}
                     >
-                      <SelectTrigger className="w-24 h-8 text-xs rounded-lg">
+                      <SelectTrigger className="w-28 h-10 rounded-xl border-gray-200 bg-white">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -162,10 +166,10 @@ const StudentAttendanceManager = () => {
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 text-gray-400 hover:text-gray-600"
+                        className="h-10 w-10 p-0 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-xl"
                         onClick={() => setEditingStudent(student.id)}
                       >
-                        <Edit3 className="h-3 w-3" />
+                        <Edit3 className="h-4 w-4" />
                       </Button>
                     </>
                   )}
@@ -174,8 +178,8 @@ const StudentAttendanceManager = () => {
             </div>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

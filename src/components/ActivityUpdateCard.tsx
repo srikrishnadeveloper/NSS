@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -95,38 +94,40 @@ const ActivityUpdateCard = () => {
   };
 
   return (
-    <Card className="shadow-sm border-0 bg-white rounded-2xl overflow-hidden">
-      <CardHeader className="pb-4 px-4 pt-4">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+      {/* Header */}
+      <div className="px-5 py-4 border-b border-gray-100">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-orange-50 rounded-xl">
-              <Camera className="h-5 w-5 text-orange-600" />
+            <div className="p-3 bg-orange-100 rounded-2xl">
+              <Camera className="h-6 w-6 text-orange-600" />
             </div>
             <div>
-              <CardTitle className="text-lg font-semibold">Activity Updates</CardTitle>
-              <CardDescription className="text-sm text-gray-500">Share session highlights</CardDescription>
+              <h3 className="text-lg font-bold text-gray-900">Activity Updates</h3>
+              <p className="text-sm text-gray-500">Share session highlights</p>
             </div>
           </div>
           <Button
             onClick={() => setShowForm(!showForm)}
             size="sm"
-            className="h-8 px-3 text-xs bg-orange-500 hover:bg-orange-600 text-white rounded-lg"
+            className="h-10 px-4 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-medium"
           >
-            <Plus className="h-3 w-3 mr-1" />
+            <Plus className="h-4 w-4 mr-2" />
             New
           </Button>
         </div>
-      </CardHeader>
+      </div>
       
-      <CardContent className="px-4 pb-4 space-y-4">
+      {/* Content */}
+      <div className="px-5 py-5 space-y-5">
         {/* New Activity Form */}
         {showForm && (
-          <div className="bg-gray-50 rounded-xl p-4 space-y-4">
-            <div className="space-y-3">
+          <div className="bg-gray-50 rounded-2xl p-5 space-y-4 border border-gray-100">
+            <div className="space-y-4">
               <div>
-                <Label htmlFor="batch" className="text-sm font-medium text-gray-700">Batch</Label>
+                <Label htmlFor="batch" className="text-sm font-bold text-gray-700 mb-2 block">Batch</Label>
                 <Select value={selectedBatch} onValueChange={setSelectedBatch}>
-                  <SelectTrigger className="mt-1 h-10 rounded-lg">
+                  <SelectTrigger className="h-12 rounded-xl border-gray-200 bg-white shadow-sm">
                     <SelectValue placeholder="Select batch" />
                   </SelectTrigger>
                   <SelectContent>
@@ -140,32 +141,32 @@ const ActivityUpdateCard = () => {
               </div>
               
               <div>
-                <Label htmlFor="title" className="text-sm font-medium text-gray-700">Activity Title</Label>
+                <Label htmlFor="title" className="text-sm font-bold text-gray-700 mb-2 block">Activity Title</Label>
                 <Input
                   id="title"
                   placeholder="e.g., Football Training Session"
                   value={activityTitle}
                   onChange={(e) => setActivityTitle(e.target.value)}
-                  className="mt-1 h-10 rounded-lg"
+                  className="h-12 rounded-xl border-gray-200 bg-white shadow-sm"
                 />
               </div>
 
               <div>
-                <Label htmlFor="description" className="text-sm font-medium text-gray-700">Description</Label>
+                <Label htmlFor="description" className="text-sm font-bold text-gray-700 mb-2 block">Description</Label>
                 <Textarea
                   id="description"
                   placeholder="Describe the activities and achievements..."
                   value={activityDescription}
                   onChange={(e) => setActivityDescription(e.target.value)}
                   rows={3}
-                  className="mt-1 rounded-lg resize-none"
+                  className="rounded-xl resize-none border-gray-200 bg-white shadow-sm"
                 />
               </div>
 
               {/* Photo Upload */}
               <div>
-                <Label className="text-sm font-medium text-gray-700">Photos</Label>
-                <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                <Label className="text-sm font-bold text-gray-700 mb-2 block">Photos</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center bg-white">
                   <input
                     type="file"
                     accept="image/*"
@@ -175,43 +176,43 @@ const ActivityUpdateCard = () => {
                     id="photo-upload"
                   />
                   <label htmlFor="photo-upload" className="cursor-pointer">
-                    <Upload className="h-6 w-6 mx-auto mb-2 text-gray-400" />
-                    <p className="text-sm text-gray-600">Upload photos</p>
+                    <Upload className="h-8 w-8 mx-auto mb-3 text-gray-400" />
+                    <p className="text-sm text-gray-600 font-medium">Upload photos</p>
                   </label>
                 </div>
               </div>
 
               {/* Selected Photos Preview */}
               {selectedPhotos.length > 0 && (
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-3">
                   {selectedPhotos.map((photo, index) => (
                     <div key={index} className="relative group">
-                      <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center border">
-                        <ImageIcon className="h-6 w-6 text-gray-400" />
+                      <div className="aspect-square bg-gray-100 rounded-2xl flex items-center justify-center border border-gray-200">
+                        <ImageIcon className="h-8 w-8 text-gray-400" />
                       </div>
                       <button
                         onClick={() => removePhoto(index)}
-                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity shadow-sm"
                       >
-                        <X className="h-3 w-3" />
+                        <X className="h-4 w-4" />
                       </button>
                     </div>
                   ))}
                 </div>
               )}
 
-              <div className="flex gap-2 pt-2">
+              <div className="flex gap-3 pt-2">
                 <Button
                   onClick={handleSubmitActivity}
                   disabled={isSubmitting}
-                  className="flex-1 h-10 bg-orange-500 hover:bg-orange-600 text-white rounded-lg"
+                  className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-bold"
                 >
                   {isSubmitting ? "Sharing..." : "Share Activity"}
                 </Button>
                 <Button
                   onClick={() => setShowForm(false)}
                   variant="outline"
-                  className="h-10 px-4 rounded-lg"
+                  className="h-12 px-6 rounded-xl border-gray-200"
                 >
                   Cancel
                 </Button>
@@ -221,40 +222,46 @@ const ActivityUpdateCard = () => {
         )}
 
         {/* Recent Activities */}
-        <div className="space-y-3">
-          <h4 className="font-medium text-gray-700 text-sm">Recent Activities</h4>
+        <div className="space-y-4">
+          <h4 className="font-bold text-gray-800">Recent Activities</h4>
           {recentActivities.map((activity) => (
-            <div key={activity.id} className="bg-gray-50 rounded-xl p-3">
+            <div key={activity.id} className="bg-gray-50 rounded-2xl p-4 border border-gray-100">
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
-                  <h5 className="font-medium text-gray-900 text-sm truncate">{activity.title}</h5>
-                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">{activity.description}</p>
-                  <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">
-                    <Calendar className="h-3 w-3" />
-                    <span>{activity.date}</span>
+                  <h5 className="font-bold text-gray-900 truncate">{activity.title}</h5>
+                  <p className="text-sm text-gray-600 mt-1 line-clamp-2">{activity.description}</p>
+                  <div className="flex items-center gap-3 mt-3 text-sm text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <Calendar className="h-4 w-4" />
+                      <span>{activity.date}</span>
+                    </div>
                     <span>•</span>
                     <span>{activity.batch}</span>
                     <span>•</span>
                     <span>{activity.photos.length} photos</span>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 ml-2">
+                <div className="flex items-center gap-3 ml-4">
                   <Badge 
                     variant={activity.status === 'shared' ? 'default' : 'secondary'}
-                    className={`text-xs px-2 py-1 ${activity.status === 'shared' ? 'bg-green-100 text-green-700 hover:bg-green-100' : 'bg-gray-100 text-gray-600'}`}
+                    className={`px-3 py-1 rounded-xl font-medium ${
+                      activity.status === 'shared' 
+                        ? 'bg-green-100 text-green-700 hover:bg-green-100' 
+                        : 'bg-gray-100 text-gray-600'
+                    }`}
                   >
                     {activity.status === 'shared' ? 'Shared' : 'Draft'}
                   </Badge>
-                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                    <Eye className="h-3 w-3" />
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0 rounded-xl hover:bg-gray-100">
+                    <Eye className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
             </div>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 
