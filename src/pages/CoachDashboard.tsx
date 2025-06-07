@@ -11,29 +11,27 @@ import ActivityUpdateCard from '@/components/ActivityUpdateCard';
 const CoachDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
+      <div className="container mx-auto px-4 py-8">
         <Header />
         
-        <div className="mt-4 sm:mt-6 lg:mt-8 mb-4 sm:mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Coach Dashboard</h1>
-          <p className="text-gray-600 mt-1 sm:mt-2 text-sm sm:text-base">Manage your attendance, students, and activities</p>
+        <div className="mt-8 mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Coach Dashboard</h1>
+          <p className="text-gray-600 mt-2">Manage your attendance, students, and activities</p>
         </div>
 
-        <div className="space-y-4 sm:space-y-6">
-          {/* Mobile-first layout: Stack everything vertically on mobile */}
-          
-          {/* Coach Attendance Section - Full width on mobile */}
-          <div className="w-full">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          {/* Coach Attendance Section */}
+          <div className="lg:col-span-1">
             <CoachAttendanceCard />
           </div>
 
-          {/* Student Attendance Section - Full width on mobile */}
-          <div className="w-full">
+          {/* Student Attendance Section */}
+          <div className="lg:col-span-1 xl:col-span-2">
             <StudentAttendanceManager />
           </div>
 
-          {/* Activity Update Section - Full width on mobile */}
-          <div className="w-full">
+          {/* Activity Update Section */}
+          <div className="lg:col-span-2 xl:col-span-3">
             <ActivityUpdateCard />
           </div>
         </div>
