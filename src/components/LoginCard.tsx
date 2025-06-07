@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -15,14 +16,14 @@ interface LoginCardProps {
 }
 
 const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(`${userType} login attempt:`, { email, password });
+    console.log(`${userType} login attempt:`, { username, password });
     
     // Mock login success
     toast({
@@ -78,13 +79,13 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
       <CardContent>
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor={`${userType}-email`}>Email Address</Label>
+            <Label htmlFor={`${userType}-username`}>Username</Label>
             <Input
-              id={`${userType}-email`}
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              id={`${userType}-username`}
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
               className="h-11"
             />

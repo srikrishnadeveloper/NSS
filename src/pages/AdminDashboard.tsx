@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -106,7 +105,6 @@ const AdminDashboard = () => {
             <Shield className="h-6 w-6 text-red-600" />
             <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
           </div>
-          <Badge className="bg-red-100 text-red-800 hover:bg-red-200">Administrator</Badge>
         </div>
 
         <Tabs defaultValue="students" className="space-y-6">
