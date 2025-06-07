@@ -1,7 +1,6 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Bell, Menu, User } from 'lucide-react';
+import { User } from 'lucide-react';
 import CoachAttendanceCard from '@/components/CoachAttendanceCard';
 import StudentAttendanceManager from '@/components/StudentAttendanceManager';
 import ActivityUpdateCard from '@/components/ActivityUpdateCard';
@@ -20,14 +19,6 @@ const CoachDashboard = () => {
               <h1 className="text-xl font-bold text-foreground">Coach Portal</h1>
               <p className="text-sm text-muted-foreground">Monday, June 7</p>
             </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="sm" className="h-10 w-10 p-0 rounded-lg bg-secondary">
-              <Bell className="h-5 w-5 text-muted-foreground" />
-            </Button>
-            <Button variant="ghost" size="sm" className="h-10 w-10 p-0 rounded-lg bg-secondary">
-              <Menu className="h-5 w-5 text-muted-foreground" />
-            </Button>
           </div>
         </div>
       </div>
