@@ -2,20 +2,19 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, MessageSquare, Calendar, UserPlus, CreditCard } from 'lucide-react';
+import { Shield, MessageSquare, Calendar, UserPlus, CreditCard, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import StudentRegistrationForm from '@/components/StudentRegistrationForm';
+import ParentCredentialsCard from '@/components/ParentCredentialsCard';
 
 // Mock data
 const mockStudents = [
-  { id: 1, name: 'John Smith', sport: 'Soccer', feePlan: 'Monthly - $150', paymentStatus: 'paid', parentContact: '+1234567890', lastPayment: '2024-01-15' },
-  { id: 2, name: 'Sarah Johnson', sport: 'Basketball', feePlan: 'Weekly - $40', paymentStatus: 'failed', parentContact: '+1234567891', lastPayment: '2024-01-10' },
-  { id: 3, name: 'Mike Davis', sport: 'Tennis', feePlan: 'Monthly - $200', paymentStatus: 'upcoming', parentContact: '+1234567892', lastPayment: '2023-12-15' },
-  { id: 4, name: 'Emma Wilson', sport: 'Swimming', feePlan: 'Monthly - $180', paymentStatus: 'paid', parentContact: '+1234567893', lastPayment: '2024-01-20' },
+  { id: 1, name: 'John Smith', sport: 'Soccer', feePlan: 'Monthly - $150', paymentStatus: 'paid', parentContact: '+1234567890', lastPayment: '2024-01-15', group: 'Advanced' },
+  { id: 2, name: 'Sarah Johnson', sport: 'Basketball', feePlan: 'Weekly - $40', paymentStatus: 'failed', parentContact: '+1234567891', lastPayment: '2024-01-10', group: 'Intermediate' },
+  { id: 3, name: 'Mike Davis', sport: 'Tennis', feePlan: 'Monthly - $200', paymentStatus: 'upcoming', parentContact: '+1234567892', lastPayment: '2023-12-15', group: 'Beginners' },
+  { id: 4, name: 'Emma Wilson', sport: 'Swimming', feePlan: 'Monthly - $180', paymentStatus: 'paid', parentContact: '+1234567893', lastPayment: '2024-01-20', group: 'Advanced' },
 ];
 
 const mockPaymentLogs = [
@@ -39,9 +38,8 @@ const mockAttendance = [
 ];
 
 const AdminDashboard = () => {
-  const [selectedStudent, setSelectedStudent] = useState(null);
-  const [isAddingStudent, setIsAddingStudent] = useState(false);
-  const [newStudent, setNewStudent] = useState({ name: '', sport: '', feePlan: '', parentContact: '' });
+  const [currentView, setCurrentView] = useState('dashboard');
+  const [parentCredentials, setParentCredentials] = useState(null);
   const { toast } = useToast();
 
   const getPaymentStatusBadge = (status: string) => {
@@ -68,44 +66,51 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleSendWhatsApp = (studentName: string) => {
-    toast({
-      title: "WhatsApp Message Sent",
-      description: `Payment reminder sent to ${studentName}'s parent`,
-    });
-  };
-
   const handleAddStudent = () => {
-    if (newStudent.name && newStudent.sport && newStudent.feePlan && newStudent.parentContact) {
-      toast({
-        title: "Student Added",
-        description: `${newStudent.name} has been added successfully`,
-      });
-      setNewStudent({ name: '', sport: '', feePlan: '', parentContact: '' });
-      setIsAddingStudent(false);
-    }
+    setCurrentView('registration');
   };
 
-  const handleMarkAttendance = (studentId: number, status: string) => {
-    toast({
-      title: "Attendance Updated",
-      description: `Attendance marked as ${status}`,
-    });
+  const handleRegistrationSuccess = (credentials: { username: string; password: string }) => {
+    setParentCredentials(credentials);
+    setCurrentView('credentials');
   };
+
+  const handleBackToDashboard = () => {
+    setCurrentView('dashboard');
+    setParentCredentials(null);
+  };
+
+  if (currentView === 'registration') {
+    return (
+      <StudentRegistrationForm
+        onBack={handleBackToDashboard}
+        onSuccess={handleRegistrationSuccess}
+      />
+    );
+  }
+
+  if (currentView === 'credentials' && parentCredentials) {
+    return (
+      <ParentCredentialsCard
+        credentials={parentCredentials}
+        onBack={handleBackToDashboard}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
-            <Shield className="h-8 w-8 text-red-600" />
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+            <Shield className="h-6 w-6 text-red-600" />
+            <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
           </div>
           <Badge className="bg-red-100 text-red-800 hover:bg-red-200">Administrator</Badge>
         </div>
 
         <Tabs defaultValue="students" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-4 text-xs">
             <TabsTrigger value="students">Students</TabsTrigger>
             <TabsTrigger value="payments">Payments</TabsTrigger>
             <TabsTrigger value="whatsapp">WhatsApp</TabsTrigger>
@@ -114,102 +119,46 @@ const AdminDashboard = () => {
 
           <TabsContent value="students">
             <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
+              <CardHeader className="flex flex-row items-center justify-between pb-4">
                 <div>
-                  <CardTitle>Student Management</CardTitle>
-                  <CardDescription>View and manage all students</CardDescription>
+                  <CardTitle className="text-lg">Student Management</CardTitle>
+                  <CardDescription className="text-sm">View all students</CardDescription>
                 </div>
-                <Button onClick={() => setIsAddingStudent(true)} className="bg-red-600 hover:bg-red-700">
+                <Button onClick={handleAddStudent} size="sm" className="bg-red-600 hover:bg-red-700">
                   <UserPlus className="h-4 w-4 mr-2" />
-                  Add Student
+                  Add
                 </Button>
               </CardHeader>
-              <CardContent>
-                {isAddingStudent && (
-                  <Card className="mb-6">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Add New Student</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="name">Name</Label>
-                          <Input
-                            id="name"
-                            value={newStudent.name}
-                            onChange={(e) => setNewStudent({ ...newStudent, name: e.target.value })}
-                            placeholder="Student name"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="sport">Sport</Label>
-                          <Input
-                            id="sport"
-                            value={newStudent.sport}
-                            onChange={(e) => setNewStudent({ ...newStudent, sport: e.target.value })}
-                            placeholder="Sport"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="feePlan">Fee Plan</Label>
-                          <Input
-                            id="feePlan"
-                            value={newStudent.feePlan}
-                            onChange={(e) => setNewStudent({ ...newStudent, feePlan: e.target.value })}
-                            placeholder="Fee plan"
-                          />
-                        </div>
-                        <div>
-                          <Label htmlFor="parentContact">Parent Contact</Label>
-                          <Input
-                            id="parentContact"
-                            value={newStudent.parentContact}
-                            onChange={(e) => setNewStudent({ ...newStudent, parentContact: e.target.value })}
-                            placeholder="Phone number"
-                          />
+              <CardContent className="space-y-3">
+                {mockStudents.map((student) => (
+                  <Card key={student.id} className="p-4 border border-gray-200">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-semibold text-gray-900">{student.name}</h3>
+                      {getPaymentStatusBadge(student.paymentStatus)}
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <div className="flex justify-between">
+                        <span>Sport:</span>
+                        <span className="font-medium">{student.sport}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Group:</span>
+                        <span className="font-medium">{student.group}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Fee Plan:</span>
+                        <span className="font-medium">{student.feePlan}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span>Parent:</span>
+                        <div className="flex items-center space-x-2">
+                          <span className="font-medium">{student.parentContact}</span>
+                          <Phone className="h-3 w-3" />
                         </div>
                       </div>
-                      <div className="flex space-x-2">
-                        <Button onClick={handleAddStudent} className="bg-red-600 hover:bg-red-700">
-                          Add Student
-                        </Button>
-                        <Button variant="outline" onClick={() => setIsAddingStudent(false)}>
-                          Cancel
-                        </Button>
-                      </div>
-                    </CardContent>
+                    </div>
                   </Card>
-                )}
-                
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Sport</TableHead>
-                      <TableHead>Fee Plan</TableHead>
-                      <TableHead>Payment Status</TableHead>
-                      <TableHead>Parent Contact</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {mockStudents.map((student) => (
-                      <TableRow key={student.id}>
-                        <TableCell className="font-medium">{student.name}</TableCell>
-                        <TableCell>{student.sport}</TableCell>
-                        <TableCell>{student.feePlan}</TableCell>
-                        <TableCell>{getPaymentStatusBadge(student.paymentStatus)}</TableCell>
-                        <TableCell>{student.parentContact}</TableCell>
-                        <TableCell>
-                          <div className="flex space-x-2">
-                            <Button size="sm" variant="outline">Edit</Button>
-                            <Button size="sm" variant="destructive">Delete</Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                ))}
               </CardContent>
             </Card>
           </TabsContent>
@@ -217,35 +166,35 @@ const AdminDashboard = () => {
           <TabsContent value="payments">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
+                <CardTitle className="flex items-center text-lg">
                   <CreditCard className="h-5 w-5 mr-2" />
                   Payment Logs
                 </CardTitle>
-                <CardDescription>Stripe payment history and status</CardDescription>
+                <CardDescription className="text-sm">Stripe payment history</CardDescription>
               </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Student</TableHead>
-                      <TableHead>Amount</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Method</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {mockPaymentLogs.map((log) => (
-                      <TableRow key={log.id}>
-                        <TableCell className="font-medium">{log.studentName}</TableCell>
-                        <TableCell>{log.amount}</TableCell>
-                        <TableCell>{getPaymentStatusBadge(log.status)}</TableCell>
-                        <TableCell>{log.date}</TableCell>
-                        <TableCell>{log.method}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <CardContent className="space-y-3">
+                {mockPaymentLogs.map((log) => (
+                  <Card key={log.id} className="p-4 border border-gray-200">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-semibold text-gray-900">{log.studentName}</h3>
+                      {getPaymentStatusBadge(log.status)}
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <div className="flex justify-between">
+                        <span>Amount:</span>
+                        <span className="font-medium text-green-600">{log.amount}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Date:</span>
+                        <span className="font-medium">{log.date}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Method:</span>
+                        <span className="font-medium">{log.method}</span>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
               </CardContent>
             </Card>
           </TabsContent>
@@ -253,58 +202,33 @@ const AdminDashboard = () => {
           <TabsContent value="whatsapp">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
+                <CardTitle className="flex items-center text-lg">
                   <MessageSquare className="h-5 w-5 mr-2" />
                   WhatsApp Messages
                 </CardTitle>
-                <CardDescription>Send manual messages and view automated logs</CardDescription>
+                <CardDescription className="text-sm">View automated message logs</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-4">Send Manual Message</h3>
-                  <div className="grid grid-cols-4 gap-2">
-                    {mockStudents.map((student) => (
-                      <Button
-                        key={student.id}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleSendWhatsApp(student.name)}
-                        className="justify-start"
-                      >
-                        <MessageSquare className="h-4 w-4 mr-2" />
-                        {student.name}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-lg font-semibold mb-4">Message History</h3>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Student</TableHead>
-                        <TableHead>Message</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Date</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {mockWhatsAppLogs.map((log) => (
-                        <TableRow key={log.id}>
-                          <TableCell className="font-medium">{log.studentName}</TableCell>
-                          <TableCell>{log.message}</TableCell>
-                          <TableCell>
-                            <Badge variant={log.status === 'delivered' ? 'default' : 'secondary'}>
-                              {log.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{log.date}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
+              <CardContent className="space-y-3">
+                {mockWhatsAppLogs.map((log) => (
+                  <Card key={log.id} className="p-4 border border-gray-200">
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="font-semibold text-gray-900">{log.studentName}</h3>
+                      <Badge variant={log.status === 'delivered' ? 'default' : 'secondary'} className="text-xs">
+                        {log.status}
+                      </Badge>
+                    </div>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <div>
+                        <span className="font-medium">Message:</span>
+                        <p className="mt-1">{log.message}</p>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Date:</span>
+                        <span className="font-medium">{log.date}</span>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
               </CardContent>
             </Card>
           </TabsContent>
@@ -312,53 +236,24 @@ const AdminDashboard = () => {
           <TabsContent value="attendance">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
+                <CardTitle className="flex items-center text-lg">
                   <Calendar className="h-5 w-5 mr-2" />
                   Attendance Tracking
                 </CardTitle>
-                <CardDescription>Mark daily attendance and view reports</CardDescription>
+                <CardDescription className="text-sm">View daily attendance (Jan 25, 2024)</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold mb-4">Today's Attendance (Jan 25, 2024)</h3>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Student</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {mockAttendance.map((record) => (
-                        <TableRow key={record.id}>
-                          <TableCell className="font-medium">{record.studentName}</TableCell>
-                          <TableCell>{getAttendanceStatusBadge(record.status)}</TableCell>
-                          <TableCell>
-                            <div className="flex space-x-2">
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="text-green-600 border-green-600 hover:bg-green-50"
-                                onClick={() => handleMarkAttendance(record.id, 'present')}
-                              >
-                                Present
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="text-red-600 border-red-600 hover:bg-red-50"
-                                onClick={() => handleMarkAttendance(record.id, 'absent')}
-                              >
-                                Absent
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
+              <CardContent className="space-y-3">
+                {mockAttendance.map((record) => (
+                  <Card key={record.id} className="p-4 border border-gray-200">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h3 className="font-semibold text-gray-900">{record.studentName}</h3>
+                        <p className="text-sm text-gray-600">{record.date}</p>
+                      </div>
+                      {getAttendanceStatusBadge(record.status)}
+                    </div>
+                  </Card>
+                ))}
               </CardContent>
             </Card>
           </TabsContent>
