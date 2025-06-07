@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useNavigate } from 'react-router-dom';
 
 interface UserTypeCardProps {
@@ -18,37 +17,29 @@ const UserTypeCard = ({ userType, title, description, icon, href }: UserTypeCard
     navigate(href);
   };
 
-  const getCardStyles = () => {
+  const getCircleStyles = () => {
     switch (userType) {
       case 'admin':
-        return 'border-red-200 hover:border-red-400 bg-gradient-to-br from-red-50 to-white hover:shadow-red-200 cursor-pointer transform hover:scale-105';
+        return 'bg-gradient-to-br from-red-100 to-red-200 border-red-300 hover:from-red-200 hover:to-red-300 hover:border-red-400 hover:shadow-red-200';
       case 'coach':
-        return 'border-blue-200 hover:border-blue-400 bg-gradient-to-br from-blue-50 to-white hover:shadow-blue-200 cursor-pointer transform hover:scale-105';
+        return 'bg-gradient-to-br from-blue-100 to-blue-200 border-blue-300 hover:from-blue-200 hover:to-blue-300 hover:border-blue-400 hover:shadow-blue-200';
       case 'parent':
-        return 'border-green-200 hover:border-green-400 bg-gradient-to-br from-green-50 to-white hover:shadow-green-200 cursor-pointer transform hover:scale-105';
+        return 'bg-gradient-to-br from-green-100 to-green-200 border-green-300 hover:from-green-200 hover:to-green-300 hover:border-green-400 hover:shadow-green-200';
       default:
         return '';
     }
   };
 
   return (
-    <Card 
-      className={`w-full max-w-md transition-all duration-300 hover:shadow-xl ${getCardStyles()}`}
-      onClick={handleClick}
-    >
-      <CardHeader className="text-center pb-4">
-        <div className="mx-auto mb-4 p-4 rounded-full bg-white shadow-md">
-          {icon}
-        </div>
-        <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-        <CardDescription className="text-base">{description}</CardDescription>
-      </CardHeader>
-      <CardContent className="text-center">
-        <p className="text-sm text-muted-foreground">
-          Click to access {title.toLowerCase()} portal
-        </p>
-      </CardContent>
-    </Card>
+    <div className="flex flex-col items-center space-y-3">
+      <div 
+        className={`w-32 h-32 rounded-full border-2 flex items-center justify-center cursor-pointer transform hover:scale-105 transition-all duration-300 hover:shadow-xl ${getCircleStyles()}`}
+        onClick={handleClick}
+      >
+        {icon}
+      </div>
+      <p className="text-lg font-semibold text-gray-800">{title}</p>
+    </div>
   );
 };
 
