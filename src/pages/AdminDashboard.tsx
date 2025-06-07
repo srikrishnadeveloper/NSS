@@ -1,11 +1,16 @@
-
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, MessageSquare, Calendar, UserPlus, CreditCard, Phone, Users, MapPin, Clock } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Shield, MessageSquare, Calendar as CalendarIcon, UserPlus, CreditCard, Phone, Users, MapPin, Clock, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { format, subDays, isWithinInterval } from 'date-fns';
+import { cn } from '@/lib/utils';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import StudentRegistrationForm from '@/components/StudentRegistrationForm';
 import ParentCredentialsCard from '@/components/ParentCredentialsCard';
 
@@ -28,14 +33,6 @@ const mockWhatsAppLogs = [
   { id: 1, studentName: 'John Smith', message: 'Payment reminder sent', status: 'delivered', date: '2024-01-14' },
   { id: 2, studentName: 'Sarah Johnson', message: 'Payment failed notification', status: 'delivered', date: '2024-01-10' },
   { id: 3, studentName: 'Mike Davis', message: 'Upcoming payment reminder', status: 'pending', date: '2024-01-25' },
-];
-
-const mockStudentAttendance = [
-  { id: 1, studentName: 'John Smith', date: '2024-01-25', status: 'present', batch: 'Advanced Soccer', sport: 'Soccer' },
-  { id: 2, studentName: 'Sarah Johnson', date: '2024-01-25', status: 'absent', batch: 'Intermediate Basketball', sport: 'Basketball' },
-  { id: 3, studentName: 'Mike Davis', date: '2024-01-25', status: 'present', batch: 'Beginners Tennis', sport: 'Tennis' },
-  { id: 4, studentName: 'Emma Wilson', date: '2024-01-25', status: 'present', batch: 'Advanced Swimming', sport: 'Swimming' },
-  { id: 5, studentName: 'Alex Brown', date: '2024-01-25', status: 'late', batch: 'Advanced Soccer', sport: 'Soccer' },
 ];
 
 const mockCoachAttendance = [
@@ -85,11 +82,54 @@ const mockCoachAttendance = [
   },
 ];
 
+// Extended mock data for 45 days attendance
+const generateMockAttendanceData = () => {
+  const students = ['John Smith', 'Sarah Johnson', 'Mike Davis', 'Emma Wilson', 'Alex Brown', 'Lisa Chen', 'David Wilson', 'Sophie Taylor'];
+  const sports = ['Soccer', 'Basketball', 'Tennis', 'Swimming'];
+  const statuses = ['present', 'absent', 'late'];
+  const data = [];
+  
+  for (let i = 0; i < 45; i++) {
+    const date = subDays(new Date(), i);
+    students.forEach((student, index) => {
+      // Skip weekends for more realistic data
+      if (date.getDay() !== 0 && date.getDay() !== 6) {
+        data.push({
+          id: `${index}-${i}`,
+          studentName: student,
+          date: format(date, 'yyyy-MM-dd'),
+          status: statuses[Math.floor(Math.random() * statuses.length)],
+          sport: sports[index % sports.length],
+          batch: `${sports[index % sports.length]} Training`
+        });
+      }
+    });
+  }
+  
+  return data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+};
+
+const mockStudentAttendanceExtended = generateMockAttendanceData();
+
 const AdminDashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [parentCredentials, setParentCredentials] = useState(null);
-  const [attendanceView, setAttendanceView] = useState('student'); // 'student' or 'coach'
+  const [attendanceView, setAttendanceView] = useState('student');
+  const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
+    from: subDays(new Date(), 45),
+    to: new Date()
+  });
+  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const { toast } = useToast();
+
+  // Filter attendance data based on date range
+  const filteredAttendanceData = useMemo(() => {
+    return mockStudentAttendanceExtended.filter(record => {
+      const recordDate = new Date(record.date);
+      return isWithinInterval(recordDate, { start: dateRange.from, end: dateRange.to });
+    });
+  }, [dateRange]);
 
   const getPaymentStatusBadge = (status: string) => {
     switch (status) {
@@ -114,6 +154,69 @@ const AdminDashboard = () => {
         return <Badge className="bg-yellow-100 text-yellow-800 hover:bg-yellow-200 text-xs">Late</Badge>;
       default:
         return <Badge variant="secondary" className="text-xs">{status}</Badge>;
+    }
+  };
+
+  const downloadAttendancePDF = () => {
+    const pdf = new jsPDF();
+    
+    // Add title
+    pdf.setFontSize(16);
+    pdf.text('Student Attendance Report', 20, 20);
+    
+    // Add date range
+    pdf.setFontSize(12);
+    pdf.text(`Period: ${format(dateRange.from, 'MMM dd, yyyy')} - ${format(dateRange.to, 'MMM dd, yyyy')}`, 20, 35);
+    
+    // Prepare data for table
+    const tableData = filteredAttendanceData.map(record => [
+      record.studentName,
+      format(new Date(record.date), 'MMM dd, yyyy'),
+      record.status,
+      record.sport,
+      record.batch
+    ]);
+    
+    // Add table
+    (pdf as any).autoTable({
+      head: [['Student Name', 'Date', 'Status', 'Sport', 'Batch']],
+      body: tableData,
+      startY: 45,
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [220, 53, 69] },
+      alternateRowStyles: { fillColor: [245, 245, 245] }
+    });
+    
+    // Add summary
+    const totalRecords = filteredAttendanceData.length;
+    const presentCount = filteredAttendanceData.filter(r => r.status === 'present').length;
+    const absentCount = filteredAttendanceData.filter(r => r.status === 'absent').length;
+    const lateCount = filteredAttendanceData.filter(r => r.status === 'late').length;
+    
+    const finalY = (pdf as any).lastAutoTable.finalY + 10;
+    pdf.text('Summary:', 20, finalY);
+    pdf.text(`Total Records: ${totalRecords}`, 20, finalY + 10);
+    pdf.text(`Present: ${presentCount}`, 20, finalY + 20);
+    pdf.text(`Absent: ${absentCount}`, 20, finalY + 30);
+    pdf.text(`Late: ${lateCount}`, 20, finalY + 40);
+    
+    // Save the PDF
+    pdf.save(`attendance-report-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
+    
+    toast({
+      title: "PDF Downloaded",
+      description: "Attendance report has been downloaded successfully.",
+    });
+  };
+
+  const handleDateSelect = (date: Date | undefined) => {
+    if (date) {
+      setDateRange({
+        from: subDays(date, 45),
+        to: date
+      });
+      setSelectedDate(date);
+      setIsDatePickerOpen(false);
     }
   };
 
@@ -176,7 +279,7 @@ const AdminDashboard = () => {
               WhatsApp
             </TabsTrigger>
             <TabsTrigger value="attendance" className="text-xs px-2 py-2.5 data-[state=active]:bg-white">
-              <Calendar className="h-3 w-3 mr-1" />
+              <CalendarIcon className="h-3 w-3 mr-1" />
               Attendance
             </TabsTrigger>
           </TabsList>
@@ -302,18 +405,60 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
 
-          {/* Attendance Tab */}
+          {/* Enhanced Attendance Tab */}
           <TabsContent value="attendance" className="space-y-3">
             <Card className="shadow-sm">
               <CardHeader className="pb-3">
                 <div className="space-y-3">
                   <div>
                     <CardTitle className="flex items-center text-base sm:text-lg">
-                      <Calendar className="h-4 w-4 mr-2" />
+                      <CalendarIcon className="h-4 w-4 mr-2" />
                       Attendance Management
                     </CardTitle>
-                    <CardDescription className="text-xs sm:text-sm">View attendance records (Jan 25, 2024)</CardDescription>
+                    <CardDescription className="text-xs sm:text-sm">
+                      View attendance records for the last 45 days
+                    </CardDescription>
                   </div>
+                  
+                  {/* Date Range Picker and Download Controls */}
+                  <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                    <div className="flex items-center space-x-2">
+                      <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-xs"
+                          >
+                            <CalendarIcon className="h-3 w-3 mr-1" />
+                            {selectedDate ? format(selectedDate, 'MMM dd, yyyy') : 'Select End Date'}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={selectedDate}
+                            onSelect={handleDateSelect}
+                            initialFocus
+                            className={cn("p-3 pointer-events-auto")}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      <span className="text-xs text-gray-500">
+                        ({filteredAttendanceData.length} records)
+                      </span>
+                    </div>
+                    
+                    <Button 
+                      onClick={downloadAttendancePDF}
+                      size="sm"
+                      className="bg-green-600 hover:bg-green-700 text-xs"
+                    >
+                      <Download className="h-3 w-3 mr-1" />
+                      Download PDF
+                    </Button>
+                  </div>
+
                   <div className="flex space-x-2">
                     <Button 
                       variant={attendanceView === 'student' ? 'default' : 'outline'}
@@ -339,12 +484,12 @@ const AdminDashboard = () => {
               <CardContent className="space-y-3 px-3 sm:px-6">
                 {attendanceView === 'student' ? (
                   <>
-                    {mockStudentAttendance.map((record) => (
+                    {filteredAttendanceData.slice(0, 20).map((record) => (
                       <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
                         <div className="flex justify-between items-start mb-3">
                           <div>
                             <h3 className="font-semibold text-gray-900 text-sm">{record.studentName}</h3>
-                            <p className="text-xs text-gray-600">{record.date}</p>
+                            <p className="text-xs text-gray-600">{format(new Date(record.date), 'MMM dd, yyyy')}</p>
                           </div>
                           {getAttendanceStatusBadge(record.status)}
                         </div>
@@ -360,6 +505,11 @@ const AdminDashboard = () => {
                         </div>
                       </Card>
                     ))}
+                    {filteredAttendanceData.length > 20 && (
+                      <div className="text-center text-xs text-gray-500 py-2">
+                        Showing 20 of {filteredAttendanceData.length} records. Download PDF for full report.
+                      </div>
+                    )}
                   </>
                 ) : (
                   <>
