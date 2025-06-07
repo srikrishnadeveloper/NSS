@@ -1,8 +1,9 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Users, Edit3, Filter } from 'lucide-react';
+import { Users, Edit3, Filter, Send } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Student {
@@ -10,7 +11,7 @@ interface Student {
   name: string;
   rollNumber: string;
   batch: string;
-  status: 'present' | 'absent' | 'late';
+  status: 'present' | 'absent';
 }
 
 const StudentAttendanceManager = () => {
@@ -35,7 +36,7 @@ const StudentAttendanceManager = () => {
       name: 'Michael Brown',
       rollNumber: 'S003',
       batch: 'Morning Batch A',
-      status: 'late'
+      status: 'present'
     }, {
       id: '4',
       name: 'Sarah Davis',
@@ -57,22 +58,17 @@ const StudentAttendanceManager = () => {
   const toggleStudentStatus = (studentId: string) => {
     setStudents(prev => prev.map(student => {
       if (student.id === studentId) {
-        let newStatus: 'present' | 'absent' | 'late';
-        if (student.status === 'present') {
-          newStatus = 'absent';
-        } else if (student.status === 'absent') {
-          newStatus = 'late';
-        } else {
-          newStatus = 'present';
-        }
+        const newStatus: 'present' | 'absent' = student.status === 'present' ? 'absent' : 'present';
         return { ...student, status: newStatus };
       }
       return student;
     }));
-    
+  };
+
+  const handleSubmitAttendance = () => {
     toast({
-      title: "Attendance Updated",
-      description: "Student attendance has been successfully updated"
+      title: "Attendance Submitted",
+      description: "Student attendance has been successfully submitted"
     });
   };
 
@@ -95,16 +91,6 @@ const StudentAttendanceManager = () => {
             className="px-3 py-1 rounded-lg font-medium h-8"
           >
             Absent
-          </Button>
-        );
-      case 'late':
-        return (
-          <Button 
-            onClick={onClick}
-            variant="secondary"
-            className="px-3 py-1 rounded-lg font-medium h-8"
-          >
-            Late
           </Button>
         );
       default:
@@ -175,6 +161,17 @@ const StudentAttendanceManager = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Submit Button */}
+        <div className="pt-4">
+          <Button 
+            onClick={handleSubmitAttendance}
+            className="w-full bg-primary text-primary-foreground hover:bg-primary/90 h-12 rounded-lg font-medium"
+          >
+            <Send className="h-5 w-5 mr-2" />
+            Submit Attendance
+          </Button>
         </div>
       </div>
     </div>
