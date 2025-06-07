@@ -9,6 +9,7 @@ import AdminLogin from "./pages/AdminLogin";
 import CoachLogin from "./pages/CoachLogin";
 import ParentLogin from "./pages/ParentLogin";
 import AdminDashboard from "./pages/AdminDashboard";
+import CoachDashboard from "./pages/CoachDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/login/coach" element={<CoachLogin />} />
           <Route path="/login/parent" element={<ParentLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/coach/dashboard" element={<CoachDashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
