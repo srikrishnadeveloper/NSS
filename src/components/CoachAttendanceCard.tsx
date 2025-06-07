@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Clock, MapPin, CheckCircle, XCircle, Play, Square } from 'lucide-react';
+import { Clock, MapPin, CheckCircle, XCircle, Play, Square, Timer } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const CoachAttendanceCard = () => {
@@ -54,65 +54,61 @@ const CoachAttendanceCard = () => {
   };
 
   return (
-    <Card className="h-fit">
-      <CardHeader className="pb-3 sm:pb-6">
-        <CardTitle className="flex items-center gap-2 text-lg sm:text-xl">
-          <Clock className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
-          My Attendance
-        </CardTitle>
-        <CardDescription className="text-sm">
-          Record your check-in and check-out times with location
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3 sm:space-y-4 px-3 sm:px-6">
-        {/* Current Status - Mobile optimized */}
-        <div className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg">
-          <span className="font-medium text-sm sm:text-base">Status:</span>
+    <Card className="shadow-sm border-0 bg-white rounded-2xl overflow-hidden">
+      <CardHeader className="pb-4 px-4 pt-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-50 rounded-xl">
+              <Clock className="h-5 w-5 text-blue-600" />
+            </div>
+            <div>
+              <CardTitle className="text-lg font-semibold">My Attendance</CardTitle>
+              <CardDescription className="text-sm text-gray-500">Track your session time</CardDescription>
+            </div>
+          </div>
           <Badge 
             variant={isCheckedIn ? "default" : "secondary"}
-            className={`text-xs sm:text-sm ${isCheckedIn ? "bg-green-500 hover:bg-green-600" : ""}`}
+            className={`text-xs px-2 py-1 ${isCheckedIn ? "bg-green-100 text-green-700 hover:bg-green-100" : "bg-gray-100 text-gray-600"}`}
           >
-            {isCheckedIn ? (
-              <>
-                <CheckCircle className="h-3 w-3 mr-1" />
-                Checked In
-              </>
-            ) : (
-              <>
-                <XCircle className="h-3 w-3 mr-1" />
-                Not Checked In
-              </>
-            )}
+            {isCheckedIn ? "Active" : "Inactive"}
           </Badge>
         </div>
-
-        {/* Check-in Time - Mobile optimized */}
-        {checkInTime && (
-          <div className="p-2 sm:p-3 bg-blue-50 rounded-lg">
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-blue-700">
-              <Play className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-              <span>Check-in: {checkInTime.toLocaleTimeString()}</span>
-            </div>
+      </CardHeader>
+      
+      <CardContent className="px-4 pb-4 space-y-4">
+        {/* Status Display */}
+        <div className="bg-gray-50 rounded-xl p-4">
+          <div className="flex items-center justify-between mb-3">
+            <span className="font-medium text-gray-700">Current Status</span>
+            {isCheckedIn ? (
+              <CheckCircle className="h-5 w-5 text-green-500" />
+            ) : (
+              <XCircle className="h-5 w-5 text-gray-400" />
+            )}
           </div>
-        )}
-
-        {/* Location - Mobile optimized */}
-        {location && (
-          <div className="p-2 sm:p-3 bg-gray-50 rounded-lg">
-            <div className="flex items-start gap-2 text-xs sm:text-sm text-gray-600">
-              <MapPin className="h-3 w-3 sm:h-4 sm:w-4 mt-0.5 flex-shrink-0" />
-              <span className="break-all leading-relaxed">{location}</span>
+          
+          {checkInTime && (
+            <div className="flex items-center gap-2 text-sm text-blue-600 mb-2">
+              <Timer className="h-4 w-4" />
+              <span>Started: {checkInTime.toLocaleTimeString()}</span>
             </div>
-          </div>
-        )}
+          )}
+          
+          {location && (
+            <div className="flex items-start gap-2 text-xs text-gray-500">
+              <MapPin className="h-3 w-3 mt-0.5 flex-shrink-0" />
+              <span className="leading-relaxed break-all">{location}</span>
+            </div>
+          )}
+        </div>
 
-        {/* Action Button - Mobile optimized */}
+        {/* Action Button */}
         <Button
           onClick={isCheckedIn ? handleCheckOut : handleCheckIn}
-          className={`w-full h-10 sm:h-11 text-sm sm:text-base ${
+          className={`w-full h-12 text-base font-medium rounded-xl ${
             isCheckedIn 
-              ? "bg-red-600 hover:bg-red-700" 
-              : "bg-green-600 hover:bg-green-700"
+              ? "bg-red-500 hover:bg-red-600 text-white" 
+              : "bg-green-500 hover:bg-green-600 text-white"
           }`}
         >
           {isCheckedIn ? (
@@ -128,13 +124,22 @@ const CoachAttendanceCard = () => {
           )}
         </Button>
 
-        {/* Today's Summary - Mobile optimized */}
-        <div className="pt-3 sm:pt-4 border-t">
-          <h4 className="font-medium text-sm mb-2">Today's Summary</h4>
-          <div className="text-xs text-gray-500 space-y-1 leading-relaxed">
-            <div>Total Sessions: 2</div>
-            <div>Total Hours: 6.5</div>
-            <div>Last Check-out: 2:30 PM</div>
+        {/* Today's Summary */}
+        <div className="bg-blue-50 rounded-xl p-3">
+          <h4 className="font-medium text-blue-900 text-sm mb-2">Today's Summary</h4>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div>
+              <div className="text-lg font-bold text-blue-600">2</div>
+              <div className="text-xs text-blue-600">Sessions</div>
+            </div>
+            <div>
+              <div className="text-lg font-bold text-blue-600">6.5</div>
+              <div className="text-xs text-blue-600">Hours</div>
+            </div>
+            <div>
+              <div className="text-lg font-bold text-blue-600">2:30</div>
+              <div className="text-xs text-blue-600">Last Out</div>
+            </div>
           </div>
         </div>
       </CardContent>

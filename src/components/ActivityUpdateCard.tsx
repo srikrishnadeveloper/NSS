@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Camera, Upload, X, Eye, Calendar } from 'lucide-react';
+import { Camera, Upload, X, Eye, Calendar, Image as ImageIcon, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface Activity {
@@ -26,6 +26,7 @@ const ActivityUpdateCard = () => {
   const [activityDescription, setActivityDescription] = useState<string>('');
   const [selectedPhotos, setSelectedPhotos] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const { toast } = useToast();
 
   // Mock data for recent activities
@@ -89,167 +90,171 @@ const ActivityUpdateCard = () => {
       setActivityDescription('');
       setSelectedPhotos([]);
       setIsSubmitting(false);
+      setShowForm(false);
     }, 1500);
   };
 
   return (
-    <div className="space-y-6">
-      {/* New Activity Form */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Camera className="h-5 w-5 text-blue-600" />
-            Share Activity Update
-          </CardTitle>
-          <CardDescription>
-            Document and share activities with photos for parents and admin
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Batch Selection */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="batch">Batch *</Label>
-              <Select value={selectedBatch} onValueChange={setSelectedBatch}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select batch" />
-                </SelectTrigger>
-                <SelectContent>
-                  {batches.map((batch) => (
-                    <SelectItem key={batch} value={batch}>
-                      {batch}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+    <Card className="shadow-sm border-0 bg-white rounded-2xl overflow-hidden">
+      <CardHeader className="pb-4 px-4 pt-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-orange-50 rounded-xl">
+              <Camera className="h-5 w-5 text-orange-600" />
             </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="title">Activity Title *</Label>
-              <Input
-                id="title"
-                placeholder="e.g., Football Training Session"
-                value={activityTitle}
-                onChange={(e) => setActivityTitle(e.target.value)}
-              />
+            <div>
+              <CardTitle className="text-lg font-semibold">Activity Updates</CardTitle>
+              <CardDescription className="text-sm text-gray-500">Share session highlights</CardDescription>
             </div>
           </div>
-
-          {/* Activity Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description">Activity Description *</Label>
-            <Textarea
-              id="description"
-              placeholder="Describe the activities conducted, skills practiced, achievements, etc."
-              value={activityDescription}
-              onChange={(e) => setActivityDescription(e.target.value)}
-              rows={4}
-            />
-          </div>
-
-          {/* Photo Upload */}
-          <div className="space-y-2">
-            <Label>Photos</Label>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={handlePhotoUpload}
-                className="hidden"
-                id="photo-upload"
-              />
-              <label htmlFor="photo-upload" className="cursor-pointer">
-                <Upload className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-                <p className="text-sm text-gray-600">
-                  Click to upload photos or drag and drop
-                </p>
-                <p className="text-xs text-gray-400 mt-1">
-                  PNG, JPG up to 10MB each
-                </p>
-              </label>
-            </div>
-          </div>
-
-          {/* Selected Photos Preview */}
-          {selectedPhotos.length > 0 && (
-            <div className="space-y-2">
-              <Label>Selected Photos ({selectedPhotos.length})</Label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {selectedPhotos.map((photo, index) => (
-                  <div key={index} className="relative group">
-                    <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center border">
-                      <Camera className="h-6 w-6 text-gray-400" />
-                    </div>
-                    <button
-                      onClick={() => removePhoto(index)}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                    <p className="text-xs text-gray-500 mt-1 truncate">
-                      {photo.name}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Submit Button */}
           <Button
-            onClick={handleSubmitActivity}
-            disabled={isSubmitting}
-            className="w-full bg-blue-600 hover:bg-blue-700"
+            onClick={() => setShowForm(!showForm)}
+            size="sm"
+            className="h-8 px-3 text-xs bg-orange-500 hover:bg-orange-600 text-white rounded-lg"
           >
-            {isSubmitting ? "Sharing..." : "Share Activity"}
+            <Plus className="h-3 w-3 mr-1" />
+            New
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </CardHeader>
+      
+      <CardContent className="px-4 pb-4 space-y-4">
+        {/* New Activity Form */}
+        {showForm && (
+          <div className="bg-gray-50 rounded-xl p-4 space-y-4">
+            <div className="space-y-3">
+              <div>
+                <Label htmlFor="batch" className="text-sm font-medium text-gray-700">Batch</Label>
+                <Select value={selectedBatch} onValueChange={setSelectedBatch}>
+                  <SelectTrigger className="mt-1 h-10 rounded-lg">
+                    <SelectValue placeholder="Select batch" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {batches.map((batch) => (
+                      <SelectItem key={batch} value={batch}>
+                        {batch}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div>
+                <Label htmlFor="title" className="text-sm font-medium text-gray-700">Activity Title</Label>
+                <Input
+                  id="title"
+                  placeholder="e.g., Football Training Session"
+                  value={activityTitle}
+                  onChange={(e) => setActivityTitle(e.target.value)}
+                  className="mt-1 h-10 rounded-lg"
+                />
+              </div>
 
-      {/* Recent Activities */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Recent Activities</CardTitle>
-          <CardDescription>
-            View your recently shared activities
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {recentActivities.map((activity) => (
-              <div key={activity.id} className="border rounded-lg p-4 space-y-2">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <h4 className="font-medium">{activity.title}</h4>
-                    <p className="text-sm text-gray-600 mt-1">{activity.description}</p>
-                    <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-                      <Calendar className="h-4 w-4" />
-                      {activity.date}
-                      <span>•</span>
-                      <span>{activity.batch}</span>
-                      <span>•</span>
-                      <span>{activity.photos.length} photos</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge 
-                      variant={activity.status === 'shared' ? 'default' : 'secondary'}
-                      className={activity.status === 'shared' ? 'bg-green-500 hover:bg-green-600' : ''}
-                    >
-                      {activity.status === 'shared' ? 'Shared' : 'Draft'}
-                    </Badge>
-                    <Button variant="ghost" size="sm">
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                  </div>
+              <div>
+                <Label htmlFor="description" className="text-sm font-medium text-gray-700">Description</Label>
+                <Textarea
+                  id="description"
+                  placeholder="Describe the activities and achievements..."
+                  value={activityDescription}
+                  onChange={(e) => setActivityDescription(e.target.value)}
+                  rows={3}
+                  className="mt-1 rounded-lg resize-none"
+                />
+              </div>
+
+              {/* Photo Upload */}
+              <div>
+                <Label className="text-sm font-medium text-gray-700">Photos</Label>
+                <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                    id="photo-upload"
+                  />
+                  <label htmlFor="photo-upload" className="cursor-pointer">
+                    <Upload className="h-6 w-6 mx-auto mb-2 text-gray-400" />
+                    <p className="text-sm text-gray-600">Upload photos</p>
+                  </label>
                 </div>
               </div>
-            ))}
+
+              {/* Selected Photos Preview */}
+              {selectedPhotos.length > 0 && (
+                <div className="grid grid-cols-3 gap-2">
+                  {selectedPhotos.map((photo, index) => (
+                    <div key={index} className="relative group">
+                      <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center border">
+                        <ImageIcon className="h-6 w-6 text-gray-400" />
+                      </div>
+                      <button
+                        onClick={() => removePhoto(index)}
+                        className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <div className="flex gap-2 pt-2">
+                <Button
+                  onClick={handleSubmitActivity}
+                  disabled={isSubmitting}
+                  className="flex-1 h-10 bg-orange-500 hover:bg-orange-600 text-white rounded-lg"
+                >
+                  {isSubmitting ? "Sharing..." : "Share Activity"}
+                </Button>
+                <Button
+                  onClick={() => setShowForm(false)}
+                  variant="outline"
+                  className="h-10 px-4 rounded-lg"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        )}
+
+        {/* Recent Activities */}
+        <div className="space-y-3">
+          <h4 className="font-medium text-gray-700 text-sm">Recent Activities</h4>
+          {recentActivities.map((activity) => (
+            <div key={activity.id} className="bg-gray-50 rounded-xl p-3">
+              <div className="flex items-start justify-between">
+                <div className="flex-1 min-w-0">
+                  <h5 className="font-medium text-gray-900 text-sm truncate">{activity.title}</h5>
+                  <p className="text-xs text-gray-600 mt-1 line-clamp-2">{activity.description}</p>
+                  <div className="flex items-center gap-2 mt-2 text-xs text-gray-500">
+                    <Calendar className="h-3 w-3" />
+                    <span>{activity.date}</span>
+                    <span>•</span>
+                    <span>{activity.batch}</span>
+                    <span>•</span>
+                    <span>{activity.photos.length} photos</span>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 ml-2">
+                  <Badge 
+                    variant={activity.status === 'shared' ? 'default' : 'secondary'}
+                    className={`text-xs px-2 py-1 ${activity.status === 'shared' ? 'bg-green-100 text-green-700 hover:bg-green-100' : 'bg-gray-100 text-gray-600'}`}
+                  >
+                    {activity.status === 'shared' ? 'Shared' : 'Draft'}
+                  </Badge>
+                  <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                    <Eye className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
