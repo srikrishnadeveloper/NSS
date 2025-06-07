@@ -10,30 +10,36 @@ const Index = () => {
       <div className="container mx-auto px-4 py-8">
         <Header />
         
-        <div className="flex flex-col items-center justify-center space-y-8 mt-16">
-          <UserTypeCard
-            userType="admin"
-            title="Admin"
-            description=""
-            icon={<Shield className="h-16 w-16 text-red-600" />}
-            href="/login/admin"
-          />
+        <div className="flex flex-col items-center justify-center space-y-12 mt-16">
+          {/* First row - Admin and Coach */}
+          <div className="flex justify-center space-x-12">
+            <UserTypeCard
+              userType="admin"
+              title="Admin"
+              description=""
+              icon={<Shield className="h-16 w-16 text-red-600" />}
+              href="/login/admin"
+            />
+            
+            <UserTypeCard
+              userType="coach"
+              title="Coach"
+              description=""
+              icon={<User className="h-16 w-16 text-blue-600" />}
+              href="/login/coach"
+            />
+          </div>
           
-          <UserTypeCard
-            userType="coach"
-            title="Coach"
-            description=""
-            icon={<User className="h-16 w-16 text-blue-600" />}
-            href="/login/coach"
-          />
-          
-          <UserTypeCard
-            userType="parent"
-            title="Parent"
-            description=""
-            icon={<Users className="h-16 w-16 text-green-600" />}
-            href="/login/parent"
-          />
+          {/* Second row - Parent (centered) */}
+          <div className="flex justify-center">
+            <UserTypeCard
+              userType="parent"
+              title="Parent"
+              description=""
+              icon={<Users className="h-16 w-16 text-green-600" />}
+              href="/login/parent"
+            />
+          </div>
         </div>
       </div>
     </div>
