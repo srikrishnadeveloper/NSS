@@ -6,11 +6,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { ArrowLeft, UserPlus } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { ArrowLeft, UserPlus, CalendarIcon } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 interface StudentRegistrationFormProps {
   onBack: () => void;
@@ -20,7 +24,9 @@ interface StudentRegistrationFormProps {
 const formSchema = z.object({
   studentName: z.string().min(1, 'Student name is required'),
   address: z.string().min(1, 'Address is required'),
-  dateOfBirth: z.string().min(1, 'Date of birth is required'),
+  dateOfBirth: z.date({
+    required_error: 'Date of birth is required',
+  }),
   parentNumber: z.string().min(1, 'Parent number is required'),
   weight: z.string().min(1, 'Weight is required'),
   height: z.string().min(1, 'Height is required'),
@@ -42,7 +48,6 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
     defaultValues: {
       studentName: '',
       address: '',
-      dateOfBirth: '',
       parentNumber: '',
       weight: '',
       height: '',
@@ -74,7 +79,7 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4">
-      <div className="max-w-md mx-auto">
+      <div className="max-w-lg mx-auto">
         <div className="flex items-center mb-6">
           <Button variant="ghost" size="sm" onClick={onBack} className="mr-3">
             <ArrowLeft className="h-4 w-4" />
@@ -82,25 +87,29 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
           <h1 className="text-xl font-bold text-gray-900">Add New Student</h1>
         </div>
 
-        <Card className="mb-4">
-          <CardHeader className="pb-4">
+        <Card className="shadow-lg border-0">
+          <CardHeader className="pb-6">
             <CardTitle className="flex items-center text-lg">
               <UserPlus className="h-5 w-5 mr-2 text-red-600" />
               Student Registration
             </CardTitle>
             <CardDescription>Fill in all student details</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="px-6 pb-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
                   control={form.control}
                   name="studentName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Student Name *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Student Name *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter student name" {...field} />
+                        <Input 
+                          placeholder="Enter student name" 
+                          className="h-11"
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -112,9 +121,14 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   name="address"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Address *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Address *</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Enter full address" rows={3} {...field} />
+                        <Textarea 
+                          placeholder="Enter full address" 
+                          rows={3} 
+                          className="resize-none"
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -125,11 +139,40 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   control={form.control}
                   name="dateOfBirth"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Date of Birth *</FormLabel>
-                      <FormControl>
-                        <Input type="date" {...field} />
-                      </FormControl>
+                    <FormItem className="flex flex-col">
+                      <FormLabel className="text-sm font-medium">Date of Birth *</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant="outline"
+                              className={cn(
+                                "h-11 justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                            className="pointer-events-auto"
+                          />
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -140,24 +183,34 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   name="parentNumber"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Parent's Number *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Parent's Number *</FormLabel>
                       <FormControl>
-                        <Input type="tel" placeholder="Enter parent's phone number" {...field} />
+                        <Input 
+                          type="tel" 
+                          placeholder="Enter parent's phone number" 
+                          className="h-11"
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
                     name="weight"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Weight (kg) *</FormLabel>
+                        <FormLabel className="text-sm font-medium">Weight (kg) *</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Weight" {...field} />
+                          <Input 
+                            type="number" 
+                            placeholder="Weight" 
+                            className="h-11"
+                            {...field} 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -168,9 +221,14 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                     name="height"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Height (cm) *</FormLabel>
+                        <FormLabel className="text-sm font-medium">Height (cm) *</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Height" {...field} />
+                          <Input 
+                            type="number" 
+                            placeholder="Height" 
+                            className="h-11"
+                            {...field} 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -183,10 +241,10 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   name="interestedGame"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Interested Game *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Interested Game *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-11">
                             <SelectValue placeholder="Select sport/game" />
                           </SelectTrigger>
                         </FormControl>
@@ -210,10 +268,10 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   name="governmentSchool"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Government School *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Government School *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-11">
                             <SelectValue placeholder="Select Yes or No" />
                           </SelectTrigger>
                         </FormControl>
@@ -232,9 +290,13 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   name="schoolName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>School Name *</FormLabel>
+                      <FormLabel className="text-sm font-medium">School Name *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter school name" {...field} />
+                        <Input 
+                          placeholder="Enter school name" 
+                          className="h-11"
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -246,10 +308,10 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   name="sex"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Sex *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Gender *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-11">
                             <SelectValue placeholder="Select gender" />
                           </SelectTrigger>
                         </FormControl>
@@ -269,9 +331,13 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   name="nationality"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nationality *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Nationality *</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter nationality" {...field} />
+                        <Input 
+                          placeholder="Enter nationality" 
+                          className="h-11"
+                          {...field} 
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -283,10 +349,10 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   name="groupBatch"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Group/Batch *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Group/Batch *</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="h-11">
                             <SelectValue placeholder="Select group/batch" />
                           </SelectTrigger>
                         </FormControl>
@@ -303,7 +369,10 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   )}
                 />
 
-                <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white">
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 bg-red-600 hover:bg-red-700 text-white font-medium text-base mt-8"
+                >
                   Register Student
                 </Button>
               </form>
