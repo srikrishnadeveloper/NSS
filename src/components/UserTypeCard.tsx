@@ -31,14 +31,14 @@ const UserTypeCard = ({ userType, title, description, icon, href }: UserTypeCard
   };
 
   return (
-    <div className="flex flex-col items-center space-y-3">
+    <div className="flex flex-col items-center space-y-2">
       <div 
-        className={`w-32 h-32 rounded-full border-2 flex items-center justify-center cursor-pointer transform hover:scale-105 transition-all duration-300 hover:shadow-xl ${getCircleStyles()}`}
+        className={`w-24 h-24 md:w-32 md:h-32 rounded-full border-2 flex items-center justify-center cursor-pointer transform hover:scale-105 active:scale-95 transition-all duration-300 hover:shadow-xl ${getCircleStyles()}`}
         onClick={handleClick}
       >
         {icon}
       </div>
-      <p className="text-lg font-semibold text-gray-800">{title}</p>
+      <p className="text-base md:text-lg font-semibold text-gray-800">{title}</p>
     </div>
   );
 };
