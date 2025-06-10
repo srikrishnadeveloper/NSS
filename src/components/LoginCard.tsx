@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/components/ui/sonner';
 
 interface LoginCardProps {
@@ -35,93 +36,56 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
     }
   };
 
-  const getAccentColor = () => {
-    switch (userType) {
-      case 'admin':
-        return 'text-red-500';
-      case 'coach':
-        return 'text-blue-500';
-      case 'parent':
-        return 'text-green-500';
-      default:
-        return 'text-gray-500';
-    }
-  };
-
-  const getButtonStyles = () => {
-    switch (userType) {
-      case 'admin':
-        return 'bg-red-500 hover:bg-red-600';
-      case 'coach':
-        return 'bg-blue-500 hover:bg-blue-600';
-      case 'parent':
-        return 'bg-green-500 hover:bg-green-600';
-      default:
-        return '';
-    }
-  };
-
   return (
-    <div className="w-full max-w-sm mx-auto">
-      <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-8 shadow-2xl">
-        {/* Header Section */}
-        <div className="text-center mb-8">
-          <div className="mx-auto mb-4 p-3 rounded-full bg-white/20 w-fit">
+    <div className="flex items-center justify-center min-h-screen p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="flex justify-center mb-4">
             {icon}
           </div>
-          <h1 className={`text-2xl font-bold ${getAccentColor()}`}>{title}</h1>
-        </div>
-
-        {/* Login Form */}
-        <form onSubmit={handleLogin} className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor={`${userType}-username`} className="text-white/90 text-sm font-medium">
-              Username
-            </Label>
-            <Input
-              id={`${userType}-username`}
-              type="text"
-              placeholder="Enter username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="h-12 text-base border-0 bg-white/20 text-white placeholder:text-white/60 focus:bg-white/30 focus:ring-2 focus:ring-white/30 rounded-xl"
-            />
+          <CardTitle className="text-2xl font-bold">{title} Login</CardTitle>
+          <CardDescription>
+            National Sports School Portal
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor={`${userType}-username`}>Username</Label>
+              <Input
+                id={`${userType}-username`}
+                type="text"
+                placeholder="Enter your username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor={`${userType}-password`}>Password</Label>
+              <Input
+                id={`${userType}-password`}
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full">
+              Sign In
+            </Button>
+          </form>
+          <div className="mt-4 text-center">
+            <a
+              href="#"
+              className="text-sm text-muted-foreground hover:text-primary"
+            >
+              Forgot your password?
+            </a>
           </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor={`${userType}-password`} className="text-white/90 text-sm font-medium">
-              Password
-            </Label>
-            <Input
-              id={`${userType}-password`}
-              type="password"
-              placeholder="Enter password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="h-12 text-base border-0 bg-white/20 text-white placeholder:text-white/60 focus:bg-white/30 focus:ring-2 focus:ring-white/30 rounded-xl"
-            />
-          </div>
-
-          <Button
-            type="submit"
-            className={`w-full h-12 text-base font-semibold transition-all duration-200 shadow-lg rounded-xl ${getButtonStyles()}`}
-          >
-            Sign In
-          </Button>
-        </form>
-
-        {/* Forgot Password Link */}
-        <div className="mt-6 text-center">
-          <a
-            href="#"
-            className="text-sm text-white/70 hover:text-white transition-colors"
-          >
-            Forgot password?
-          </a>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

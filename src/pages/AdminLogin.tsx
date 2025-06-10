@@ -5,12 +5,12 @@ import { Shield } from 'lucide-react';
 
 const AdminLogin = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background">
       <LoginCard
         userType="admin"
         title="Administrator"
         description=""
-        icon={<Shield className="h-8 w-8 text-red-500" />}
+        icon={<Shield className="h-12 w-12 text-red-500" />}
       />
     </div>
   );
