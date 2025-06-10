@@ -36,8 +36,8 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white text-black flex flex-col items-center justify-center px-4 py-8 overflow-x-hidden">
-      <div className="w-full max-w-sm mx-auto space-y-8">
+    <div className="h-screen w-full bg-white text-black flex flex-col items-center justify-center px-4 py-8 overflow-hidden">
+      <div className="w-full max-w-sm mx-auto space-y-8 transform -translate-y-8">
         {/* Header Section */}
         <div className="text-center space-y-6">
           <div className="flex justify-center">

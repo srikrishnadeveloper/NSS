@@ -5,7 +5,7 @@ import { Users } from 'lucide-react';
 
 const ParentLogin = () => {
   return (
-    <div className="min-h-screen bg-white w-full overflow-x-hidden">
+    <div className="h-screen bg-white w-full overflow-hidden">
       <LoginCard
         userType="parent"
         title="Parent"
