@@ -6,11 +6,11 @@ import { Shield, Users, User } from 'lucide-react';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 font-roboto">
       <div className="container mx-auto px-4 py-6">
         <Header />
         
-        <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-8 mt-8">
+        <div className="flex flex-col items-center justify-center min-h-[40vh] space-y-8 mt-16">
           {/* First row - Admin and Coach */}
           <div className="flex justify-center items-center gap-8 md:gap-12">
             <UserTypeCard
