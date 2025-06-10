@@ -89,16 +89,6 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
             Sign In
           </Button>
         </form>
-
-        {/* Footer */}
-        <div className="text-center">
-          <a
-            href="#"
-            className="text-sm text-gray-600 hover:text-black transition-colors"
-          >
-            Forgot your password?
-          </a>
-        </div>
       </div>
     </div>
   );
