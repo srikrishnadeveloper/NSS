@@ -123,32 +123,6 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
       </div>
     </div>
   );
-
-  function getAccentColor() {
-    switch (userType) {
-      case 'admin':
-        return 'text-red-600';
-      case 'coach':
-        return 'text-blue-600';
-      case 'parent':
-        return 'text-green-600';
-      default:
-        return 'text-gray-600';
-    }
-  }
-
-  function getButtonStyles() {
-    switch (userType) {
-      case 'admin':
-        return 'bg-red-600 hover:bg-red-700';
-      case 'coach':
-        return 'bg-blue-600 hover:bg-blue-700';
-      case 'parent':
-        return 'bg-green-600 hover:bg-green-700';
-      default:
-        return '';
-    }
-  }
 };
 
 export default LoginCard;
