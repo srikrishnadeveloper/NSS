@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { toast } from '@/components/ui/sonner';
+import { toast } from 'sonner';
 
 interface LoginCardProps {
   userType: 'admin' | 'coach' | 'parent';
@@ -23,7 +23,7 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
     console.log(`${userType} login attempt:`, { username, password });
     
     // Mock login success
-    toast(`Welcome back!`);
+    toast('Welcome back!');
 
     // Redirect based on user type
     if (userType === 'admin') {

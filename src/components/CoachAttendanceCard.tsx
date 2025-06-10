@@ -1,19 +1,17 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 const CoachAttendanceCard = () => {
   const [isCheckedIn, setIsCheckedIn] = useState(false);
   const [checkInTime, setCheckInTime] = useState<Date | null>(null);
-  const { toast } = useToast();
 
   const handleCheckIn = () => {
     setIsCheckedIn(true);
     setCheckInTime(new Date());
-    toast({
-      title: "Checked In",
-      description: "Session started",
+    toast('Checked In', {
+      description: 'Session started',
     });
   };
 
@@ -23,8 +21,7 @@ const CoachAttendanceCard = () => {
     const duration = checkInTime ? 
       Math.round((checkOutTime.getTime() - checkInTime.getTime()) / (1000 * 60)) : 0;
     
-    toast({
-      title: "Checked Out",
+    toast('Checked Out', {
       description: `Session duration: ${duration} minutes`,
     });
     
