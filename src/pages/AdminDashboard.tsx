@@ -371,7 +371,7 @@ const AdminDashboard = () => {
     return <ParentCredentialsCard credentials={parentCredentials} onBack={handleBackToDashboard} />;
   }
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <div className="container mx-auto px-3 py-4 max-w-md sm:max-w-2xl md:max-w-4xl lg:max-w-6xl">
+      <div className="container mx-auto px-3 py-4 max-w-md sm:max-w-2xl md:max-4xl lg:max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-4 px-1">
           <div className="flex items-center space-x-2">
