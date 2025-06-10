@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from '@/components/ui/sonner';
 
 interface LoginCardProps {
@@ -37,21 +36,26 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
+    <div className="min-h-screen bg-black text-white px-6 py-12 flex flex-col justify-center">
+      <div className="w-full max-w-sm mx-auto space-y-8">
+        {/* Header Section */}
+        <div className="text-center space-y-6">
+          <div className="flex justify-center">
             {icon}
           </div>
-          <CardTitle className="text-2xl font-bold">{title} Login</CardTitle>
-          <CardDescription>
-            National Sports School Portal
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
+            <p className="text-gray-400 text-sm">National Sports School Portal</p>
+          </div>
+        </div>
+
+        {/* Form Section */}
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor={`${userType}-username`}>Username</Label>
+              <Label htmlFor={`${userType}-username`} className="text-white text-sm font-medium">
+                Username
+              </Label>
               <Input
                 id={`${userType}-username`}
                 type="text"
@@ -59,10 +63,13 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
+                className="bg-gray-900 border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-500 focus:ring-gray-500 h-12"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor={`${userType}-password`}>Password</Label>
+              <Label htmlFor={`${userType}-password`} className="text-white text-sm font-medium">
+                Password
+              </Label>
               <Input
                 id={`${userType}-password`}
                 type="password"
@@ -70,22 +77,29 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="bg-gray-900 border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-500 focus:ring-gray-500 h-12"
               />
             </div>
-            <Button type="submit" className="w-full">
-              Sign In
-            </Button>
-          </form>
-          <div className="mt-4 text-center">
-            <a
-              href="#"
-              className="text-sm text-muted-foreground hover:text-primary"
-            >
-              Forgot your password?
-            </a>
           </div>
-        </CardContent>
-      </Card>
+          
+          <Button 
+            type="submit" 
+            className="w-full h-12 bg-white text-black hover:bg-gray-200 font-semibold text-base"
+          >
+            Sign In
+          </Button>
+        </form>
+
+        {/* Footer */}
+        <div className="text-center">
+          <a
+            href="#"
+            className="text-sm text-gray-400 hover:text-white transition-colors"
+          >
+            Forgot your password?
+          </a>
+        </div>
+      </div>
     </div>
   );
 };

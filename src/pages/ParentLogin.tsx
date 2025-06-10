@@ -5,12 +5,12 @@ import { Users } from 'lucide-react';
 
 const ParentLogin = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black">
       <LoginCard
         userType="parent"
         title="Parent"
         description="Track your child's progress and school communications"
-        icon={<Users className="h-12 w-12 text-green-500" />}
+        icon={<Users className="h-16 w-16 text-green-500" />}
       />
     </div>
   );
