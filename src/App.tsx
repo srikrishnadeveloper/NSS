@@ -15,9 +15,9 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <Toaster />
-    <PWAInstallPrompt />
     <BrowserRouter>
+      <Toaster position="top-right" />
+      <PWAInstallPrompt />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/login/admin" element={<AdminLogin />} />
