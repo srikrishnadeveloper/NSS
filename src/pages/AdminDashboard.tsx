@@ -16,142 +16,195 @@ import ParentCredentialsCard from '@/components/ParentCredentialsCard';
 import DrillActivityCard from '@/components/DrillActivityCard';
 
 // Mock data
-const mockStudents = [
-  { id: 1, name: 'John Smith', sport: 'Soccer', feePlan: 'Monthly - $150', paymentStatus: 'paid', parentContact: '+1234567890', lastPayment: '2024-01-15', group: 'Advanced' },
-  { id: 2, name: 'Sarah Johnson', sport: 'Basketball', feePlan: 'Weekly - $40', paymentStatus: 'failed', parentContact: '+1234567891', lastPayment: '2024-01-10', group: 'Intermediate' },
-  { id: 3, name: 'Mike Davis', sport: 'Tennis', feePlan: 'Monthly - $200', paymentStatus: 'upcoming', parentContact: '+1234567892', lastPayment: '2023-12-15', group: 'Beginners' },
-  { id: 4, name: 'Emma Wilson', sport: 'Swimming', feePlan: 'Monthly - $180', paymentStatus: 'paid', parentContact: '+1234567893', lastPayment: '2024-01-20', group: 'Advanced' },
-];
-
-const mockPaymentLogs = [
-  { id: 1, studentName: 'John Smith', amount: '$150', status: 'paid', date: '2024-01-15', method: 'Stripe' },
-  { id: 2, studentName: 'Sarah Johnson', amount: '$40', status: 'failed', date: '2024-01-10', method: 'Stripe' },
-  { id: 3, studentName: 'Mike Davis', amount: '$200', status: 'upcoming', date: '2024-02-15', method: 'Stripe' },
-  { id: 4, studentName: 'Emma Wilson', amount: '$180', status: 'paid', date: '2024-01-20', method: 'Stripe' },
-];
-
-const mockWhatsAppLogs = [
-  { id: 1, studentName: 'John Smith', message: 'Payment reminder sent', status: 'delivered', date: '2024-01-14' },
-  { id: 2, studentName: 'Sarah Johnson', message: 'Payment failed notification', status: 'delivered', date: '2024-01-10' },
-  { id: 3, studentName: 'Mike Davis', message: 'Upcoming payment reminder', status: 'pending', date: '2024-01-25' },
-];
-
-const mockCoachAttendance = [
-  { 
-    id: 1, 
-    coachName: 'Coach Michael', 
-    date: '2024-01-25', 
-    entryTime: '08:00 AM', 
-    entryLocation: 'Main Gate', 
-    exitTime: '06:00 PM', 
-    exitLocation: 'Side Gate',
-    sport: 'Soccer',
-    batch: 'Advanced Soccer'
-  },
-  { 
-    id: 2, 
-    coachName: 'Coach Sarah', 
-    date: '2024-01-25', 
-    entryTime: '09:00 AM', 
-    entryLocation: 'Main Gate', 
-    exitTime: '05:30 PM', 
-    exitLocation: 'Main Gate',
-    sport: 'Basketball',
-    batch: 'Intermediate Basketball'
-  },
-  { 
-    id: 3, 
-    coachName: 'Coach David', 
-    date: '2024-01-25', 
-    entryTime: '07:30 AM', 
-    entryLocation: 'Side Gate', 
-    exitTime: '04:00 PM', 
-    exitLocation: 'Side Gate',
-    sport: 'Tennis',
-    batch: 'Beginners Tennis'
-  },
-  { 
-    id: 4, 
-    coachName: 'Coach Lisa', 
-    date: '2024-01-25', 
-    entryTime: '10:00 AM', 
-    entryLocation: 'Pool Entrance', 
-    exitTime: '07:00 PM', 
-    exitLocation: 'Pool Entrance',
-    sport: 'Swimming',
-    batch: 'Advanced Swimming'
-  },
-];
+const mockStudents = [{
+  id: 1,
+  name: 'John Smith',
+  sport: 'Soccer',
+  feePlan: 'Monthly - $150',
+  paymentStatus: 'paid',
+  parentContact: '+1234567890',
+  lastPayment: '2024-01-15',
+  group: 'Advanced'
+}, {
+  id: 2,
+  name: 'Sarah Johnson',
+  sport: 'Basketball',
+  feePlan: 'Weekly - $40',
+  paymentStatus: 'failed',
+  parentContact: '+1234567891',
+  lastPayment: '2024-01-10',
+  group: 'Intermediate'
+}, {
+  id: 3,
+  name: 'Mike Davis',
+  sport: 'Tennis',
+  feePlan: 'Monthly - $200',
+  paymentStatus: 'upcoming',
+  parentContact: '+1234567892',
+  lastPayment: '2023-12-15',
+  group: 'Beginners'
+}, {
+  id: 4,
+  name: 'Emma Wilson',
+  sport: 'Swimming',
+  feePlan: 'Monthly - $180',
+  paymentStatus: 'paid',
+  parentContact: '+1234567893',
+  lastPayment: '2024-01-20',
+  group: 'Advanced'
+}];
+const mockPaymentLogs = [{
+  id: 1,
+  studentName: 'John Smith',
+  amount: '$150',
+  status: 'paid',
+  date: '2024-01-15',
+  method: 'Stripe'
+}, {
+  id: 2,
+  studentName: 'Sarah Johnson',
+  amount: '$40',
+  status: 'failed',
+  date: '2024-01-10',
+  method: 'Stripe'
+}, {
+  id: 3,
+  studentName: 'Mike Davis',
+  amount: '$200',
+  status: 'upcoming',
+  date: '2024-02-15',
+  method: 'Stripe'
+}, {
+  id: 4,
+  studentName: 'Emma Wilson',
+  amount: '$180',
+  status: 'paid',
+  date: '2024-01-20',
+  method: 'Stripe'
+}];
+const mockWhatsAppLogs = [{
+  id: 1,
+  studentName: 'John Smith',
+  message: 'Payment reminder sent',
+  status: 'delivered',
+  date: '2024-01-14'
+}, {
+  id: 2,
+  studentName: 'Sarah Johnson',
+  message: 'Payment failed notification',
+  status: 'delivered',
+  date: '2024-01-10'
+}, {
+  id: 3,
+  studentName: 'Mike Davis',
+  message: 'Upcoming payment reminder',
+  status: 'pending',
+  date: '2024-01-25'
+}];
+const mockCoachAttendance = [{
+  id: 1,
+  coachName: 'Coach Michael',
+  date: '2024-01-25',
+  entryTime: '08:00 AM',
+  entryLocation: 'Main Gate',
+  exitTime: '06:00 PM',
+  exitLocation: 'Side Gate',
+  sport: 'Soccer',
+  batch: 'Advanced Soccer'
+}, {
+  id: 2,
+  coachName: 'Coach Sarah',
+  date: '2024-01-25',
+  entryTime: '09:00 AM',
+  entryLocation: 'Main Gate',
+  exitTime: '05:30 PM',
+  exitLocation: 'Main Gate',
+  sport: 'Basketball',
+  batch: 'Intermediate Basketball'
+}, {
+  id: 3,
+  coachName: 'Coach David',
+  date: '2024-01-25',
+  entryTime: '07:30 AM',
+  entryLocation: 'Side Gate',
+  exitTime: '04:00 PM',
+  exitLocation: 'Side Gate',
+  sport: 'Tennis',
+  batch: 'Beginners Tennis'
+}, {
+  id: 4,
+  coachName: 'Coach Lisa',
+  date: '2024-01-25',
+  entryTime: '10:00 AM',
+  entryLocation: 'Pool Entrance',
+  exitTime: '07:00 PM',
+  exitLocation: 'Pool Entrance',
+  sport: 'Swimming',
+  batch: 'Advanced Swimming'
+}];
 
 // Mock data for drill activities
-const mockDrillActivities = [
-  {
-    id: 1,
-    title: 'Advanced Soccer Dribbling Drills',
-    description: 'Intensive dribbling practice focusing on ball control, quick turns, and speed. Students practiced cone weaving and 1v1 scenarios.',
-    image: 'photo-1431576901776-e539bd916ba2',
-    date: '2024-01-24',
-    sport: 'Soccer',
-    participants: 12,
-    duration: '45 mins',
-    instructor: 'Coach Michael'
-  },
-  {
-    id: 2,
-    title: 'Basketball Shooting Fundamentals',
-    description: 'Free throw practice and 3-point shooting drills. Focus on proper form, follow-through, and consistency.',
-    image: 'photo-1546519638-68e109498ffc',
-    date: '2024-01-23',
-    sport: 'Basketball',
-    participants: 8,
-    duration: '60 mins',
-    instructor: 'Coach Sarah'
-  },
-  {
-    id: 3,
-    title: 'Tennis Backhand Technique',
-    description: 'Working on two-handed backhand strokes, footwork positioning, and cross-court rallies.',
-    image: 'photo-1622279457486-62dcc4a431d6',
-    date: '2024-01-22',
-    sport: 'Tennis',
-    participants: 6,
-    duration: '50 mins',
-    instructor: 'Coach David'
-  },
-  {
-    id: 4,
-    title: 'Swimming Stroke Improvement',
-    description: 'Freestyle and backstroke technique refinement. Focus on breathing patterns and stroke efficiency.',
-    image: 'photo-1530549387789-4c1017266635',
-    date: '2024-01-21',
-    sport: 'Swimming',
-    participants: 10,
-    duration: '55 mins',
-    instructor: 'Coach Lisa'
-  },
-  {
-    id: 5,
-    title: 'Soccer Tactical Positioning',
-    description: 'Team formation drills, defensive positioning, and offensive strategies for game situations.',
-    image: 'photo-1551698618-1dfe5d97d256',
-    date: '2024-01-20',
-    sport: 'Soccer',
-    participants: 15,
-    duration: '70 mins',
-    instructor: 'Coach Michael'
-  },
-  {
-    id: 6,
-    title: 'Basketball Defense Drills',
-    description: 'Man-to-man defense, help defense concepts, and defensive slides practice.',
-    image: 'photo-1505666287802-931dc83948e9',
-    date: '2024-01-19',
-    sport: 'Basketball',
-    participants: 9,
-    duration: '40 mins',
-    instructor: 'Coach Sarah'
-  }
-];
+const mockDrillActivities = [{
+  id: 1,
+  title: 'Advanced Soccer Dribbling Drills',
+  description: 'Intensive dribbling practice focusing on ball control, quick turns, and speed. Students practiced cone weaving and 1v1 scenarios.',
+  image: 'photo-1431576901776-e539bd916ba2',
+  date: '2024-01-24',
+  sport: 'Soccer',
+  participants: 12,
+  duration: '45 mins',
+  instructor: 'Coach Michael'
+}, {
+  id: 2,
+  title: 'Basketball Shooting Fundamentals',
+  description: 'Free throw practice and 3-point shooting drills. Focus on proper form, follow-through, and consistency.',
+  image: 'photo-1546519638-68e109498ffc',
+  date: '2024-01-23',
+  sport: 'Basketball',
+  participants: 8,
+  duration: '60 mins',
+  instructor: 'Coach Sarah'
+}, {
+  id: 3,
+  title: 'Tennis Backhand Technique',
+  description: 'Working on two-handed backhand strokes, footwork positioning, and cross-court rallies.',
+  image: 'photo-1622279457486-62dcc4a431d6',
+  date: '2024-01-22',
+  sport: 'Tennis',
+  participants: 6,
+  duration: '50 mins',
+  instructor: 'Coach David'
+}, {
+  id: 4,
+  title: 'Swimming Stroke Improvement',
+  description: 'Freestyle and backstroke technique refinement. Focus on breathing patterns and stroke efficiency.',
+  image: 'photo-1530549387789-4c1017266635',
+  date: '2024-01-21',
+  sport: 'Swimming',
+  participants: 10,
+  duration: '55 mins',
+  instructor: 'Coach Lisa'
+}, {
+  id: 5,
+  title: 'Soccer Tactical Positioning',
+  description: 'Team formation drills, defensive positioning, and offensive strategies for game situations.',
+  image: 'photo-1551698618-1dfe5d97d256',
+  date: '2024-01-20',
+  sport: 'Soccer',
+  participants: 15,
+  duration: '70 mins',
+  instructor: 'Coach Michael'
+}, {
+  id: 6,
+  title: 'Basketball Defense Drills',
+  description: 'Man-to-man defense, help defense concepts, and defensive slides practice.',
+  image: 'photo-1505666287802-931dc83948e9',
+  date: '2024-01-19',
+  sport: 'Basketball',
+  participants: 9,
+  duration: '40 mins',
+  instructor: 'Coach Sarah'
+}];
 
 // Extended mock data for 45 days attendance
 const generateMockAttendanceData = () => {
@@ -159,7 +212,6 @@ const generateMockAttendanceData = () => {
   const sports = ['Soccer', 'Basketball', 'Tennis', 'Swimming'];
   const statuses = ['present', 'absent', 'late'];
   const data = [];
-  
   for (let i = 0; i < 45; i++) {
     const date = subDays(new Date(), i);
     students.forEach((student, index) => {
@@ -176,33 +228,37 @@ const generateMockAttendanceData = () => {
       }
     });
   }
-  
   return data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
-
 const mockStudentAttendanceExtended = generateMockAttendanceData();
-
 const AdminDashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [parentCredentials, setParentCredentials] = useState(null);
   const [attendanceView, setAttendanceView] = useState('student');
   const [showDrillHistory, setShowDrillHistory] = useState(false);
-  const [dateRange, setDateRange] = useState<{ from: Date; to: Date }>({
+  const [dateRange, setDateRange] = useState<{
+    from: Date;
+    to: Date;
+  }>({
     from: new Date(),
     to: new Date()
   });
   const [isStartDatePickerOpen, setIsStartDatePickerOpen] = useState(false);
   const [isEndDatePickerOpen, setIsEndDatePickerOpen] = useState(false);
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
 
   // Filter attendance data based on date range
   const filteredAttendanceData = useMemo(() => {
     return mockStudentAttendanceExtended.filter(record => {
       const recordDate = new Date(record.date);
-      return isWithinInterval(recordDate, { start: dateRange.from, end: dateRange.to });
+      return isWithinInterval(recordDate, {
+        start: dateRange.from,
+        end: dateRange.to
+      });
     });
   }, [dateRange]);
-
   const getPaymentStatusBadge = (status: string) => {
     switch (status) {
       case 'paid':
@@ -215,7 +271,6 @@ const AdminDashboard = () => {
         return <Badge variant="secondary" className="text-xs">{status}</Badge>;
     }
   };
-
   const getAttendanceStatusBadge = (status: string) => {
     switch (status) {
       case 'present':
@@ -228,59 +283,55 @@ const AdminDashboard = () => {
         return <Badge variant="secondary" className="text-xs">{status}</Badge>;
     }
   };
-
   const downloadAttendancePDF = () => {
     const pdf = new jsPDF();
-    
+
     // Add title
     pdf.setFontSize(16);
     pdf.text('Student Attendance Report', 20, 20);
-    
+
     // Add date range
     pdf.setFontSize(12);
     pdf.text(`Period: ${format(dateRange.from, 'MMM dd, yyyy')} - ${format(dateRange.to, 'MMM dd, yyyy')}`, 20, 35);
-    
+
     // Prepare data for table
-    const tableData = filteredAttendanceData.map(record => [
-      record.studentName,
-      format(new Date(record.date), 'MMM dd, yyyy'),
-      record.status,
-      record.sport,
-      record.batch
-    ]);
-    
+    const tableData = filteredAttendanceData.map(record => [record.studentName, format(new Date(record.date), 'MMM dd, yyyy'), record.status, record.sport, record.batch]);
+
     // Add table using autoTable
     autoTable(pdf, {
       head: [['Student Name', 'Date', 'Status', 'Sport', 'Batch']],
       body: tableData,
       startY: 45,
-      styles: { fontSize: 8 },
-      headStyles: { fillColor: [220, 53, 69] },
-      alternateRowStyles: { fillColor: [245, 245, 245] }
+      styles: {
+        fontSize: 8
+      },
+      headStyles: {
+        fillColor: [220, 53, 69]
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245]
+      }
     });
-    
+
     // Add summary
     const totalRecords = filteredAttendanceData.length;
     const presentCount = filteredAttendanceData.filter(r => r.status === 'present').length;
     const absentCount = filteredAttendanceData.filter(r => r.status === 'absent').length;
     const lateCount = filteredAttendanceData.filter(r => r.status === 'late').length;
-    
     const finalY = (pdf as any).lastAutoTable.finalY + 10;
     pdf.text('Summary:', 20, finalY);
     pdf.text(`Total Records: ${totalRecords}`, 20, finalY + 10);
     pdf.text(`Present: ${presentCount}`, 20, finalY + 20);
     pdf.text(`Absent: ${absentCount}`, 20, finalY + 30);
     pdf.text(`Late: ${lateCount}`, 20, finalY + 40);
-    
+
     // Save the PDF
     pdf.save(`attendance-report-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
-    
     toast({
       title: "PDF Downloaded",
-      description: "Attendance report has been downloaded successfully.",
+      description: "Attendance report has been downloaded successfully."
     });
   };
-
   const handleStartDateSelect = (date: Date | undefined) => {
     if (date) {
       setDateRange(prev => ({
@@ -290,7 +341,6 @@ const AdminDashboard = () => {
       setIsStartDatePickerOpen(false);
     }
   };
-
   const handleEndDateSelect = (date: Date | undefined) => {
     if (date) {
       setDateRange(prev => ({
@@ -300,41 +350,27 @@ const AdminDashboard = () => {
       setIsEndDatePickerOpen(false);
     }
   };
-
   const handleAddStudent = () => {
     setCurrentView('registration');
   };
-
-  const handleRegistrationSuccess = (credentials: { username: string; password: string }) => {
+  const handleRegistrationSuccess = (credentials: {
+    username: string;
+    password: string;
+  }) => {
     setParentCredentials(credentials);
     setCurrentView('credentials');
   };
-
   const handleBackToDashboard = () => {
     setCurrentView('dashboard');
     setParentCredentials(null);
   };
-
   if (currentView === 'registration') {
-    return (
-      <StudentRegistrationForm
-        onBack={handleBackToDashboard}
-        onSuccess={handleRegistrationSuccess}
-      />
-    );
+    return <StudentRegistrationForm onBack={handleBackToDashboard} onSuccess={handleRegistrationSuccess} />;
   }
-
   if (currentView === 'credentials' && parentCredentials) {
-    return (
-      <ParentCredentialsCard
-        credentials={parentCredentials}
-        onBack={handleBackToDashboard}
-      />
-    );
+    return <ParentCredentialsCard credentials={parentCredentials} onBack={handleBackToDashboard} />;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="container mx-auto px-3 py-4 max-w-md sm:max-w-2xl md:max-w-4xl lg:max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-4 px-1">
@@ -381,8 +417,7 @@ const AdminDashboard = () => {
                 </div>
               </CardHeader>
               <CardContent className="space-y-3 px-3 sm:px-6">
-                {mockStudents.map((student) => (
-                  <Card key={student.id} className="p-3 border border-gray-200 shadow-sm">
+                {mockStudents.map(student => <Card key={student.id} className="p-3 border border-gray-200 shadow-sm">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="font-semibold text-gray-900 text-sm pr-2">{student.name}</h3>
                       {getPaymentStatusBadge(student.paymentStatus)}
@@ -408,8 +443,7 @@ const AdminDashboard = () => {
                         </div>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </CardContent>
             </Card>
           </TabsContent>
@@ -425,8 +459,7 @@ const AdminDashboard = () => {
                 <CardDescription className="text-xs sm:text-sm">Stripe payment history</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3 px-3 sm:px-6">
-                {mockPaymentLogs.map((log) => (
-                  <Card key={log.id} className="p-3 border border-gray-200 shadow-sm">
+                {mockPaymentLogs.map(log => <Card key={log.id} className="p-3 border border-gray-200 shadow-sm">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="font-semibold text-gray-900 text-sm pr-2">{log.studentName}</h3>
                       {getPaymentStatusBadge(log.status)}
@@ -445,8 +478,7 @@ const AdminDashboard = () => {
                         <span className="font-medium">{log.method}</span>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </CardContent>
             </Card>
           </TabsContent>
@@ -462,8 +494,7 @@ const AdminDashboard = () => {
                 <CardDescription className="text-xs sm:text-sm">View automated message logs</CardDescription>
               </CardHeader>
               <CardContent className="space-y-3 px-3 sm:px-6">
-                {mockWhatsAppLogs.map((log) => (
-                  <Card key={log.id} className="p-3 border border-gray-200 shadow-sm">
+                {mockWhatsAppLogs.map(log => <Card key={log.id} className="p-3 border border-gray-200 shadow-sm">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="font-semibold text-gray-900 text-sm pr-2">{log.studentName}</h3>
                       <Badge variant={log.status === 'delivered' ? 'default' : 'secondary'} className="text-xs">
@@ -480,8 +511,7 @@ const AdminDashboard = () => {
                         <span className="font-medium">{log.date}</span>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </CardContent>
             </Card>
           </TabsContent>
@@ -508,30 +538,21 @@ const AdminDashboard = () => {
                         <label className="text-xs font-medium text-gray-700">Start Date</label>
                         <Popover open={isStartDatePickerOpen} onOpenChange={setIsStartDatePickerOpen}>
                           <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-full text-xs justify-start"
-                            >
+                            <Button variant="outline" size="sm" className="w-full text-xs justify-start">
                               <CalendarIcon className="h-3 w-3 mr-1" />
                               {format(dateRange.from, 'MMM dd, yyyy')}
                             </Button>
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={dateRange.from}
-                              onSelect={(date) => {
-                                if (date) {
-                                  setDateRange(prev => ({
-                                    ...prev,
-                                    from: date
-                                  }));
-                                  setIsStartDatePickerOpen(false);
-                                }
-                              }}
-                              initialFocus
-                            />
+                            <Calendar mode="single" selected={dateRange.from} onSelect={date => {
+                            if (date) {
+                              setDateRange(prev => ({
+                                ...prev,
+                                from: date
+                              }));
+                              setIsStartDatePickerOpen(false);
+                            }
+                          }} initialFocus />
                           </PopoverContent>
                         </Popover>
                       </div>
@@ -540,31 +561,21 @@ const AdminDashboard = () => {
                         <label className="text-xs font-medium text-gray-700">End Date</label>
                         <Popover open={isEndDatePickerOpen} onOpenChange={setIsEndDatePickerOpen}>
                           <PopoverTrigger asChild>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-full text-xs justify-start"
-                            >
+                            <Button variant="outline" size="sm" className="w-full text-xs justify-start">
                               <CalendarIcon className="h-3 w-3 mr-1" />
                               {format(dateRange.to, 'MMM dd, yyyy')}
                             </Button>
                           </PopoverTrigger>
                           <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={dateRange.to}
-                              onSelect={(date) => {
-                                if (date) {
-                                  setDateRange(prev => ({
-                                    ...prev,
-                                    to: date
-                                  }));
-                                  setIsEndDatePickerOpen(false);
-                                }
-                              }}
-                              disabled={(date) => date < dateRange.from}
-                              initialFocus
-                            />
+                            <Calendar mode="single" selected={dateRange.to} onSelect={date => {
+                            if (date) {
+                              setDateRange(prev => ({
+                                ...prev,
+                                to: date
+                              }));
+                              setIsEndDatePickerOpen(false);
+                            }
+                          }} disabled={date => date < dateRange.from} initialFocus />
                           </PopoverContent>
                         </Popover>
                       </div>
@@ -572,21 +583,12 @@ const AdminDashboard = () => {
                     
                     <div className="flex items-center justify-between">
                       <div className="flex space-x-2">
-                        <Button 
-                          onClick={() => setShowDrillHistory(!showDrillHistory)}
-                          size="sm"
-                          variant={showDrillHistory ? "default" : "outline"}
-                          className="text-xs"
-                        >
+                        <Button onClick={() => setShowDrillHistory(!showDrillHistory)} size="sm" variant={showDrillHistory ? "default" : "outline"} className="text-xs px-[32px]">
                           <Activity className="h-3 w-3 mr-1" />
                           Drill History
                         </Button>
                         
-                        <Button 
-                          onClick={downloadAttendancePDF}
-                          size="sm"
-                          className="bg-green-600 hover:bg-green-700 text-xs"
-                        >
+                        <Button onClick={downloadAttendancePDF} size="sm" className="bg-green-600 hover:bg-green-700 text-xs">
                           <Download className="h-3 w-3 mr-1" />
                           Download PDF
                         </Button>
@@ -594,54 +596,35 @@ const AdminDashboard = () => {
                     </div>
                   </div>
 
-                  {!showDrillHistory && (
-                    <div className="flex space-x-2">
-                      <Button 
-                        variant={attendanceView === 'student' ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setAttendanceView('student')}
-                        className="flex-1 text-xs"
-                      >
+                  {!showDrillHistory && <div className="flex space-x-2">
+                      <Button variant={attendanceView === 'student' ? 'default' : 'outline'} size="sm" onClick={() => setAttendanceView('student')} className="flex-1 text-xs">
                         <Users className="h-3 w-3 mr-1" />
                         Students
                       </Button>
-                      <Button 
-                        variant={attendanceView === 'coach' ? 'default' : 'outline'}
-                        size="sm"
-                        onClick={() => setAttendanceView('coach')}
-                        className="flex-1 text-xs"
-                      >
+                      <Button variant={attendanceView === 'coach' ? 'default' : 'outline'} size="sm" onClick={() => setAttendanceView('coach')} className="flex-1 text-xs">
                         <Clock className="h-3 w-3 mr-1" />
                         Coaches
                       </Button>
-                    </div>
-                  )}
+                    </div>}
                 </div>
               </CardHeader>
               <CardContent className="space-y-3 px-3 sm:px-6">
-                {showDrillHistory ? (
-                  <div className="space-y-3">
+                {showDrillHistory ? <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-medium text-gray-900">Recent Drill Activities</h3>
                       <span className="text-xs text-gray-500">({mockDrillActivities.length} activities)</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {mockDrillActivities.map((activity) => (
-                        <DrillActivityCard key={activity.id} activity={activity} />
-                      ))}
+                      {mockDrillActivities.map(activity => <DrillActivityCard key={activity.id} activity={activity} />)}
                     </div>
-                  </div>
-                ) : (
-                  <>
-                    {attendanceView === 'student' ? (
-                      <>
+                  </div> : <>
+                    {attendanceView === 'student' ? <>
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-xs text-gray-500">
                             ({filteredAttendanceData.length} records)
                           </span>
                         </div>
-                        {filteredAttendanceData.slice(0, 20).map((record) => (
-                          <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
+                        {filteredAttendanceData.slice(0, 20).map(record => <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
                             <div className="flex justify-between items-start mb-3">
                               <div>
                                 <h3 className="font-semibold text-gray-900 text-sm">{record.studentName}</h3>
@@ -659,18 +642,12 @@ const AdminDashboard = () => {
                                 <span className="font-medium">{record.sport}</span>
                               </div>
                             </div>
-                          </Card>
-                        ))}
-                        {filteredAttendanceData.length > 20 && (
-                          <div className="text-center text-xs text-gray-500 py-2">
+                          </Card>)}
+                        {filteredAttendanceData.length > 20 && <div className="text-center text-xs text-gray-500 py-2">
                             Showing 20 of {filteredAttendanceData.length} records. Download PDF for full report.
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {mockCoachAttendance.map((record) => (
-                          <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
+                          </div>}
+                      </> : <>
+                        {mockCoachAttendance.map(record => <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
                             <div className="flex justify-between items-start mb-3">
                               <div>
                                 <h3 className="font-semibold text-gray-900 text-sm">{record.coachName}</h3>
@@ -712,19 +689,14 @@ const AdminDashboard = () => {
                                 </div>
                               </div>
                             </div>
-                          </Card>
-                        ))}
-                      </>
-                    )}
-                  </>
-                )}
+                          </Card>)}
+                      </>}
+                  </>}
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default AdminDashboard;
