@@ -583,7 +583,7 @@ const AdminDashboard = () => {
                     
                     <div className="flex items-center justify-between">
                       <div className="flex space-x-2">
-                        <Button onClick={() => setShowDrillHistory(!showDrillHistory)} size="sm" variant={showDrillHistory ? "default" : "outline"} className="text-xs px-[32px]">
+                        <Button onClick={() => setShowDrillHistory(!showDrillHistory)} size="sm" variant={showDrillHistory ? "default" : "outline"} className="text-xs px-[27px]">
                           <Activity className="h-3 w-3 mr-1" />
                           Drill History
                         </Button>
