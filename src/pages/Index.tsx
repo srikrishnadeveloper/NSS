@@ -8,61 +8,53 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 flex items-center justify-center">
       <div className="container mx-auto px-4 py-8">
-        <Header />
+        {/* Header with Logo */}
+        <div className="text-center mb-12">
+          <div className="flex justify-center items-center mb-6">
+            <img 
+              src="/lovable-uploads/759b44af-ccb8-4cf0-a32f-ce1580c02622.png" 
+              alt="National Sports School Logo" 
+              className="h-16 w-auto object-contain"
+            />
+          </div>
+        </div>
         
         <div className="flex flex-col items-center justify-center">
-          {/* Login Card Container */}
-          <div className="bg-white rounded-3xl shadow-xl w-full max-w-md mx-4 p-8">
-            <div className="text-center mb-8">
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">Log in</h1>
-              <p className="text-gray-500">Hello! Welcome Back</p>
-            </div>
-
-            {/* User Type Selection */}
-            <div className="space-y-4 mb-8">
-              <div className="flex gap-3">
-                <UserTypeCard
-                  userType="admin"
-                  title="Admin"
-                  description=""
-                  icon={<Shield className="h-6 w-6 text-white" />}
-                  href="/login/admin"
-                  isActive={false}
-                />
-                
-                <UserTypeCard
-                  userType="coach"
-                  title="Coach"
-                  description=""
-                  icon={<User className="h-6 w-6 text-gray-600" />}
-                  href="/login/coach"
-                  isActive={false}
-                />
-              </div>
+          {/* User Type Selection */}
+          <div className="space-y-8 flex flex-col items-center">
+            {/* Top row - Admin and Coach */}
+            <div className="flex gap-12">
+              <UserTypeCard
+                userType="admin"
+                title="Admin"
+                description=""
+                icon={<Shield className="h-8 w-8 text-red-500" />}
+                href="/login/admin"
+                isActive={false}
+                backgroundColor="bg-red-100"
+              />
               
               <UserTypeCard
-                userType="parent"
-                title="Parent"
+                userType="coach"
+                title="Coach"
                 description=""
-                icon={<Users className="h-6 w-6 text-gray-600" />}
-                href="/login/parent"
+                icon={<User className="h-8 w-8 text-blue-500" />}
+                href="/login/coach"
                 isActive={false}
-                fullWidth={true}
+                backgroundColor="bg-blue-100"
               />
             </div>
-
-            {/* Login Button */}
-            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-full transition-colors">
-              Log in
-            </button>
-
-            {/* Footer Text */}
-            <div className="text-center mt-6">
-              <p className="text-gray-600 text-sm">
-                Don't have an account? 
-                <span className="text-blue-500 font-medium ml-1">Create One</span>
-              </p>
-            </div>
+            
+            {/* Bottom row - Parent */}
+            <UserTypeCard
+              userType="parent"
+              title="Parent"
+              description=""
+              icon={<Users className="h-8 w-8 text-green-500" />}
+              href="/login/parent"
+              isActive={false}
+              backgroundColor="bg-green-100"
+            />
           </div>
         </div>
       </div>
