@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from '@/components/ui/sonner';
 
 interface LoginCardProps {
   userType: 'admin' | 'coach' | 'parent';
@@ -17,17 +17,13 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
-  const { toast } = useToast();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(`${userType} login attempt:`, { username, password });
     
     // Mock login success
-    toast({
-      title: "Login Successful",
-      description: `Welcome back, ${title}!`,
-    });
+    toast(`Welcome back, ${title}!`);
 
     // Redirect based on user type
     if (userType === 'admin') {
@@ -127,6 +123,32 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
       </div>
     </div>
   );
+
+  function getAccentColor() {
+    switch (userType) {
+      case 'admin':
+        return 'text-red-600';
+      case 'coach':
+        return 'text-blue-600';
+      case 'parent':
+        return 'text-green-600';
+      default:
+        return 'text-gray-600';
+    }
+  }
+
+  function getButtonStyles() {
+    switch (userType) {
+      case 'admin':
+        return 'bg-red-600 hover:bg-red-700';
+      case 'coach':
+        return 'bg-blue-600 hover:bg-blue-700';
+      case 'parent':
+        return 'bg-green-600 hover:bg-green-700';
+      default:
+        return '';
+    }
+  }
 };
 
 export default LoginCard;
