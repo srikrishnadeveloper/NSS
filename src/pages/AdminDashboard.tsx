@@ -588,7 +588,7 @@ const AdminDashboard = () => {
                           Drill History
                         </Button>
                         
-                        <Button onClick={downloadAttendancePDF} size="sm" className="bg-green-600 hover:bg-green-700 text-xs">
+                        <Button onClick={downloadAttendancePDF} size="sm" className="bg-green-600 hover:bg-green-700 text-xs px-[17px]">
                           <Download className="h-3 w-3 mr-1" />
                           Download PDF
                         </Button>
