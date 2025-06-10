@@ -11,8 +11,13 @@ interface BeforeInstallPromptEvent extends Event {
 const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   useEffect(() => {
+    // Detect iOS
+    const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    setIsIOS(iOS);
+
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -24,6 +29,14 @@ const PWAInstallPrompt = () => {
       }
     };
 
+    // For iOS, show install prompt if not in standalone mode
+    if (iOS && !window.matchMedia('(display-mode: standalone)').matches) {
+      const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-seen');
+      if (!hasSeenPrompt) {
+        setShowInstallPrompt(true);
+      }
+    }
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
     return () => {
@@ -32,6 +45,13 @@ const PWAInstallPrompt = () => {
   }, []);
 
   const handleInstallClick = async () => {
+    if (isIOS) {
+      // For iOS, show instructions
+      setShowInstallPrompt(false);
+      localStorage.setItem('pwa-install-prompt-seen', 'true');
+      return;
+    }
+
     if (!deferredPrompt) return;
 
     deferredPrompt.prompt();
@@ -51,7 +71,7 @@ const PWAInstallPrompt = () => {
     localStorage.setItem('pwa-install-prompt-seen', 'true');
   };
 
-  if (!showInstallPrompt || !deferredPrompt) {
+  if (!showInstallPrompt) {
     return null;
   }
 
@@ -67,7 +87,10 @@ const PWAInstallPrompt = () => {
           <div>
             <h3 className="font-semibold text-sm">Install Sports Hub</h3>
             <p className="text-xs text-muted-foreground">
-              Install our app for quick access and offline use
+              {isIOS 
+                ? "Tap the share button and select 'Add to Home Screen'"
+                : "Install our app for quick access and offline use"
+              }
             </p>
           </div>
         </div>
@@ -82,7 +105,7 @@ const PWAInstallPrompt = () => {
       </div>
       <div className="flex space-x-2 mt-3">
         <Button onClick={handleInstallClick} size="sm" className="flex-1">
-          Install
+          {isIOS ? "Got it" : "Install"}
         </Button>
         <Button variant="outline" onClick={handleDismiss} size="sm" className="flex-1">
           Not now
