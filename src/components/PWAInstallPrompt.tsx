@@ -59,7 +59,11 @@ const PWAInstallPrompt = () => {
     <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-background border rounded-lg shadow-lg p-4 max-w-sm w-full mx-4">
       <div className="flex items-start justify-between">
         <div className="flex items-center space-x-3">
-          <Download className="h-6 w-6 text-primary" />
+          <img 
+            src="/lovable-uploads/d3e2c1ed-3a94-410a-92a5-4126a5366ca6.png" 
+            alt="Sports Hub Logo" 
+            className="h-8 w-8 rounded"
+          />
           <div>
             <h3 className="font-semibold text-sm">Install Sports Hub</h3>
             <p className="text-xs text-muted-foreground">
