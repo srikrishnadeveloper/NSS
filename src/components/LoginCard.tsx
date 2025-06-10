@@ -4,9 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { User, Shield, Users } from 'lucide-react';
 
 interface LoginCardProps {
   userType: 'admin' | 'coach' | 'parent';
@@ -41,16 +39,16 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
     }
   };
 
-  const getCardStyles = () => {
+  const getAccentColor = () => {
     switch (userType) {
       case 'admin':
-        return 'border-red-200 hover:border-red-300 bg-gradient-to-br from-red-50 to-white hover:shadow-red-100';
+        return 'text-red-600';
       case 'coach':
-        return 'border-blue-200 hover:border-blue-300 bg-gradient-to-br from-blue-50 to-white hover:shadow-blue-100';
+        return 'text-blue-600';
       case 'parent':
-        return 'border-green-200 hover:border-green-300 bg-gradient-to-br from-green-50 to-white hover:shadow-green-100';
+        return 'text-green-600';
       default:
-        return '';
+        return 'text-gray-600';
     }
   };
 
@@ -68,57 +66,66 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
   };
 
   return (
-    <Card className={`w-full max-w-md transition-all duration-300 hover:shadow-xl ${getCardStyles()}`}>
-      <CardHeader className="text-center pb-4">
-        <div className="mx-auto mb-4 p-3 rounded-full bg-white shadow-md">
+    <div className="w-full max-w-md mx-auto px-6 py-8">
+      {/* Header Section */}
+      <div className="text-center mb-12">
+        <div className="mx-auto mb-6 p-4 rounded-full bg-white shadow-lg w-fit">
           {icon}
         </div>
-        <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-        <CardDescription className="text-base">{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor={`${userType}-username`}>Username</Label>
-            <Input
-              id={`${userType}-username`}
-              type="text"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              className="h-11"
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor={`${userType}-password`}>Password</Label>
-            <Input
-              id={`${userType}-password`}
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="h-11"
-            />
-          </div>
-          <Button
-            type="submit"
-            className={`w-full h-11 text-white font-semibold transition-colors duration-200 ${getButtonStyles()}`}
-          >
-            Sign In as {title}
-          </Button>
-        </form>
-        <div className="mt-4 text-center">
-          <a
-            href="#"
-            className="text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            Forgot your password?
-          </a>
+        <h1 className={`text-3xl font-bold mb-2 ${getAccentColor()}`}>{title}</h1>
+        <p className="text-muted-foreground text-base">{description}</p>
+      </div>
+
+      {/* Login Form */}
+      <form onSubmit={handleLogin} className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor={`${userType}-username`} className="text-base font-medium">
+            Username
+          </Label>
+          <Input
+            id={`${userType}-username`}
+            type="text"
+            placeholder="Enter your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            className="h-12 text-base border-0 bg-muted/50 focus:bg-background focus:ring-2 focus:ring-offset-2"
+          />
         </div>
-      </CardContent>
-    </Card>
+        
+        <div className="space-y-2">
+          <Label htmlFor={`${userType}-password`} className="text-base font-medium">
+            Password
+          </Label>
+          <Input
+            id={`${userType}-password`}
+            type="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            className="h-12 text-base border-0 bg-muted/50 focus:bg-background focus:ring-2 focus:ring-offset-2"
+          />
+        </div>
+
+        <Button
+          type="submit"
+          className={`w-full h-12 text-base font-semibold transition-all duration-200 shadow-lg ${getButtonStyles()}`}
+        >
+          Sign In as {title}
+        </Button>
+      </form>
+
+      {/* Forgot Password Link */}
+      <div className="mt-8 text-center">
+        <a
+          href="#"
+          className={`text-sm ${getAccentColor()} hover:underline transition-colors`}
+        >
+          Forgot your password?
+        </a>
+      </div>
+    </div>
   );
 };
 
