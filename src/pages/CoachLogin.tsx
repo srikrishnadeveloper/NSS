@@ -5,7 +5,7 @@ import { User } from 'lucide-react';
 
 const CoachLogin = () => {
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-white">
       <LoginCard
         userType="coach"
         title="Coach"

@@ -36,7 +36,7 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-12 flex flex-col justify-center">
+    <div className="min-h-screen bg-white text-black px-6 py-12 flex flex-col justify-center">
       <div className="w-full max-w-sm mx-auto space-y-8">
         {/* Header Section */}
         <div className="text-center space-y-6">
@@ -44,8 +44,8 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
             {icon}
           </div>
           <div className="space-y-2">
-            <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-            <p className="text-gray-400 text-sm">National Sports School Portal</p>
+            <h1 className="text-3xl font-bold tracking-tight text-black">{title}</h1>
+            <p className="text-gray-600 text-sm">National Sports School Portal</p>
           </div>
         </div>
 
@@ -53,7 +53,7 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor={`${userType}-username`} className="text-white text-sm font-medium">
+              <Label htmlFor={`${userType}-username`} className="text-black text-sm font-medium">
                 Username
               </Label>
               <Input
@@ -63,11 +63,11 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required
-                className="bg-gray-900 border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-500 focus:ring-gray-500 h-12"
+                className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-500 focus:border-gray-900 focus:ring-gray-900 h-12"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor={`${userType}-password`} className="text-white text-sm font-medium">
+              <Label htmlFor={`${userType}-password`} className="text-black text-sm font-medium">
                 Password
               </Label>
               <Input
@@ -77,14 +77,14 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="bg-gray-900 border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-500 focus:ring-gray-500 h-12"
+                className="bg-gray-50 border-gray-300 text-black placeholder:text-gray-500 focus:border-gray-900 focus:ring-gray-900 h-12"
               />
             </div>
           </div>
           
           <Button 
             type="submit" 
-            className="w-full h-12 bg-white text-black hover:bg-gray-200 font-semibold text-base"
+            className="w-full h-12 bg-black text-white hover:bg-gray-800 font-semibold text-base"
           >
             Sign In
           </Button>
@@ -94,7 +94,7 @@ const LoginCard = ({ userType, title, description, icon }: LoginCardProps) => {
         <div className="text-center">
           <a
             href="#"
-            className="text-sm text-gray-400 hover:text-white transition-colors"
+            className="text-sm text-gray-600 hover:text-black transition-colors"
           >
             Forgot your password?
           </a>
