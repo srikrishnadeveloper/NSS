@@ -76,40 +76,42 @@ const PWAInstallPrompt = () => {
   }
 
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-background border rounded-lg shadow-lg p-4 max-w-sm w-full mx-4">
-      <div className="flex items-start justify-between">
-        <div className="flex items-center space-x-3">
-          <img 
-            src="/lovable-uploads/d3e2c1ed-3a94-410a-92a5-4126a5366ca6.png" 
-            alt="Sports Hub Logo" 
-            className="h-8 w-8 rounded"
-          />
-          <div>
-            <h3 className="font-semibold text-sm">Install Sports Hub</h3>
-            <p className="text-xs text-muted-foreground">
-              {isIOS 
-                ? "Tap the share button and select 'Add to Home Screen'"
-                : "Install our app for quick access and offline use"
-              }
-            </p>
+    <div className="fixed top-4 left-4 right-4 z-50 max-w-sm mx-auto">
+      <div className="bg-background border rounded-lg shadow-lg p-4 w-full">
+        <div className="flex items-start justify-between gap-2">
+          <div className="flex items-center space-x-3 min-w-0 flex-1">
+            <img 
+              src="/lovable-uploads/d3e2c1ed-3a94-410a-92a5-4126a5366ca6.png" 
+              alt="Sports Hub Logo" 
+              className="h-8 w-8 rounded flex-shrink-0"
+            />
+            <div className="min-w-0 flex-1">
+              <h3 className="font-semibold text-sm truncate">Install Sports Hub</h3>
+              <p className="text-xs text-muted-foreground leading-tight">
+                {isIOS 
+                  ? "Tap share → 'Add to Home Screen'"
+                  : "Install for quick access"
+                }
+              </p>
+            </div>
           </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDismiss}
+            className="h-6 w-6 p-0 flex-shrink-0"
+          >
+            <X className="h-4 w-4" />
+          </Button>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handleDismiss}
-          className="h-6 w-6 p-0"
-        >
-          <X className="h-4 w-4" />
-        </Button>
-      </div>
-      <div className="flex space-x-2 mt-3">
-        <Button onClick={handleInstallClick} size="sm" className="flex-1">
-          {isIOS ? "Got it" : "Install"}
-        </Button>
-        <Button variant="outline" onClick={handleDismiss} size="sm" className="flex-1">
-          Not now
-        </Button>
+        <div className="flex space-x-2 mt-3">
+          <Button onClick={handleInstallClick} size="sm" className="flex-1 text-xs">
+            {isIOS ? "Got it" : "Install"}
+          </Button>
+          <Button variant="outline" onClick={handleDismiss} size="sm" className="flex-1 text-xs">
+            Not now
+          </Button>
+        </div>
       </div>
     </div>
   );

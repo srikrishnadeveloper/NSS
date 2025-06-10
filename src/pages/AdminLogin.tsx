@@ -5,7 +5,7 @@ import { Shield } from 'lucide-react';
 
 const AdminLogin = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full overflow-x-hidden">
       <LoginCard
         userType="admin"
         title="Administrator"
