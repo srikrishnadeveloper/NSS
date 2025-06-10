@@ -6,11 +6,11 @@ import { Shield, Users, User } from 'lucide-react';
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600">
+    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 flex items-center justify-center">
       <div className="container mx-auto px-4 py-8">
         <Header />
         
-        <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-8">
+        <div className="flex flex-col items-center justify-center">
           {/* Login Card Container */}
           <div className="bg-white rounded-3xl shadow-xl w-full max-w-md mx-4 p-8">
             <div className="text-center mb-8">
