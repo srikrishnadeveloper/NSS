@@ -1,11 +1,11 @@
 
-const CACHE_NAME = 'sports-school-hub-v3';
+const CACHE_NAME = 'sports-school-hub-v4';
 const urlsToCache = [
   '/',
   '/static/js/bundle.js',
   '/static/css/main.css',
   '/manifest.json',
-  '/lovable-uploads/d3e2c1ed-3a94-410a-92a5-4126a5366ca6.png',
+  '/lovable-uploads/b664e962-4870-4c4b-a986-a4f843478fce.png',
   '/lovable-uploads/33900580-8f8e-4c8d-b6d6-511af21db8ca.png'
 ];
 
