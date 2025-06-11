@@ -15,7 +15,7 @@ const Index = () => {
           <div className="flex justify-center items-center gap-8 md:gap-12">
             <UserTypeCard
               userType="admin"
-              title="Admin"
+              title="ADMIN"
               description=""
               icon={<Shield className="h-12 w-12 md:h-16 md:w-16 text-red-600" />}
               href="/login/admin"
@@ -23,7 +23,7 @@ const Index = () => {
             
             <UserTypeCard
               userType="coach"
-              title="Coach"
+              title="COACH"
               description=""
               icon={<User className="h-12 w-12 md:h-16 md:w-16 text-blue-600" />}
               href="/login/coach"
@@ -34,7 +34,7 @@ const Index = () => {
           <div className="flex justify-center">
             <UserTypeCard
               userType="parent"
-              title="Parent"
+              title="PARENT"
               description=""
               icon={<Users className="h-12 w-12 md:h-16 md:w-16 text-green-600" />}
               href="/login/parent"
