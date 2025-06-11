@@ -12,35 +12,58 @@ const PWAInstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
+  const [isPWAInstalled, setIsPWAInstalled] = useState(false);
 
   useEffect(() => {
     // Detect iOS
     const iOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     setIsIOS(iOS);
 
+    // Check if PWA is already installed
+    const checkPWAInstalled = () => {
+      // Check if running in standalone mode (PWA is installed)
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+      // Check if running as PWA on mobile
+      const isInWebAppiOS = (window.navigator as any).standalone === true;
+      
+      return isStandalone || isInWebAppiOS;
+    };
+
+    const pwaInstalled = checkPWAInstalled();
+    setIsPWAInstalled(pwaInstalled);
+
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       
-      // Check if user has seen the prompt before
-      const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-seen');
-      if (!hasSeenPrompt) {
+      // Only show prompt if PWA is not installed and user hasn't dismissed it permanently
+      const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-dismissed-permanently');
+      if (!pwaInstalled && !hasSeenPrompt) {
         setShowInstallPrompt(true);
       }
     };
 
-    // For iOS, show install prompt if not in standalone mode
-    if (iOS && !window.matchMedia('(display-mode: standalone)').matches) {
-      const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-seen');
+    // For iOS, show install prompt if not in standalone mode and PWA not installed
+    if (iOS && !pwaInstalled) {
+      const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-dismissed-permanently');
       if (!hasSeenPrompt) {
         setShowInstallPrompt(true);
       }
     }
 
+    // Listen for app installed event
+    const handleAppInstalled = () => {
+      setIsPWAInstalled(true);
+      setShowInstallPrompt(false);
+      localStorage.removeItem('pwa-install-prompt-dismissed-permanently');
+    };
+
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener('appinstalled', handleAppInstalled);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener('appinstalled', handleAppInstalled);
     };
   }, []);
 
@@ -48,7 +71,7 @@ const PWAInstallPrompt = () => {
     if (isIOS) {
       // For iOS, show instructions
       setShowInstallPrompt(false);
-      localStorage.setItem('pwa-install-prompt-seen', 'true');
+      localStorage.setItem('pwa-install-prompt-dismissed-permanently', 'true');
       return;
     }
 
@@ -59,19 +82,27 @@ const PWAInstallPrompt = () => {
     
     if (choiceResult.outcome === 'accepted') {
       console.log('User accepted the install prompt');
+      setIsPWAInstalled(true);
     }
     
     setDeferredPrompt(null);
     setShowInstallPrompt(false);
-    localStorage.setItem('pwa-install-prompt-seen', 'true');
+    localStorage.setItem('pwa-install-prompt-dismissed-permanently', 'true');
   };
 
   const handleDismiss = () => {
     setShowInstallPrompt(false);
+    // Set a temporary dismissal (will show again on next visit unless permanently dismissed)
     localStorage.setItem('pwa-install-prompt-seen', 'true');
   };
 
-  if (!showInstallPrompt) {
+  const handleDismissPermanently = () => {
+    setShowInstallPrompt(false);
+    localStorage.setItem('pwa-install-prompt-dismissed-permanently', 'true');
+  };
+
+  // Don't show if PWA is already installed
+  if (!showInstallPrompt || isPWAInstalled) {
     return null;
   }
 
@@ -108,8 +139,8 @@ const PWAInstallPrompt = () => {
           <Button onClick={handleInstallClick} size="sm" className="flex-1 text-xs">
             {isIOS ? "Got it" : "Install"}
           </Button>
-          <Button variant="outline" onClick={handleDismiss} size="sm" className="flex-1 text-xs">
-            Not now
+          <Button variant="outline" onClick={handleDismissPermanently} size="sm" className="flex-1 text-xs">
+            Don't ask again
           </Button>
         </div>
       </div>

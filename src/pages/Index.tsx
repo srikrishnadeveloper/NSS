@@ -50,6 +50,13 @@ const Index = () => {
         <Header />
         
         <div className="flex flex-col items-center justify-center min-h-[40vh] space-y-8 mt-16">
+          {/* Select Your Role Text */}
+          <div className="text-center mb-8">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-800 uppercase tracking-wide">
+              SELECT YOUR ROLE
+            </h1>
+          </div>
+
           {/* First row - Admin and Coach */}
           <div className="flex justify-center items-center gap-8 md:gap-12">
             <UserTypeCard
