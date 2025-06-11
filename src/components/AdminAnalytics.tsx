@@ -26,12 +26,12 @@ const sportDistribution = [
 ];
 
 const paymentTrends = [
-  { month: 'Jan', successful: 85, failed: 8, pending: 7 },
-  { month: 'Feb', successful: 88, failed: 6, pending: 6 },
-  { month: 'Mar', successful: 92, failed: 4, pending: 4 },
-  { month: 'Apr', successful: 89, failed: 7, pending: 4 },
-  { month: 'May', successful: 94, failed: 3, pending: 3 },
-  { month: 'Jun', successful: 96, failed: 2, pending: 2 }
+  { month: 'Jan', successful: 85, not_paid: 8, pending: 7 },
+  { month: 'Feb', successful: 88, not_paid: 6, pending: 6 },
+  { month: 'Mar', successful: 92, not_paid: 4, pending: 4 },
+  { month: 'Apr', successful: 89, not_paid: 7, pending: 4 },
+  { month: 'May', successful: 94, not_paid: 3, pending: 3 },
+  { month: 'Jun', successful: 96, not_paid: 2, pending: 2 }
 ];
 
 const coachPerformance = [
@@ -88,7 +88,7 @@ const chartConfig = {
   absent: { label: 'Absent', color: '#ef4444' },
   late: { label: 'Late', color: '#f59e0b' },
   successful: { label: 'Successful', color: '#10b981' },
-  failed: { label: 'Failed', color: '#ef4444' },
+  not_paid: { label: 'Not Paid', color: '#ef4444' },
   pending: { label: 'Pending', color: '#f59e0b' }
 };
 
@@ -424,6 +424,49 @@ const AdminAnalytics = ({ onBack }: AdminAnalyticsProps) => {
                 </CardContent>
               </Card>
             </div>
+          </TabsContent>
+
+          {/* Payments Analytics */}
+          <TabsContent value="payments" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>Payment Trends</CardTitle>
+                <CardDescription>Payment success and failure patterns over time</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer config={chartConfig} className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={paymentTrends}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Area 
+                        type="monotone" 
+                        dataKey="successful" 
+                        stackId="1"
+                        stroke="#10b981" 
+                        fill="#10b981" 
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="pending" 
+                        stackId="1"
+                        stroke="#f59e0b" 
+                        fill="#f59e0b" 
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="not_paid" 
+                        stackId="1"
+                        stroke="#ef4444" 
+                        fill="#ef4444" 
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </ChartContainer>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           {/* Performance Analytics */}
