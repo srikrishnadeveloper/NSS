@@ -1,5 +1,5 @@
 
-import * as React from 'react';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface UserTypeCardProps {
@@ -13,7 +13,7 @@ interface UserTypeCardProps {
 const UserTypeCard = ({ userType, title, description, icon, href }: UserTypeCardProps) => {
   const navigate = useNavigate();
 
-  const handleClick = React.useCallback(() => {
+  const handleClick = useCallback(() => {
     navigate(href);
   }, [navigate, href]);
 
