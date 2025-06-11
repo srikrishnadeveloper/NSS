@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Shield, MessageSquare, Calendar as CalendarIcon, UserPlus, CreditCard, Phone, Users, MapPin, Clock, Download, Activity } from 'lucide-react';
+import { Shield, MessageSquare, Calendar as CalendarIcon, UserPlus, CreditCard, Phone, Users, MapPin, Clock, Download, Activity, BarChart3 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { format, subDays, isWithinInterval } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -14,6 +14,7 @@ import autoTable from 'jspdf-autotable';
 import StudentRegistrationForm from '@/components/StudentRegistrationForm';
 import ParentCredentialsCard from '@/components/ParentCredentialsCard';
 import DrillActivityCard from '@/components/DrillActivityCard';
+import AdminAnalytics from '@/components/AdminAnalytics';
 
 // Mock data
 const mockStudents = [{
@@ -360,15 +361,23 @@ const AdminDashboard = () => {
     setParentCredentials(credentials);
     setCurrentView('credentials');
   };
+  const handleViewAnalytics = () => {
+    setCurrentView('analytics');
+  };
+
   const handleBackToDashboard = () => {
     setCurrentView('dashboard');
     setParentCredentials(null);
   };
+
   if (currentView === 'registration') {
     return <StudentRegistrationForm onBack={handleBackToDashboard} onSuccess={handleRegistrationSuccess} />;
   }
   if (currentView === 'credentials' && parentCredentials) {
     return <ParentCredentialsCard credentials={parentCredentials} onBack={handleBackToDashboard} />;
+  }
+  if (currentView === 'analytics') {
+    return <AdminAnalytics onBack={handleBackToDashboard} />;
   }
   return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="container mx-auto px-3 py-4 max-w-md sm:max-w-2xl md:max-4xl lg:max-w-6xl">
@@ -377,6 +386,16 @@ const AdminDashboard = () => {
           <div className="flex items-center space-x-2">
             <Shield className="h-5 w-5 text-red-600 flex-shrink-0" />
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+          </div>
+          {/* Analytics Button - Only show on larger screens */}
+          <div className="hidden lg:block">
+            <Button 
+              onClick={handleViewAnalytics}
+              className="bg-blue-600 hover:bg-blue-700 flex items-center space-x-2"
+            >
+              <BarChart3 className="h-4 w-4" />
+              <span>View Analytics</span>
+            </Button>
           </div>
         </div>
 
@@ -700,3 +719,5 @@ const AdminDashboard = () => {
     </div>;
 };
 export default AdminDashboard;
+
+}

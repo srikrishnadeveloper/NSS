@@ -13,9 +13,9 @@ interface UserTypeCardProps {
 const UserTypeCard = ({ userType, title, description, icon, href }: UserTypeCardProps) => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleClick = React.useCallback(() => {
     navigate(href);
-  };
+  }, [navigate, href]);
 
   const getCircleStyles = () => {
     switch (userType) {
