@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Download } from 'lucide-react';
@@ -36,15 +35,15 @@ const PWAInstallPrompt = () => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       
-      // Only show prompt if PWA is not installed and user hasn't dismissed it permanently
+      // Show prompt if user hasn't dismissed it permanently
       const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-dismissed-permanently');
-      if (!pwaInstalled && !hasSeenPrompt) {
+      if (!hasSeenPrompt) {
         setShowInstallPrompt(true);
       }
     };
 
-    // For iOS, show install prompt if not in standalone mode and PWA not installed
-    if (iOS && !pwaInstalled) {
+    // For iOS or if PWA is installed, show install prompt based on user preference
+    if (iOS || pwaInstalled) {
       const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-dismissed-permanently');
       if (!hasSeenPrompt) {
         setShowInstallPrompt(true);
@@ -54,8 +53,11 @@ const PWAInstallPrompt = () => {
     // Listen for app installed event
     const handleAppInstalled = () => {
       setIsPWAInstalled(true);
-      setShowInstallPrompt(false);
-      localStorage.removeItem('pwa-install-prompt-dismissed-permanently');
+      // Keep showing prompt unless user dismisses permanently
+      const hasSeenPrompt = localStorage.getItem('pwa-install-prompt-dismissed-permanently');
+      if (!hasSeenPrompt) {
+        setShowInstallPrompt(true);
+      }
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -75,17 +77,20 @@ const PWAInstallPrompt = () => {
       return;
     }
 
-    if (!deferredPrompt) return;
+    if (!deferredPrompt && !isPWAInstalled) return;
 
-    deferredPrompt.prompt();
-    const choiceResult = await deferredPrompt.userChoice;
-    
-    if (choiceResult.outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-      setIsPWAInstalled(true);
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const choiceResult = await deferredPrompt.userChoice;
+      
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted the install prompt');
+        setIsPWAInstalled(true);
+      }
+      
+      setDeferredPrompt(null);
     }
     
-    setDeferredPrompt(null);
     setShowInstallPrompt(false);
     localStorage.setItem('pwa-install-prompt-dismissed-permanently', 'true');
   };
@@ -101,14 +106,14 @@ const PWAInstallPrompt = () => {
     localStorage.setItem('pwa-install-prompt-dismissed-permanently', 'true');
   };
 
-  // Don't show if PWA is already installed
-  if (!showInstallPrompt || isPWAInstalled) {
+  // Show prompt based on conditions
+  if (!showInstallPrompt) {
     return null;
   }
 
   return (
-    <div className="fixed top-4 left-4 right-4 z-50 max-w-sm mx-auto">
-      <div className="bg-background border rounded-lg shadow-lg p-4 w-full">
+    <div className="fixed bottom-4 left-4 right-4 z-50 max-w-md mx-auto">
+      <div className="bg-background border rounded-lg shadow-lg p-4 w-full animate-fade-in">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center space-x-3 min-w-0 flex-1">
             <img 
@@ -117,11 +122,15 @@ const PWAInstallPrompt = () => {
               className="h-8 w-8 rounded flex-shrink-0"
             />
             <div className="min-w-0 flex-1">
-              <h3 className="font-semibold text-sm truncate">Install Sports Hub</h3>
+              <h3 className="font-semibold text-sm truncate">
+                {isPWAInstalled ? 'Sports Hub PWA Available' : 'Install Sports Hub'}
+              </h3>
               <p className="text-xs text-muted-foreground leading-tight">
                 {isIOS 
                   ? "Tap share → 'Add to Home Screen'"
-                  : "Install for quick access"
+                  : isPWAInstalled 
+                    ? "PWA is ready for quick access"
+                    : "Install for quick access"
                 }
               </p>
             </div>
@@ -137,10 +146,10 @@ const PWAInstallPrompt = () => {
         </div>
         <div className="flex space-x-2 mt-3">
           <Button onClick={handleInstallClick} size="sm" className="flex-1 text-xs">
-            {isIOS ? "Got it" : "Install"}
+            {isIOS ? "Got it" : isPWAInstalled ? "Open PWA" : "Install"}
           </Button>
           <Button variant="outline" onClick={handleDismissPermanently} size="sm" className="flex-1 text-xs">
-            Don't ask again
+            Don't show again
           </Button>
         </div>
       </div>

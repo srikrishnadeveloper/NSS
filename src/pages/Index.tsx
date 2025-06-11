@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Shield, User, Users } from 'lucide-react';
+import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 
 const Index = () => {
   const [selectedRole, setSelectedRole] = useState<'admin' | 'coach' | 'parent' | null>(null);
@@ -208,6 +209,9 @@ const Index = () => {
           )}
         </div>
       </div>
+      
+      {/* PWA Install Prompt */}
+      <PWAInstallPrompt />
     </div>
   );
 };
