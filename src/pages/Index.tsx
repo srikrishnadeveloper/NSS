@@ -39,7 +39,7 @@ const Index = () => {
     {
       id: 'parent' as const,
       title: 'Parent',
-      subtitle: 'Track your child\'s progress',
+      subtitle: "Track your child's progress",
       icon: Users,
       color: 'from-green-500 to-green-600',
       hoverColor: 'hover:from-green-600 hover:to-green-700',
@@ -216,31 +216,6 @@ const Index = () => {
                 Please select your role above to enable the login form
               </p>
             )}
-          </div>
-        </div>
-
-        {/* Footer Features */}
-        <div className="mt-12 grid md:grid-cols-3 gap-8 text-center max-w-4xl mx-auto">
-          <div className="p-4">
-            <div className="inline-flex p-3 rounded-full bg-blue-100 mb-3">
-              <Shield className="h-5 w-5 text-blue-600" />
-            </div>
-            <h4 className="font-semibold text-gray-900 mb-1">Secure Access</h4>
-            <p className="text-sm text-gray-600">Role-based authentication ensures data security</p>
-          </div>
-          <div className="p-4">
-            <div className="inline-flex p-3 rounded-full bg-green-100 mb-3">
-              <User className="h-5 w-5 text-green-600" />
-            </div>
-            <h4 className="font-semibold text-gray-900 mb-1">Real-time Updates</h4>
-            <p className="text-sm text-gray-600">Get instant notifications and progress tracking</p>
-          </div>
-          <div className="p-4">
-            <div className="inline-flex p-3 rounded-full bg-purple-100 mb-3">
-              <Users className="h-5 w-5 text-purple-600" />
-            </div>
-            <h4 className="font-semibold text-gray-900 mb-1">Connected Community</h4>
-            <p className="text-sm text-gray-600">Bridge communication between all stakeholders</p>
           </div>
         </div>
       </div>
