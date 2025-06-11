@@ -93,110 +93,108 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Main Login Card */}
+        {/* Main Login Section */}
         <div className="max-w-md mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
-            
-            {/* Role Icons */}
-            <div className="mb-8">
-              <div className="flex justify-center items-center space-x-8">
-                {roles.map((role) => {
-                  const Icon = role.icon;
-                  const isSelected = selectedRole === role.id;
-                  
-                  return (
-                    <div
-                      key={role.id}
-                      className={`p-4 rounded-full cursor-pointer transition-all duration-300 ${
-                        isSelected 
-                          ? `bg-gradient-to-r ${role.color} transform scale-125 shadow-lg` 
-                          : 'bg-gray-100 hover:bg-gray-200 transform scale-100 hover:scale-110'
-                      }`}
-                      onClick={() => {
-                        setSelectedRole(role.id);
-                        setUsername('');
-                        setPassword('');
-                      }}
-                    >
-                      <Icon className={`h-8 w-8 ${isSelected ? 'text-white' : 'text-gray-600'}`} />
-                    </div>
-                  );
-                })}
+          
+          {/* Role Icons */}
+          <div className="mb-8">
+            <div className="flex justify-center items-center space-x-8">
+              {roles.map((role) => {
+                const Icon = role.icon;
+                const isSelected = selectedRole === role.id;
+                
+                return (
+                  <div
+                    key={role.id}
+                    className={`p-4 rounded-full cursor-pointer transition-all duration-300 ${
+                      isSelected 
+                        ? `bg-gradient-to-r ${role.color} transform scale-125 shadow-lg` 
+                        : 'bg-white/80 hover:bg-white transform scale-100 hover:scale-110 shadow-md hover:shadow-lg'
+                    }`}
+                    onClick={() => {
+                      setSelectedRole(role.id);
+                      setUsername('');
+                      setPassword('');
+                    }}
+                  >
+                    <Icon className={`h-8 w-8 ${isSelected ? 'text-white' : 'text-gray-600'}`} />
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Login Form */}
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="username" className="text-sm font-medium text-gray-700">
+                  Username
+                </Label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  disabled={!selectedRole}
+                  required
+                  className={`mt-1 h-12 text-base transition-all duration-200 bg-white/90 backdrop-blur-sm ${
+                    !selectedRole 
+                      ? 'bg-gray-100/90 text-gray-400 cursor-not-allowed' 
+                      : 'bg-white/90 hover:bg-white'
+                  }`}
+                />
+              </div>
+              <div>
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                  Password
+                </Label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  disabled={!selectedRole}
+                  required
+                  className={`mt-1 h-12 text-base transition-all duration-200 bg-white/90 backdrop-blur-sm ${
+                    !selectedRole 
+                      ? 'bg-gray-100/90 text-gray-400 cursor-not-allowed' 
+                      : 'bg-white/90 hover:bg-white'
+                  }`}
+                />
               </div>
             </div>
-
-            {/* Login Form */}
-            <form onSubmit={handleLogin} className="space-y-6">
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="username" className="text-sm font-medium text-gray-700">
-                    Username
-                  </Label>
-                  <Input
-                    id="username"
-                    type="text"
-                    placeholder="Enter your username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    disabled={!selectedRole}
-                    required
-                    className={`mt-1 h-12 text-base transition-all duration-200 ${
-                      !selectedRole 
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                        : 'bg-white'
-                    }`}
-                  />
+            
+            <Button 
+              type="submit" 
+              disabled={isLoading || !selectedRole || !username || !password}
+              className={`w-full h-12 text-base font-semibold transition-all duration-300 ${
+                selectedRoleData
+                  ? `bg-gradient-to-r ${selectedRoleData.color} ${selectedRoleData.hoverColor} text-white shadow-lg hover:shadow-xl`
+                  : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }`}
+            >
+              {isLoading ? (
+                <div className="flex items-center space-x-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                  <span>Signing In...</span>
                 </div>
-                <div>
-                  <Label htmlFor="password" className="text-sm font-medium text-gray-700">
-                    Password
-                  </Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    disabled={!selectedRole}
-                    required
-                    className={`mt-1 h-12 text-base transition-all duration-200 ${
-                      !selectedRole 
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                        : 'bg-white'
-                    }`}
-                  />
-                </div>
-              </div>
-              
-              <Button 
-                type="submit" 
-                disabled={isLoading || !selectedRole || !username || !password}
-                className={`w-full h-12 text-base font-semibold transition-all duration-300 ${
-                  selectedRoleData
-                    ? `bg-gradient-to-r ${selectedRoleData.color} ${selectedRoleData.hoverColor} text-white`
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                }`}
-              >
-                {isLoading ? (
-                  <div className="flex items-center space-x-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                    <span>Signing In...</span>
-                  </div>
-                ) : selectedRoleData ? (
-                  `Sign In as ${selectedRoleData.title}`
-                ) : (
-                  'Select Role to Continue'
-                )}
-              </Button>
-            </form>
+              ) : selectedRoleData ? (
+                `Sign In as ${selectedRoleData.title}`
+              ) : (
+                'Select Role to Continue'
+              )}
+            </Button>
+          </form>
 
-            {/* Helper Text */}
-            {!selectedRole && (
-              <p className="text-center text-sm text-gray-500 mt-4">
-                Please select your role above to enable the login form
-              </p>
-            )}
-          </div>
+          {/* Helper Text */}
+          {!selectedRole && (
+            <p className="text-center text-sm text-gray-600 mt-4">
+              Please select your role above to enable the login form
+            </p>
+          )}
         </div>
       </div>
     </div>
