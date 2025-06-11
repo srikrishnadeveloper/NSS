@@ -232,6 +232,7 @@ const generateMockAttendanceData = () => {
   return data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 const mockStudentAttendanceExtended = generateMockAttendanceData();
+
 const AdminDashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [parentCredentials, setParentCredentials] = useState(null);
@@ -260,6 +261,7 @@ const AdminDashboard = () => {
       });
     });
   }, [dateRange]);
+  
   const getPaymentStatusBadge = (status: string) => {
     switch (status) {
       case 'paid':
@@ -272,6 +274,7 @@ const AdminDashboard = () => {
         return <Badge variant="secondary" className="text-xs">{status}</Badge>;
     }
   };
+  
   const getAttendanceStatusBadge = (status: string) => {
     switch (status) {
       case 'present':
@@ -284,6 +287,7 @@ const AdminDashboard = () => {
         return <Badge variant="secondary" className="text-xs">{status}</Badge>;
     }
   };
+  
   const downloadAttendancePDF = () => {
     const pdf = new jsPDF();
 
@@ -333,6 +337,7 @@ const AdminDashboard = () => {
       description: "Attendance report has been downloaded successfully."
     });
   };
+  
   const handleStartDateSelect = (date: Date | undefined) => {
     if (date) {
       setDateRange(prev => ({
@@ -342,6 +347,7 @@ const AdminDashboard = () => {
       setIsStartDatePickerOpen(false);
     }
   };
+  
   const handleEndDateSelect = (date: Date | undefined) => {
     if (date) {
       setDateRange(prev => ({
@@ -351,9 +357,11 @@ const AdminDashboard = () => {
       setIsEndDatePickerOpen(false);
     }
   };
+  
   const handleAddStudent = () => {
     setCurrentView('registration');
   };
+  
   const handleRegistrationSuccess = (credentials: {
     username: string;
     password: string;
@@ -361,6 +369,7 @@ const AdminDashboard = () => {
     setParentCredentials(credentials);
     setCurrentView('credentials');
   };
+  
   const handleViewAnalytics = () => {
     setCurrentView('analytics');
   };
@@ -379,7 +388,9 @@ const AdminDashboard = () => {
   if (currentView === 'analytics') {
     return <AdminAnalytics onBack={handleBackToDashboard} />;
   }
-  return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+  
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="container mx-auto px-3 py-4 max-w-md sm:max-w-2xl md:max-4xl lg:max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-4 px-1">
@@ -716,8 +727,8 @@ const AdminDashboard = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </div>;
+    </div>
+  );
 };
-export default AdminDashboard;
 
-}
+export default AdminDashboard;
