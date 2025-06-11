@@ -106,18 +106,29 @@ const Index = () => {
                 return (
                   <div
                     key={role.id}
-                    className={`p-4 rounded-full cursor-pointer transition-all duration-300 ${
-                      isSelected 
-                        ? `bg-gradient-to-r ${role.color} transform scale-125 shadow-lg` 
-                        : 'bg-white/80 hover:bg-white transform scale-100 hover:scale-110 shadow-md hover:shadow-lg'
-                    }`}
+                    className="flex flex-col items-center cursor-pointer"
                     onClick={() => {
                       setSelectedRole(role.id);
                       setUsername('');
                       setPassword('');
                     }}
                   >
-                    <Icon className={`h-8 w-8 ${isSelected ? 'text-white' : 'text-gray-600'}`} />
+                    <div
+                      className={`p-4 rounded-full transition-all duration-300 ${
+                        isSelected 
+                          ? `bg-gradient-to-r ${role.color} transform scale-125 shadow-lg` 
+                          : 'bg-white/80 hover:bg-white transform scale-100 hover:scale-110 shadow-md hover:shadow-lg'
+                      }`}
+                    >
+                      <Icon className={`h-8 w-8 ${isSelected ? 'text-white' : 'text-gray-600'}`} />
+                    </div>
+                    {isSelected && (
+                      <div className="mt-3 text-center">
+                        <span className={`text-sm font-semibold ${role.textColor}`}>
+                          {role.title}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 );
               })}
