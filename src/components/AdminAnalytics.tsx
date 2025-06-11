@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, AreaChart } from 'recharts';
-import { TrendingUp, TrendingDown, Users, DollarSign, Activity, Calendar, Download, ArrowLeft, Clock, MapPin, User } from 'lucide-react';
+import { TrendingUp, TrendingDown, Users, DollarSign, Activity, Calendar, Download, ArrowLeft, Clock, MapPin, User, UserPlus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 // Mock analytics data
@@ -34,11 +35,48 @@ const paymentTrends = [
   { month: 'Jun', successful: 96, not_paid: 2, pending: 2 }
 ];
 
+// Extended coach performance data (40 coaches)
 const coachPerformance = [
-  { name: 'Coach Michael', students: 28, retention: 95, rating: 4.8 },
-  { name: 'Coach Sarah', students: 22, retention: 92, rating: 4.7 },
-  { name: 'Coach David', students: 15, retention: 88, rating: 4.6 },
-  { name: 'Coach Lisa', students: 18, retention: 94, rating: 4.9 }
+  { id: 1, name: 'Coach Michael', students: 28, retention: 95, rating: 4.8, sport: 'Soccer' },
+  { id: 2, name: 'Coach Sarah', students: 22, retention: 92, rating: 4.7, sport: 'Basketball' },
+  { id: 3, name: 'Coach David', students: 15, retention: 88, rating: 4.6, sport: 'Tennis' },
+  { id: 4, name: 'Coach Lisa', students: 18, retention: 94, rating: 4.9, sport: 'Swimming' },
+  { id: 5, name: 'Coach James', students: 25, retention: 90, rating: 4.5, sport: 'Soccer' },
+  { id: 6, name: 'Coach Emma', students: 20, retention: 93, rating: 4.8, sport: 'Basketball' },
+  { id: 7, name: 'Coach Ryan', students: 17, retention: 87, rating: 4.4, sport: 'Tennis' },
+  { id: 8, name: 'Coach Maria', students: 23, retention: 96, rating: 4.9, sport: 'Swimming' },
+  { id: 9, name: 'Coach Alex', students: 19, retention: 89, rating: 4.6, sport: 'Soccer' },
+  { id: 10, name: 'Coach Sophie', students: 21, retention: 91, rating: 4.7, sport: 'Basketball' },
+  { id: 11, name: 'Coach Daniel', students: 16, retention: 85, rating: 4.3, sport: 'Tennis' },
+  { id: 12, name: 'Coach Anna', students: 24, retention: 97, rating: 5.0, sport: 'Swimming' },
+  { id: 13, name: 'Coach Kevin', students: 26, retention: 88, rating: 4.5, sport: 'Soccer' },
+  { id: 14, name: 'Coach Rachel', students: 18, retention: 94, rating: 4.8, sport: 'Basketball' },
+  { id: 15, name: 'Coach Tom', students: 14, retention: 86, rating: 4.4, sport: 'Tennis' },
+  { id: 16, name: 'Coach Grace', students: 22, retention: 95, rating: 4.9, sport: 'Swimming' },
+  { id: 17, name: 'Coach Mark', students: 27, retention: 89, rating: 4.6, sport: 'Soccer' },
+  { id: 18, name: 'Coach Julia', students: 19, retention: 92, rating: 4.7, sport: 'Basketball' },
+  { id: 19, name: 'Coach Chris', students: 13, retention: 84, rating: 4.2, sport: 'Tennis' },
+  { id: 20, name: 'Coach Nina', students: 25, retention: 98, rating: 5.0, sport: 'Swimming' },
+  { id: 21, name: 'Coach Ben', students: 23, retention: 87, rating: 4.5, sport: 'Soccer' },
+  { id: 22, name: 'Coach Kate', students: 17, retention: 93, rating: 4.8, sport: 'Basketball' },
+  { id: 23, name: 'Coach Luke', students: 15, retention: 85, rating: 4.3, sport: 'Tennis' },
+  { id: 24, name: 'Coach Zoe', students: 21, retention: 96, rating: 4.9, sport: 'Swimming' },
+  { id: 25, name: 'Coach Matt', students: 24, retention: 88, rating: 4.4, sport: 'Soccer' },
+  { id: 26, name: 'Coach Lily', students: 16, retention: 91, rating: 4.6, sport: 'Basketball' },
+  { id: 27, name: 'Coach Jake', students: 12, retention: 83, rating: 4.1, sport: 'Tennis' },
+  { id: 28, name: 'Coach Mia', students: 20, retention: 94, rating: 4.7, sport: 'Swimming' },
+  { id: 29, name: 'Coach Sam', students: 22, retention: 86, rating: 4.3, sport: 'Soccer' },
+  { id: 30, name: 'Coach Chloe', students: 18, retention: 89, rating: 4.5, sport: 'Basketball' },
+  { id: 31, name: 'Coach Noah', students: 11, retention: 82, rating: 4.0, sport: 'Tennis' },
+  { id: 32, name: 'Coach Ella', students: 19, retention: 93, rating: 4.8, sport: 'Swimming' },
+  { id: 33, name: 'Coach Owen', students: 21, retention: 85, rating: 4.2, sport: 'Soccer' },
+  { id: 34, name: 'Coach Ava', students: 15, retention: 90, rating: 4.6, sport: 'Basketball' },
+  { id: 35, name: 'Coach Ethan', students: 10, retention: 81, rating: 3.9, sport: 'Tennis' },
+  { id: 36, name: 'Coach Maya', students: 17, retention: 92, rating: 4.7, sport: 'Swimming' },
+  { id: 37, name: 'Coach Leo', students: 20, retention: 84, rating: 4.1, sport: 'Soccer' },
+  { id: 38, name: 'Coach Nora', students: 14, retention: 88, rating: 4.4, sport: 'Basketball' },
+  { id: 39, name: 'Coach Ian', students: 9, retention: 80, rating: 3.8, sport: 'Tennis' },
+  { id: 40, name: 'Coach Ruby', students: 16, retention: 91, rating: 4.5, sport: 'Swimming' }
 ];
 
 const attendanceData = [
@@ -53,32 +91,71 @@ const attendanceData = [
 
 // Mock coach attendance data
 const coachAttendanceData = [
-  { date: '2024-01-01', present: 11, absent: 1, late: 0 },
-  { date: '2024-01-02', present: 12, absent: 0, late: 0 },
-  { date: '2024-01-03', present: 10, absent: 2, late: 1 },
-  { date: '2024-01-04', present: 12, absent: 0, late: 0 },
-  { date: '2024-01-05', present: 11, absent: 1, late: 0 },
-  { date: '2024-01-06', present: 12, absent: 0, late: 0 },
-  { date: '2024-01-07', present: 11, absent: 0, late: 1 }
+  { date: '2024-01-01', present: 35, absent: 3, late: 2 },
+  { date: '2024-01-02', present: 37, absent: 2, late: 1 },
+  { date: '2024-01-03', present: 36, absent: 3, late: 1 },
+  { date: '2024-01-04', present: 38, absent: 1, late: 1 },
+  { date: '2024-01-05', present: 39, absent: 1, late: 0 },
+  { date: '2024-01-06', present: 37, absent: 2, late: 1 },
+  { date: '2024-01-07', present: 38, absent: 1, late: 1 }
 ];
 
-// Mock detailed student attendance
-const studentAttendanceDetails = [
-  { name: 'John Smith', sport: 'Soccer', present: 6, absent: 1, late: 0, attendanceRate: 86 },
-  { name: 'Sarah Johnson', sport: 'Basketball', present: 5, absent: 2, late: 0, attendanceRate: 71 },
-  { name: 'Mike Davis', sport: 'Tennis', present: 7, absent: 0, late: 0, attendanceRate: 100 },
-  { name: 'Emma Wilson', sport: 'Swimming', present: 6, absent: 0, late: 1, attendanceRate: 86 },
-  { name: 'Alex Brown', sport: 'Soccer', present: 5, absent: 1, late: 1, attendanceRate: 71 },
-  { name: 'Lisa Chen', sport: 'Basketball', present: 7, absent: 0, late: 0, attendanceRate: 100 }
-];
+// Generate detailed student attendance (40 students)
+const generateStudentAttendance = () => {
+  const students = [];
+  const sports = ['Soccer', 'Basketball', 'Tennis', 'Swimming'];
+  const firstNames = ['John', 'Sarah', 'Mike', 'Emma', 'Alex', 'Lisa', 'David', 'Sophie', 'Ryan', 'Anna'];
+  const lastNames = ['Smith', 'Johnson', 'Davis', 'Wilson', 'Brown', 'Chen', 'Garcia', 'Miller', 'Taylor', 'Anderson'];
+  
+  for (let i = 0; i < 40; i++) {
+    const firstName = firstNames[i % firstNames.length];
+    const lastName = lastNames[Math.floor(i / firstNames.length) % lastNames.length];
+    const present = Math.floor(Math.random() * 3) + 5; // 5-7 days
+    const absent = Math.floor(Math.random() * 3); // 0-2 days
+    const late = Math.floor(Math.random() * 2); // 0-1 days
+    const total = present + absent + late;
+    const attendanceRate = Math.round((present / total) * 100);
+    
+    students.push({
+      name: `${firstName} ${lastName}`,
+      sport: sports[i % sports.length],
+      present,
+      absent,
+      late,
+      attendanceRate
+    });
+  }
+  return students;
+};
 
-// Mock detailed coach attendance
-const coachAttendanceDetails = [
-  { name: 'Coach Michael', sport: 'Soccer', present: 7, absent: 0, late: 0, attendanceRate: 100, avgHours: 8.5 },
-  { name: 'Coach Sarah', sport: 'Basketball', present: 6, absent: 1, late: 0, attendanceRate: 86, avgHours: 7.8 },
-  { name: 'Coach David', sport: 'Tennis', present: 7, absent: 0, late: 0, attendanceRate: 100, avgHours: 8.2 },
-  { name: 'Coach Lisa', sport: 'Swimming', present: 6, absent: 0, late: 1, attendanceRate: 86, avgHours: 8.0 }
-];
+// Generate detailed coach attendance (40 coaches)
+const generateCoachAttendance = () => {
+  const coaches = [];
+  const sports = ['Soccer', 'Basketball', 'Tennis', 'Swimming'];
+  
+  for (let i = 0; i < 40; i++) {
+    const present = Math.floor(Math.random() * 2) + 6; // 6-7 days
+    const absent = Math.floor(Math.random() * 2); // 0-1 days
+    const late = Math.floor(Math.random() * 2); // 0-1 days
+    const total = present + absent + late;
+    const attendanceRate = Math.round((present / total) * 100);
+    const avgHours = (Math.random() * 2 + 7).toFixed(1); // 7.0-9.0 hours
+    
+    coaches.push({
+      name: coachPerformance[i].name,
+      sport: sports[i % sports.length],
+      present,
+      absent,
+      late,
+      attendanceRate,
+      avgHours: parseFloat(avgHours)
+    });
+  }
+  return coaches;
+};
+
+const studentAttendanceDetails = generateStudentAttendance();
+const coachAttendanceDetails = generateCoachAttendance();
 
 const chartConfig = {
   revenue: { label: 'Revenue', color: '#ef4444' },
@@ -98,11 +175,20 @@ interface AdminAnalyticsProps {
 
 const AdminAnalytics = ({ onBack }: AdminAnalyticsProps) => {
   const [attendanceView, setAttendanceView] = React.useState<'student' | 'coach'>('student');
+  const [showCoachManagement, setShowCoachManagement] = React.useState(false);
   
   const totalRevenue = revenueData.reduce((sum, item) => sum + item.revenue, 0);
   const totalStudents = Math.max(...revenueData.map(item => item.students));
   const revenueGrowth = ((revenueData[revenueData.length - 1].revenue - revenueData[0].revenue) / revenueData[0].revenue * 100).toFixed(1);
   const avgAttendance = ((attendanceData.reduce((sum, item) => sum + item.present, 0) / attendanceData.length) / (attendanceData[0].present + attendanceData[0].absent + attendanceData[0].late) * 100).toFixed(1);
+
+  const handleAddCoach = () => {
+    console.log('Add new coach');
+  };
+
+  const handleAssignStudents = (coachId: number) => {
+    console.log('Assign students to coach:', coachId);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
@@ -245,7 +331,7 @@ const AdminAnalytics = ({ onBack }: AdminAnalyticsProps) => {
                           outerRadius={120}
                           paddingAngle={5}
                           dataKey="revenue"
-                          label={(entry: typeof sportDistribution[0]) => `${entry.sport}: $${entry.revenue}`}
+                          label={(entry: any) => `${entry.sport}: $${entry.revenue}`}
                         >
                           {sportDistribution.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
@@ -378,12 +464,12 @@ const AdminAnalytics = ({ onBack }: AdminAnalyticsProps) => {
                     {attendanceView === 'student' ? 'Student' : 'Coach'} Attendance Summary
                   </CardTitle>
                   <CardDescription>
-                    Individual attendance records and rates
+                    Individual attendance records and rates (showing 10 of {attendanceView === 'student' ? studentAttendanceDetails.length : coachAttendanceDetails.length})
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4 max-h-[300px] overflow-y-auto">
-                    {(attendanceView === 'student' ? studentAttendanceDetails : coachAttendanceDetails).map((person, index) => (
+                    {(attendanceView === 'student' ? studentAttendanceDetails : coachAttendanceDetails).slice(0, 10).map((person, index) => (
                       <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="space-y-1">
                           <h3 className="font-semibold text-sm">{person.name}</h3>
@@ -431,7 +517,7 @@ const AdminAnalytics = ({ onBack }: AdminAnalyticsProps) => {
             <Card>
               <CardHeader>
                 <CardTitle>Payment Trends</CardTitle>
-                <CardDescription>Payment success and failure patterns over time</CardDescription>
+                <CardDescription>Payment success and outstanding payments over time</CardDescription>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={chartConfig} className="h-[300px]">
@@ -473,29 +559,64 @@ const AdminAnalytics = ({ onBack }: AdminAnalyticsProps) => {
           <TabsContent value="performance" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Coach Performance</CardTitle>
-                <CardDescription>Coach effectiveness metrics</CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Coach Performance</CardTitle>
+                    <CardDescription>Coach effectiveness metrics and student assignments</CardDescription>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button onClick={handleAddCoach} size="sm" className="bg-blue-600 hover:bg-blue-700">
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Add Coach
+                    </Button>
+                    <Button
+                      onClick={() => setShowCoachManagement(!showCoachManagement)}
+                      variant="outline"
+                      size="sm"
+                    >
+                      {showCoachManagement ? 'View Performance' : 'Manage Students'}
+                    </Button>
+                  </div>
+                </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {coachPerformance.map((coach, index) => (
+                <div className="space-y-4 max-h-[400px] overflow-y-auto">
+                  <div className="text-sm text-gray-600 mb-4">
+                    Showing 10 of {coachPerformance.length} coaches
+                  </div>
+                  {coachPerformance.slice(0, 10).map((coach, index) => (
                     <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
                       <div>
                         <h3 className="font-semibold">{coach.name}</h3>
-                        <p className="text-sm text-gray-600">{coach.students} students</p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <p className="text-sm text-gray-600">{coach.students} students</p>
+                          <Badge variant="outline" className="text-xs">{coach.sport}</Badge>
+                        </div>
                       </div>
                       <div className="flex items-center space-x-4">
-                        <div className="text-center">
-                          <div className="text-sm font-medium">{coach.retention}%</div>
-                          <div className="text-xs text-gray-500">Retention</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-sm font-medium">{coach.rating}/5</div>
-                          <div className="text-xs text-gray-500">Rating</div>
-                        </div>
-                        <Badge variant={coach.retention > 90 ? "default" : "secondary"}>
-                          {coach.retention > 90 ? "Excellent" : "Good"}
-                        </Badge>
+                        {!showCoachManagement ? (
+                          <>
+                            <div className="text-center">
+                              <div className="text-sm font-medium">{coach.retention}%</div>
+                              <div className="text-xs text-gray-500">Retention</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-sm font-medium">{coach.rating}/5</div>
+                              <div className="text-xs text-gray-500">Rating</div>
+                            </div>
+                            <Badge variant={coach.retention > 90 ? "default" : "secondary"}>
+                              {coach.retention > 90 ? "Excellent" : "Good"}
+                            </Badge>
+                          </>
+                        ) : (
+                          <Button
+                            onClick={() => handleAssignStudents(coach.id)}
+                            size="sm"
+                            variant="outline"
+                          >
+                            Assign Students
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ))}
