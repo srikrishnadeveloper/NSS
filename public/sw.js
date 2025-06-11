@@ -1,20 +1,25 @@
 
-const CACHE_NAME = 'sports-school-hub-v2';
+const CACHE_NAME = 'sports-school-hub-v3';
 const urlsToCache = [
   '/',
   '/static/js/bundle.js',
   '/static/css/main.css',
   '/manifest.json',
-  '/lovable-uploads/d3e2c1ed-3a94-410a-92a5-4126a5366ca6.png'
+  '/lovable-uploads/d3e2c1ed-3a94-410a-92a5-4126a5366ca6.png',
+  '/lovable-uploads/33900580-8f8e-4c8d-b6d6-511af21db8ca.png'
 ];
 
 // Install event - cache resources
 self.addEventListener('install', (event) => {
+  console.log('Service Worker installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        return cache.addAll(urlsToCache.map(url => new Request(url, { cache: 'reload' })));
+      })
+      .catch((error) => {
+        console.log('Cache failed:', error);
       })
   );
   // Skip waiting to activate new service worker immediately
@@ -30,6 +35,7 @@ self.addEventListener('fetch', (event) => {
         if (response) {
           return response;
         }
+        
         return fetch(event.request).then(
           (response) => {
             // Check if we received a valid response
@@ -47,13 +53,19 @@ self.addEventListener('fetch', (event) => {
 
             return response;
           }
-        );
+        ).catch(() => {
+          // Return offline page or basic offline response
+          if (event.request.destination === 'document') {
+            return caches.match('/');
+          }
+        });
       })
   );
 });
 
 // Activate event - clean up old caches
 self.addEventListener('activate', (event) => {
+  console.log('Service Worker activating...');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -78,4 +90,10 @@ self.addEventListener('sync', (event) => {
       console.log('Background sync triggered')
     );
   }
+});
+
+// Handle push notifications (for future use)
+self.addEventListener('push', (event) => {
+  console.log('Push message received');
+  // Handle push notifications here
 });

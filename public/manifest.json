@@ -35,19 +35,36 @@
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/lovable-uploads/d3e2c1ed-3a94-410a-92a5-4126a5366ca6.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/lovable-uploads/d3e2c1ed-3a94-410a-92a5-4126a5366ca6.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "categories": ["education", "sports", "productivity"],
   "screenshots": [
     {
-      "src": "/lovable-uploads/d3e2c1ed-3a94-410a-92a5-4126a5366ca6.png",
+      "src": "/lovable-uploads/33900580-8f8e-4c8d-b6d6-511af21db8ca.png",
       "sizes": "1280x720",
       "type": "image/png",
-      "form_factor": "wide"
+      "form_factor": "wide",
+      "label": "Sports School Login Interface"
     }
   ],
   "prefer_related_applications": false,
   "edge_side_panel": {
     "preferred_width": 480
+  },
+  "display_override": ["standalone", "minimal-ui"],
+  "launch_handler": {
+    "client_mode": "focus-existing"
   }
 }
