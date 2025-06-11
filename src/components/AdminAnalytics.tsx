@@ -1,11 +1,11 @@
-
 import * as React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Area, AreaChart } from 'recharts';
-import { TrendingUp, TrendingDown, Users, DollarSign, Activity, Calendar, Download, ArrowLeft } from 'lucide-react';
+import { TrendingUp, TrendingDown, Users, DollarSign, Activity, Calendar, Download, ArrowLeft, Clock, MapPin, User } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
 // Mock analytics data
@@ -25,16 +25,6 @@ const sportDistribution = [
   { sport: 'Swimming', students: 18, revenue: 5400, color: '#f59e0b' }
 ];
 
-const attendanceData = [
-  { date: '2024-01-01', present: 65, absent: 8, late: 4 },
-  { date: '2024-01-02', present: 68, absent: 6, late: 3 },
-  { date: '2024-01-03', present: 71, absent: 4, late: 2 },
-  { date: '2024-01-04', present: 69, absent: 5, late: 3 },
-  { date: '2024-01-05', present: 72, absent: 3, late: 2 },
-  { date: '2024-01-06', present: 70, absent: 4, late: 3 },
-  { date: '2024-01-07', present: 73, absent: 2, late: 2 }
-];
-
 const paymentTrends = [
   { month: 'Jan', successful: 85, failed: 8, pending: 7 },
   { month: 'Feb', successful: 88, failed: 6, pending: 6 },
@@ -49,6 +39,45 @@ const coachPerformance = [
   { name: 'Coach Sarah', students: 22, retention: 92, rating: 4.7 },
   { name: 'Coach David', students: 15, retention: 88, rating: 4.6 },
   { name: 'Coach Lisa', students: 18, retention: 94, rating: 4.9 }
+];
+
+const attendanceData = [
+  { date: '2024-01-01', present: 65, absent: 8, late: 4 },
+  { date: '2024-01-02', present: 68, absent: 6, late: 3 },
+  { date: '2024-01-03', present: 71, absent: 4, late: 2 },
+  { date: '2024-01-04', present: 69, absent: 5, late: 3 },
+  { date: '2024-01-05', present: 72, absent: 3, late: 2 },
+  { date: '2024-01-06', present: 70, absent: 4, late: 3 },
+  { date: '2024-01-07', present: 73, absent: 2, late: 2 }
+];
+
+// Mock coach attendance data
+const coachAttendanceData = [
+  { date: '2024-01-01', present: 11, absent: 1, late: 0 },
+  { date: '2024-01-02', present: 12, absent: 0, late: 0 },
+  { date: '2024-01-03', present: 10, absent: 2, late: 1 },
+  { date: '2024-01-04', present: 12, absent: 0, late: 0 },
+  { date: '2024-01-05', present: 11, absent: 1, late: 0 },
+  { date: '2024-01-06', present: 12, absent: 0, late: 0 },
+  { date: '2024-01-07', present: 11, absent: 0, late: 1 }
+];
+
+// Mock detailed student attendance
+const studentAttendanceDetails = [
+  { name: 'John Smith', sport: 'Soccer', present: 6, absent: 1, late: 0, attendanceRate: 86 },
+  { name: 'Sarah Johnson', sport: 'Basketball', present: 5, absent: 2, late: 0, attendanceRate: 71 },
+  { name: 'Mike Davis', sport: 'Tennis', present: 7, absent: 0, late: 0, attendanceRate: 100 },
+  { name: 'Emma Wilson', sport: 'Swimming', present: 6, absent: 0, late: 1, attendanceRate: 86 },
+  { name: 'Alex Brown', sport: 'Soccer', present: 5, absent: 1, late: 1, attendanceRate: 71 },
+  { name: 'Lisa Chen', sport: 'Basketball', present: 7, absent: 0, late: 0, attendanceRate: 100 }
+];
+
+// Mock detailed coach attendance
+const coachAttendanceDetails = [
+  { name: 'Coach Michael', sport: 'Soccer', present: 7, absent: 0, late: 0, attendanceRate: 100, avgHours: 8.5 },
+  { name: 'Coach Sarah', sport: 'Basketball', present: 6, absent: 1, late: 0, attendanceRate: 86, avgHours: 7.8 },
+  { name: 'Coach David', sport: 'Tennis', present: 7, absent: 0, late: 0, attendanceRate: 100, avgHours: 8.2 },
+  { name: 'Coach Lisa', sport: 'Swimming', present: 6, absent: 0, late: 1, attendanceRate: 86, avgHours: 8.0 }
 ];
 
 const chartConfig = {
@@ -68,6 +97,8 @@ interface AdminAnalyticsProps {
 }
 
 const AdminAnalytics = ({ onBack }: AdminAnalyticsProps) => {
+  const [attendanceView, setAttendanceView] = React.useState<'student' | 'coach'>('student');
+  
   const totalRevenue = revenueData.reduce((sum, item) => sum + item.revenue, 0);
   const totalStudents = Math.max(...revenueData.map(item => item.students));
   const revenueGrowth = ((revenueData[revenueData.length - 1].revenue - revenueData[0].revenue) / revenueData[0].revenue * 100).toFixed(1);
@@ -282,70 +313,117 @@ const AdminAnalytics = ({ onBack }: AdminAnalyticsProps) => {
 
           {/* Attendance Analytics */}
           <TabsContent value="attendance" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Attendance Trends</CardTitle>
-                <CardDescription>Daily attendance patterns</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig} className="h-[400px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={attendanceData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Area 
-                        type="monotone" 
-                        dataKey="present" 
-                        stackId="1"
-                        stroke="#10b981" 
-                        fill="#10b981" 
-                      />
-                      <Area 
-                        type="monotone" 
-                        dataKey="late" 
-                        stackId="1"
-                        stroke="#f59e0b" 
-                        fill="#f59e0b" 
-                      />
-                      <Area 
-                        type="monotone" 
-                        dataKey="absent" 
-                        stackId="1"
-                        stroke="#ef4444" 
-                        fill="#ef4444" 
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
-          </TabsContent>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Attendance Trends</CardTitle>
+                      <CardDescription>
+                        {attendanceView === 'student' ? 'Daily student attendance patterns' : 'Daily coach attendance patterns'}
+                      </CardDescription>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2">
+                        <Users className="h-4 w-4 text-blue-600" />
+                        <span className="text-sm font-medium">Students</span>
+                        <Switch
+                          checked={attendanceView === 'coach'}
+                          onCheckedChange={(checked) => setAttendanceView(checked ? 'coach' : 'student')}
+                        />
+                        <span className="text-sm font-medium">Coaches</span>
+                        <User className="h-4 w-4 text-green-600" />
+                      </div>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer config={chartConfig} className="h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={attendanceView === 'student' ? attendanceData : coachAttendanceData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis />
+                        <ChartTooltip content={<ChartTooltipContent />} />
+                        <Area 
+                          type="monotone" 
+                          dataKey="present" 
+                          stackId="1"
+                          stroke="#10b981" 
+                          fill="#10b981" 
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="late" 
+                          stackId="1"
+                          stroke="#f59e0b" 
+                          fill="#f59e0b" 
+                        />
+                        <Area 
+                          type="monotone" 
+                          dataKey="absent" 
+                          stackId="1"
+                          stroke="#ef4444" 
+                          fill="#ef4444" 
+                        />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </CardContent>
+              </Card>
 
-          {/* Payment Analytics */}
-          <TabsContent value="payments" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>Payment Success Rates</CardTitle>
-                <CardDescription>Monthly payment performance</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig} className="h-[400px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={paymentTrends}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="month" />
-                      <YAxis />
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Bar dataKey="successful" fill="#10b981" />
-                      <Bar dataKey="failed" fill="#ef4444" />
-                      <Bar dataKey="pending" fill="#f59e0b" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </CardContent>
-            </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>
+                    {attendanceView === 'student' ? 'Student' : 'Coach'} Attendance Summary
+                  </CardTitle>
+                  <CardDescription>
+                    Individual attendance records and rates
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4 max-h-[300px] overflow-y-auto">
+                    {(attendanceView === 'student' ? studentAttendanceDetails : coachAttendanceDetails).map((person, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="space-y-1">
+                          <h3 className="font-semibold text-sm">{person.name}</h3>
+                          <div className="flex items-center space-x-2">
+                            <Badge variant="outline" className="text-xs">
+                              {person.sport}
+                            </Badge>
+                            {attendanceView === 'coach' && 'avgHours' in person && (
+                              <div className="flex items-center space-x-1 text-xs text-gray-500">
+                                <Clock className="h-3 w-3" />
+                                <span>{person.avgHours}h avg</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="text-right space-y-1">
+                          <div className="flex items-center space-x-3 text-xs">
+                            <div className="flex items-center space-x-1">
+                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              <span>{person.present}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                              <span>{person.late}</span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                              <span>{person.absent}</span>
+                            </div>
+                          </div>
+                          <div className="text-sm font-medium">
+                            {person.attendanceRate}% attendance
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           {/* Performance Analytics */}
