@@ -245,7 +245,7 @@ const AdminAnalytics = ({ onBack }: AdminAnalyticsProps) => {
                           outerRadius={120}
                           paddingAngle={5}
                           dataKey="revenue"
-                          label={({sport, revenue}) => `${sport}: $${revenue}`}
+                          label={(entry: typeof sportDistribution[0]) => `${entry.sport}: $${entry.revenue}`}
                         >
                           {sportDistribution.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
