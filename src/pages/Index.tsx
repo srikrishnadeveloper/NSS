@@ -91,22 +91,15 @@ const Index = () => {
               className="h-20 w-auto md:h-24 object-contain"
             />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Sports School Management
-          </h1>
-          <p className="text-lg text-gray-600">
-            Sign in to access your dashboard
-          </p>
         </div>
 
         {/* Main Login Card */}
         <div className="max-w-md mx-auto">
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             
-            {/* Role Selection */}
+            {/* Role Icons */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">Select Your Role</h2>
-              <div className="space-y-3">
+              <div className="flex justify-center items-center space-x-8">
                 {roles.map((role) => {
                   const Icon = role.icon;
                   const isSelected = selectedRole === role.id;
@@ -114,10 +107,10 @@ const Index = () => {
                   return (
                     <div
                       key={role.id}
-                      className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all duration-300 ${
+                      className={`p-4 rounded-full cursor-pointer transition-all duration-300 ${
                         isSelected 
-                          ? `${role.borderColor} bg-gray-50 ring-2 ring-offset-2 ring-opacity-20` 
-                          : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                          ? `bg-gradient-to-r ${role.color} transform scale-125 shadow-lg` 
+                          : 'bg-gray-100 hover:bg-gray-200 transform scale-100 hover:scale-110'
                       }`}
                       onClick={() => {
                         setSelectedRole(role.id);
@@ -125,20 +118,7 @@ const Index = () => {
                         setPassword('');
                       }}
                     >
-                      <div className="flex items-center space-x-3">
-                        <div className={`p-2 rounded-lg bg-gradient-to-r ${role.color}`}>
-                          <Icon className="h-5 w-5 text-white" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className={`font-semibold ${isSelected ? role.textColor : 'text-gray-900'}`}>
-                            {role.title}
-                          </h3>
-                          <p className="text-sm text-gray-600">{role.subtitle}</p>
-                        </div>
-                        {isSelected && (
-                          <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${role.color}`}></div>
-                        )}
-                      </div>
+                      <Icon className={`h-8 w-8 ${isSelected ? 'text-white' : 'text-gray-600'}`} />
                     </div>
                   );
                 })}
