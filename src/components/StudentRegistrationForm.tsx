@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { DatePicker } from '@/components/ui/date-picker';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
@@ -19,6 +19,9 @@ interface StudentRegistrationFormProps {
 
 const formSchema = z.object({
   studentName: z.string().min(1, 'Student name is required'),
+  dateOfBirth: z.date({
+    required_error: "Date of birth is required",
+  }),
   address: z.string().min(1, 'Address is required'),
   parentNumber: z.string().min(1, 'Parent number is required'),
   weight: z.string().min(1, 'Weight is required'),
@@ -64,6 +67,7 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
     
     console.log('=== STUDENT REGISTRATION ===');
     console.log('Student Name:', data.studentName);
+    console.log('Date of Birth:', data.dateOfBirth);
     console.log('Sport Interest:', data.interestedGame);
     console.log('Parent Credentials Generated:', credentials);
     console.log('Registration Time:', new Date().toISOString());
@@ -109,6 +113,27 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                           placeholder="Enter student name" 
                           className="h-11"
                           {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="dateOfBirth"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium">Date of Birth *</FormLabel>
+                      <FormControl>
+                        <DatePicker
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Select date of birth"
+                          disabled={(date) =>
+                            date > new Date() || date < new Date("1900-01-01")
+                          }
                         />
                       </FormControl>
                       <FormMessage />
