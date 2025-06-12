@@ -88,7 +88,7 @@ const ActivityUpdateCard = () => {
               
             </div>
           </div>
-          <Button onClick={() => setShowForm(!showForm)} size="sm" className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground px-[6px] font-medium text-center rounded-sm py-0 my-0 mx-[14px]">
+          <Button onClick={() => setShowForm(!showForm)} size="sm" className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-center rounded-sm py-0 my-0 mx-[14px] px-[22px]">
             <Plus className="h-4 w-4 mr-2" />
             New
           </Button>
