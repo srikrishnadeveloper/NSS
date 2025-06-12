@@ -47,7 +47,6 @@ export function DatePicker({
           selected={value}
           onSelect={onChange}
           disabled={disabled}
-          captionLayout="dropdown"
           className="pointer-events-auto"
         />
       </PopoverContent>
