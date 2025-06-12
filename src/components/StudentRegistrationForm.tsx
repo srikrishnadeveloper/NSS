@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -5,15 +6,11 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { ArrowLeft, UserPlus, CalendarIcon } from 'lucide-react';
+import { ArrowLeft, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
 
 interface StudentRegistrationFormProps {
   onBack: () => void;
@@ -23,9 +20,6 @@ interface StudentRegistrationFormProps {
 const formSchema = z.object({
   studentName: z.string().min(1, 'Student name is required'),
   address: z.string().min(1, 'Address is required'),
-  dateOfBirth: z.date({
-    required_error: 'Date of birth is required',
-  }),
   parentNumber: z.string().min(1, 'Parent number is required'),
   weight: z.string().min(1, 'Weight is required'),
   height: z.string().min(1, 'Height is required'),
@@ -70,7 +64,6 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
     
     console.log('=== STUDENT REGISTRATION ===');
     console.log('Student Name:', data.studentName);
-    console.log('Date of Birth:', data.dateOfBirth);
     console.log('Sport Interest:', data.interestedGame);
     console.log('Parent Credentials Generated:', credentials);
     console.log('Registration Time:', new Date().toISOString());
@@ -83,14 +76,6 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
     
     onSuccess(credentials);
   };
-
-  // Calculate date range: 3 years ago to 18 years ago (reasonable age range for sports school)
-  const today = new Date();
-  const threeYearsAgo = new Date();
-  threeYearsAgo.setFullYear(today.getFullYear() - 3);
-  
-  const eighteenYearsAgo = new Date();
-  eighteenYearsAgo.setFullYear(today.getFullYear() - 18);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4">
@@ -145,52 +130,6 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                           {...field} 
                         />
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="dateOfBirth"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel className="text-sm font-medium">Date of Birth * (Age 3-18)</FormLabel>
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <FormControl>
-                            <Button
-                              variant="outline"
-                              className={cn(
-                                "h-11 justify-start text-left font-normal",
-                                !field.value && "text-muted-foreground"
-                              )}
-                            >
-                              <CalendarIcon className="mr-2 h-4 w-4" />
-                              {field.value ? (
-                                format(field.value, "PPP")
-                              ) : (
-                                <span>Pick a date</span>
-                              )}
-                            </Button>
-                          </FormControl>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            disabled={(date) =>
-                              date > threeYearsAgo || date < eighteenYearsAgo
-                            }
-                            defaultMonth={new Date(today.getFullYear() - 10, today.getMonth())}
-                            fromYear={today.getFullYear() - 18}
-                            toYear={today.getFullYear() - 3}
-                            captionLayout="dropdown-buttons"
-                            initialFocus
-                          />
-                        </PopoverContent>
-                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}
