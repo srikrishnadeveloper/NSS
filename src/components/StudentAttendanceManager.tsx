@@ -56,16 +56,52 @@ const StudentAttendanceManager = () => {
   const filteredStudents = selectedBatch === 'all' ? students : students.filter(student => student.batch === selectedBatch);
 
   const toggleStudentStatus = (studentId: string) => {
+    console.log('Toggling student status for student ID:', studentId);
+    
     setStudents(prev => prev.map(student => {
       if (student.id === studentId) {
         const newStatus: 'present' | 'absent' = student.status === 'present' ? 'absent' : 'present';
+        console.log(`Student ${student.name} (${student.rollNumber}) status changed from ${student.status} to ${newStatus}`);
         return { ...student, status: newStatus };
       }
       return student;
     }));
   };
 
+  const handleBatchChange = (batch: string) => {
+    console.log('Batch filter changed to:', batch);
+    setSelectedBatch(batch);
+  };
+
   const handleSubmitAttendance = () => {
+    const timestamp = new Date();
+    const attendanceData = {
+      submissionTime: timestamp.toISOString(),
+      batch: selectedBatch,
+      totalStudents: filteredStudents.length,
+      presentStudents: filteredStudents.filter(s => s.status === 'present').length,
+      absentStudents: filteredStudents.filter(s => s.status === 'absent').length,
+      attendanceDetails: filteredStudents.map(student => ({
+        id: student.id,
+        name: student.name,
+        rollNumber: student.rollNumber,
+        batch: student.batch,
+        status: student.status
+      }))
+    };
+
+    console.log('=== ATTENDANCE SUBMISSION ===');
+    console.log('Submission timestamp:', timestamp.toISOString());
+    console.log('Selected batch filter:', selectedBatch);
+    console.log('Attendance summary:', {
+      totalStudents: attendanceData.totalStudents,
+      presentStudents: attendanceData.presentStudents,
+      absentStudents: attendanceData.absentStudents
+    });
+    console.log('Detailed attendance data:', attendanceData.attendanceDetails);
+    console.log('Full attendance submission data:', attendanceData);
+    console.log('==============================');
+
     toast({
       title: "Attendance Submitted",
       description: "Student attendance has been successfully submitted"
@@ -125,7 +161,7 @@ const StudentAttendanceManager = () => {
         <div className="bg-secondary p-4 rounded-none">
           <div className="flex items-center gap-3">
             <Filter className="h-5 w-5 text-muted-foreground" />
-            <Select value={selectedBatch} onValueChange={setSelectedBatch}>
+            <Select value={selectedBatch} onValueChange={handleBatchChange}>
               <SelectTrigger className="flex-1 h-12 rounded-lg border-border bg-card">
                 <SelectValue placeholder="Filter by batch" />
               </SelectTrigger>

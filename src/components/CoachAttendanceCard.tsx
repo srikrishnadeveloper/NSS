@@ -11,6 +11,10 @@ const CoachAttendanceCard = () => {
   const handleCheckIn = () => {
     const timestamp = new Date();
     
+    console.log('=== COACH CHECK-IN ===');
+    console.log('Check-in initiated at:', timestamp.toISOString());
+    console.log('Formatted time:', timestamp.toLocaleString());
+    
     // Get location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -18,29 +22,52 @@ const CoachAttendanceCard = () => {
           const location = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy
+            accuracy: position.coords.accuracy,
+            timestamp: position.timestamp
           };
           
-          console.log('Check-in Location:', location);
-          console.log('Check-in Timestamp:', timestamp.toISOString());
-          console.log('Check-in Details:', {
-            timestamp: timestamp.toISOString(),
+          console.log('Geolocation successful:');
+          console.log('- Latitude:', location.latitude);
+          console.log('- Longitude:', location.longitude);
+          console.log('- Accuracy:', location.accuracy, 'meters');
+          console.log('- GPS timestamp:', new Date(location.timestamp).toISOString());
+          console.log('Complete check-in data:', {
+            checkInTime: timestamp.toISOString(),
             location: location,
-            formattedTime: timestamp.toLocaleString()
+            formattedTime: timestamp.toLocaleString(),
+            coachStatus: 'checked-in'
           });
         },
         (error) => {
-          console.log('Location access denied or failed:', error.message);
-          console.log('Check-in Timestamp (without location):', timestamp.toISOString());
+          console.log('Geolocation failed:');
+          console.log('- Error code:', error.code);
+          console.log('- Error message:', error.message);
+          console.log('Check-in completed without location data');
+          console.log('Check-in data (no location):', {
+            checkInTime: timestamp.toISOString(),
+            location: null,
+            formattedTime: timestamp.toLocaleString(),
+            coachStatus: 'checked-in',
+            locationError: error.message
+          });
         }
       );
     } else {
-      console.log('Geolocation not supported by this browser');
-      console.log('Check-in Timestamp (without location):', timestamp.toISOString());
+      console.log('Geolocation not supported by browser');
+      console.log('Check-in data (no geolocation support):', {
+        checkInTime: timestamp.toISOString(),
+        location: null,
+        formattedTime: timestamp.toLocaleString(),
+        coachStatus: 'checked-in',
+        locationError: 'Geolocation not supported'
+      });
     }
 
     setIsCheckedIn(true);
     setCheckInTime(timestamp);
+    console.log('Coach state updated: isCheckedIn = true');
+    console.log('======================');
+    
     toast({
       title: "Checked In",
       description: "Session started",
@@ -48,20 +75,33 @@ const CoachAttendanceCard = () => {
   };
 
   const handleCheckOut = () => {
-    setIsCheckedIn(false);
     const checkOutTime = new Date();
     const duration = checkInTime ? 
       Math.round((checkOutTime.getTime() - checkInTime.getTime()) / (1000 * 60)) : 0;
     
-    console.log('Check-out Timestamp:', checkOutTime.toISOString());
-    console.log('Session Duration:', duration, 'minutes');
+    const sessionData = {
+      checkInTime: checkInTime?.toISOString() || null,
+      checkOutTime: checkOutTime.toISOString(),
+      durationMinutes: duration,
+      sessionDate: checkOutTime.toDateString(),
+      coachStatus: 'checked-out'
+    };
+
+    console.log('=== COACH CHECK-OUT ===');
+    console.log('Check-out initiated at:', checkOutTime.toISOString());
+    console.log('Check-in time was:', checkInTime?.toISOString() || 'Not recorded');
+    console.log('Session duration:', duration, 'minutes');
+    console.log('Session summary:', sessionData);
+    console.log('Coach state updated: isCheckedIn = false');
+    console.log('=======================');
+    
+    setIsCheckedIn(false);
+    setCheckInTime(null);
     
     toast({
       title: "Checked Out",
       description: `Session duration: ${duration} minutes`,
     });
-    
-    setCheckInTime(null);
   };
 
   return (
