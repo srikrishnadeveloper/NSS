@@ -24,14 +24,12 @@ const generateMockStudents = () => {
   const paymentStatuses = ['paid', 'not_paid', 'upcoming'];
   const firstNames = ['John', 'Sarah', 'Mike', 'Emma', 'Alex', 'Lisa', 'David', 'Sophie', 'Ryan', 'Anna', 'Kevin', 'Rachel', 'Tom', 'Grace', 'Mark', 'Julia', 'Chris', 'Nina', 'Ben', 'Kate'];
   const lastNames = ['Smith', 'Johnson', 'Davis', 'Wilson', 'Brown', 'Chen', 'Garcia', 'Miller', 'Taylor', 'Anderson', 'White', 'Martinez', 'Lee', 'Thompson', 'Harris', 'Clark', 'Lewis', 'Walker', 'Hall', 'Young'];
-
   for (let i = 0; i < 40; i++) {
     const firstName = firstNames[i % firstNames.length];
     const lastName = lastNames[Math.floor(i / firstNames.length)];
     const sport = sports[i % sports.length];
     const group = groups[i % groups.length];
     const paymentStatus = paymentStatuses[i % paymentStatuses.length];
-    
     students.push({
       id: i + 1,
       name: `${firstName} ${lastName}`,
@@ -45,12 +43,10 @@ const generateMockStudents = () => {
   }
   return students;
 };
-
 const generateMockPaymentLogs = () => {
   const logs = [];
   const statuses = ['paid', 'not_paid', 'upcoming'];
   const amounts = ['$150', '$40', '$200', '$180'];
-  
   for (let i = 0; i < 40; i++) {
     logs.push({
       id: i + 1,
@@ -63,19 +59,10 @@ const generateMockPaymentLogs = () => {
   }
   return logs;
 };
-
 const generateMockWhatsAppLogs = () => {
   const logs = [];
-  const messageTypes = [
-    'Payment reminder sent',
-    'Session reminder sent',
-    'Schedule update notification',
-    'Welcome message sent',
-    'Attendance notification',
-    'Monthly report sent'
-  ];
+  const messageTypes = ['Payment reminder sent', 'Session reminder sent', 'Schedule update notification', 'Welcome message sent', 'Attendance notification', 'Monthly report sent'];
   const statuses = ['delivered', 'pending'];
-  
   for (let i = 0; i < 40; i++) {
     logs.push({
       id: i + 1,
@@ -87,21 +74,18 @@ const generateMockWhatsAppLogs = () => {
   }
   return logs;
 };
-
 const generateMockCoachAttendance = () => {
   const attendance = [];
   const coaches = ['Coach Michael', 'Coach Sarah', 'Coach David', 'Coach Lisa', 'Coach James', 'Coach Emma', 'Coach Ryan', 'Coach Maria'];
   const sports = ['Soccer', 'Basketball', 'Tennis', 'Swimming'];
   const batches = ['Advanced Soccer', 'Intermediate Basketball', 'Beginners Tennis', 'Advanced Swimming'];
   const locations = ['Main Gate', 'Side Gate', 'Pool Entrance', 'Court Entrance'];
-  
   for (let i = 0; i < 40; i++) {
     const coach = coaches[i % coaches.length];
     const sport = sports[i % sports.length];
     const batch = batches[i % batches.length];
     const entryLocation = locations[i % locations.length];
     const exitLocation = locations[(i + 1) % locations.length];
-    
     attendance.push({
       id: i + 1,
       coachName: coach,
@@ -116,7 +100,6 @@ const generateMockCoachAttendance = () => {
   }
   return attendance;
 };
-
 const mockStudents = generateMockStudents();
 const mockPaymentLogs = generateMockPaymentLogs();
 const mockWhatsAppLogs = generateMockWhatsAppLogs();
@@ -210,7 +193,6 @@ const generateMockAttendanceData = () => {
   return data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 const mockStudentAttendanceExtended = generateMockAttendanceData();
-
 const AdminDashboard = () => {
   const [currentView, setCurrentView] = useState('dashboard');
   const [parentCredentials, setParentCredentials] = useState(null);
@@ -239,7 +221,6 @@ const AdminDashboard = () => {
       });
     });
   }, [dateRange]);
-  
   const getPaymentStatusBadge = (status: string) => {
     switch (status) {
       case 'paid':
@@ -252,7 +233,6 @@ const AdminDashboard = () => {
         return <Badge variant="secondary" className="text-xs">{status}</Badge>;
     }
   };
-  
   const getAttendanceStatusBadge = (status: string) => {
     switch (status) {
       case 'present':
@@ -265,7 +245,6 @@ const AdminDashboard = () => {
         return <Badge variant="secondary" className="text-xs">{status}</Badge>;
     }
   };
-  
   const downloadAttendancePDF = () => {
     const pdf = new jsPDF();
 
@@ -315,20 +294,19 @@ const AdminDashboard = () => {
       description: "Attendance report has been downloaded successfully."
     });
   };
-
   const downloadPaymentsPDF = () => {
     const pdf = new jsPDF();
 
     // Add header with company branding
     pdf.setFillColor(220, 53, 69); // Red background
     pdf.rect(0, 0, 210, 25, 'F');
-    
+
     // Add title
     pdf.setTextColor(255, 255, 255); // White text
     pdf.setFontSize(18);
     pdf.setFont('helvetica', 'bold');
     pdf.text('PAYMENT REPORT', 20, 15);
-    
+
     // Add report date
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
@@ -336,23 +314,20 @@ const AdminDashboard = () => {
 
     // Reset text color for body
     pdf.setTextColor(0, 0, 0);
-    
+
     // Add summary section
     pdf.setFontSize(14);
     pdf.setFont('helvetica', 'bold');
     pdf.text('Payment Summary', 20, 40);
-    
+
     // Calculate totals
     const totalPayments = mockPaymentLogs.length;
     const paidCount = mockPaymentLogs.filter(log => log.status === 'paid').length;
     const notPaidCount = mockPaymentLogs.filter(log => log.status === 'not_paid').length;
     const upcomingCount = mockPaymentLogs.filter(log => log.status === 'upcoming').length;
-    
+
     // Calculate total revenue
-    const totalRevenue = mockPaymentLogs
-      .filter(log => log.status === 'paid')
-      .reduce((sum, log) => sum + parseInt(log.amount.replace('$', '')), 0);
-    
+    const totalRevenue = mockPaymentLogs.filter(log => log.status === 'paid').reduce((sum, log) => sum + parseInt(log.amount.replace('$', '')), 0);
     pdf.setFontSize(10);
     pdf.setFont('helvetica', 'normal');
     pdf.text(`Total Payments: ${totalPayments}`, 20, 50);
@@ -362,13 +337,7 @@ const AdminDashboard = () => {
     pdf.text(`Total Revenue: $${totalRevenue.toLocaleString()}`, 20, 78);
 
     // Prepare data for detailed table
-    const tableData = mockPaymentLogs.map(log => [
-      log.studentName,
-      log.amount,
-      log.status.charAt(0).toUpperCase() + log.status.slice(1).replace('_', ' '),
-      format(new Date(log.date), 'MMM dd, yyyy'),
-      log.method
-    ]);
+    const tableData = mockPaymentLogs.map(log => [log.studentName, log.amount, log.status.charAt(0).toUpperCase() + log.status.slice(1).replace('_', ' '), format(new Date(log.date), 'MMM dd, yyyy'), log.method]);
 
     // Add detailed payments table
     autoTable(pdf, {
@@ -392,11 +361,29 @@ const AdminDashboard = () => {
         fillColor: [248, 249, 250]
       },
       columnStyles: {
-        0: { cellWidth: 50 }, // Student Name
-        1: { cellWidth: 25, halign: 'right' }, // Amount
-        2: { cellWidth: 30, halign: 'center' }, // Status
-        3: { cellWidth: 30, halign: 'center' }, // Date
-        4: { cellWidth: 25, halign: 'center' } // Method
+        0: {
+          cellWidth: 50
+        },
+        // Student Name
+        1: {
+          cellWidth: 25,
+          halign: 'right'
+        },
+        // Amount
+        2: {
+          cellWidth: 30,
+          halign: 'center'
+        },
+        // Status
+        3: {
+          cellWidth: 30,
+          halign: 'center'
+        },
+        // Date
+        4: {
+          cellWidth: 25,
+          halign: 'center'
+        } // Method
       }
     });
 
@@ -409,13 +396,11 @@ const AdminDashboard = () => {
 
     // Save the PDF
     pdf.save(`payment-report-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
-    
     toast({
       title: "PDF Downloaded",
       description: "Payment report has been downloaded successfully."
     });
   };
-
   const handleStartDateSelect = (date: Date | undefined) => {
     if (date) {
       setDateRange(prev => ({
@@ -425,7 +410,6 @@ const AdminDashboard = () => {
       setIsStartDatePickerOpen(false);
     }
   };
-  
   const handleEndDateSelect = (date: Date | undefined) => {
     if (date) {
       setDateRange(prev => ({
@@ -435,11 +419,9 @@ const AdminDashboard = () => {
       setIsEndDatePickerOpen(false);
     }
   };
-  
   const handleAddStudent = () => {
     setCurrentView('registration');
   };
-  
   const handleRegistrationSuccess = (credentials: {
     username: string;
     password: string;
@@ -447,16 +429,13 @@ const AdminDashboard = () => {
     setParentCredentials(credentials);
     setCurrentView('credentials');
   };
-  
   const handleViewAnalytics = () => {
     setCurrentView('analytics');
   };
-
   const handleBackToDashboard = () => {
     setCurrentView('dashboard');
     setParentCredentials(null);
   };
-
   if (currentView === 'registration') {
     return <StudentRegistrationForm onBack={handleBackToDashboard} onSuccess={handleRegistrationSuccess} />;
   }
@@ -466,9 +445,7 @@ const AdminDashboard = () => {
   if (currentView === 'analytics') {
     return <AdminAnalytics onBack={handleBackToDashboard} />;
   }
-  
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="container mx-auto px-3 py-4 max-w-md sm:max-w-2xl md:max-4xl lg:max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-4 px-1">
@@ -478,10 +455,7 @@ const AdminDashboard = () => {
           </div>
           {/* Analytics Button - Only show on larger screens */}
           <div className="hidden lg:block">
-            <Button 
-              onClick={handleViewAnalytics}
-              className="bg-blue-600 hover:bg-blue-700 flex items-center space-x-2"
-            >
+            <Button onClick={handleViewAnalytics} className="bg-blue-600 hover:bg-blue-700 flex items-center space-x-2">
               <BarChart3 className="h-4 w-4" />
               <span>View Analytics</span>
             </Button>
@@ -516,9 +490,9 @@ const AdminDashboard = () => {
                 <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
                   <div>
                     <CardTitle className="text-base sm:text-lg">Student Management</CardTitle>
-                    <CardDescription className="text-xs sm:text-sm">View all students ({mockStudents.length} total)</CardDescription>
+                    
                   </div>
-                  <Button onClick={handleAddStudent} size="sm" className="bg-red-600 hover:bg-red-700 w-full sm:w-auto">
+                  <Button onClick={handleAddStudent} size="sm" className="bg-red-600 hover:bg-red-700 w-full sm:w-auto px-0 mx-0">
                     <UserPlus className="h-4 w-4 mr-2" />
                     Add Student
                   </Button>
@@ -528,8 +502,7 @@ const AdminDashboard = () => {
                 <div className="text-xs text-gray-500 mb-3">
                   Showing 10 of {mockStudents.length} students
                 </div>
-                {mockStudents.slice(0, 10).map(student => (
-                  <Card key={student.id} className="p-3 border border-gray-200 shadow-sm">
+                {mockStudents.slice(0, 10).map(student => <Card key={student.id} className="p-3 border border-gray-200 shadow-sm">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="font-semibold text-gray-900 text-sm pr-2">{student.name}</h3>
                       {getPaymentStatusBadge(student.paymentStatus)}
@@ -555,8 +528,7 @@ const AdminDashboard = () => {
                         </div>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </CardContent>
             </Card>
           </TabsContent>
@@ -571,7 +543,7 @@ const AdminDashboard = () => {
                       <CreditCard className="h-4 w-4 mr-2" />
                       Payment Logs
                     </CardTitle>
-                    <CardDescription className="text-xs sm:text-sm">Stripe payment history ({mockPaymentLogs.length} total)</CardDescription>
+                    
                   </div>
                   <Button onClick={downloadPaymentsPDF} size="sm" className="bg-green-600 hover:bg-green-700 w-full sm:w-auto">
                     <Download className="h-4 w-4 mr-2" />
@@ -583,8 +555,7 @@ const AdminDashboard = () => {
                 <div className="text-xs text-gray-500 mb-3">
                   Showing 10 of {mockPaymentLogs.length} payment records
                 </div>
-                {mockPaymentLogs.slice(0, 10).map(log => (
-                  <Card key={log.id} className="p-3 border border-gray-200 shadow-sm">
+                {mockPaymentLogs.slice(0, 10).map(log => <Card key={log.id} className="p-3 border border-gray-200 shadow-sm">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="font-semibold text-gray-900 text-sm pr-2">{log.studentName}</h3>
                       {getPaymentStatusBadge(log.status)}
@@ -603,8 +574,7 @@ const AdminDashboard = () => {
                         <span className="font-medium">{log.method}</span>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </CardContent>
             </Card>
           </TabsContent>
@@ -617,14 +587,11 @@ const AdminDashboard = () => {
                   <MessageSquare className="h-4 w-4 mr-1" />
                   WhatsApp Messages
                 </CardTitle>
-                <CardDescription className="text-xs sm:text-sm">View automated message logs ({mockWhatsAppLogs.length} total)</CardDescription>
+                
               </CardHeader>
               <CardContent className="space-y-3 px-3 sm:px-6">
-                <div className="text-xs text-gray-500 mb-3">
-                  Showing 10 of {mockWhatsAppLogs.length} message records
-                </div>
-                {mockWhatsAppLogs.slice(0, 10).map(log => (
-                  <Card key={log.id} className="p-3 border border-gray-200 shadow-sm">
+                
+                {mockWhatsAppLogs.slice(0, 10).map(log => <Card key={log.id} className="p-3 border border-gray-200 shadow-sm">
                     <div className="flex justify-between items-start mb-3">
                       <h3 className="font-semibold text-gray-900 text-sm pr-2">{log.studentName}</h3>
                       <Badge variant={log.status === 'delivered' ? 'default' : 'secondary'} className="text-xs">
@@ -641,8 +608,7 @@ const AdminDashboard = () => {
                         <span className="font-medium">{log.date}</span>
                       </div>
                     </div>
-                  </Card>
-                ))}
+                  </Card>)}
               </CardContent>
             </Card>
           </TabsContent>
@@ -698,19 +664,12 @@ const AdminDashboard = () => {
                     
                     {/* Action Buttons - Improved Layout */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <Button 
-                        onClick={() => setShowDrillHistory(!showDrillHistory)} 
-                        variant={showDrillHistory ? "default" : "outline"} 
-                        className="h-11 text-sm font-medium"
-                      >
+                      <Button onClick={() => setShowDrillHistory(!showDrillHistory)} variant={showDrillHistory ? "default" : "outline"} className="h-11 text-sm font-medium">
                         <Activity className="h-4 w-4 mr-2" />
                         Drill History
                       </Button>
                       
-                      <Button 
-                        onClick={downloadAttendancePDF} 
-                        className="h-11 bg-green-600 hover:bg-green-700 text-sm font-medium"
-                      >
+                      <Button onClick={downloadAttendancePDF} className="h-11 bg-green-600 hover:bg-green-700 text-sm font-medium">
                         <Download className="h-4 w-4 mr-2" />
                         Download PDF
                       </Button>
@@ -718,31 +677,20 @@ const AdminDashboard = () => {
                   </div>
 
                   {/* Student/Coach Toggle - Only show when not in drill history */}
-                  {!showDrillHistory && (
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button 
-                        variant={attendanceView === 'student' ? 'default' : 'outline'} 
-                        onClick={() => setAttendanceView('student')} 
-                        className="h-11 text-sm font-medium"
-                      >
+                  {!showDrillHistory && <div className="grid grid-cols-2 gap-3">
+                      <Button variant={attendanceView === 'student' ? 'default' : 'outline'} onClick={() => setAttendanceView('student')} className="h-11 text-sm font-medium">
                         <Users className="h-4 w-4 mr-2" />
                         Students
                       </Button>
-                      <Button 
-                        variant={attendanceView === 'coach' ? 'default' : 'outline'} 
-                        onClick={() => setAttendanceView('coach')} 
-                        className="h-11 text-sm font-medium"
-                      >
+                      <Button variant={attendanceView === 'coach' ? 'default' : 'outline'} onClick={() => setAttendanceView('coach')} className="h-11 text-sm font-medium">
                         <Clock className="h-4 w-4 mr-2" />
                         Coaches
                       </Button>
-                    </div>
-                  )}
+                    </div>}
                 </div>
               </CardHeader>
               <CardContent className="space-y-3 px-3 sm:px-6">
-                {showDrillHistory ? (
-                  <div className="space-y-3">
+                {showDrillHistory ? <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h3 className="text-sm font-medium text-gray-900">Recent Drill Activities</h3>
                       <span className="text-xs text-gray-500">({mockDrillActivities.length} activities)</span>
@@ -750,18 +698,14 @@ const AdminDashboard = () => {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {mockDrillActivities.map(activity => <DrillActivityCard key={activity.id} activity={activity} />)}
                     </div>
-                  </div>
-                ) : (
-                  <>
-                    {attendanceView === 'student' ? (
-                      <>
+                  </div> : <>
+                    {attendanceView === 'student' ? <>
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-xs text-gray-500">
                             Showing 20 of {filteredAttendanceData.length} records
                           </span>
                         </div>
-                        {filteredAttendanceData.slice(0, 20).map(record => (
-                          <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
+                        {filteredAttendanceData.slice(0, 20).map(record => <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
                             <div className="flex justify-between items-start mb-3">
                               <div>
                                 <h3 className="font-semibold text-gray-900 text-sm">{record.studentName}</h3>
@@ -779,23 +723,17 @@ const AdminDashboard = () => {
                                 <span className="font-medium">{record.sport}</span>
                               </div>
                             </div>
-                          </Card>
-                        ))}
-                        {filteredAttendanceData.length > 20 && (
-                          <div className="text-center text-xs text-gray-500 py-2">
+                          </Card>)}
+                        {filteredAttendanceData.length > 20 && <div className="text-center text-xs text-gray-500 py-2">
                             Showing 20 of {filteredAttendanceData.length} records. Download PDF for full report.
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <>
+                          </div>}
+                      </> : <>
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-xs text-gray-500">
                             Showing 10 of {mockCoachAttendance.length} coach records
                           </span>
                         </div>
-                        {mockCoachAttendance.slice(0, 10).map(record => (
-                          <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
+                        {mockCoachAttendance.slice(0, 10).map(record => <Card key={record.id} className="p-3 border border-gray-200 shadow-sm">
                             <div className="flex justify-between items-start mb-3">
                               <div>
                                 <h3 className="font-semibold text-gray-900 text-sm">{record.coachName}</h3>
@@ -837,19 +775,14 @@ const AdminDashboard = () => {
                                 </div>
                               </div>
                             </div>
-                          </Card>
-                        ))}
-                      </>
-                    )}
-                  </>
-                )}
+                          </Card>)}
+                      </>}
+                  </>}
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default AdminDashboard;
