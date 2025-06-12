@@ -315,7 +315,107 @@ const AdminDashboard = () => {
       description: "Attendance report has been downloaded successfully."
     });
   };
-  
+
+  const downloadPaymentsPDF = () => {
+    const pdf = new jsPDF();
+
+    // Add header with company branding
+    pdf.setFillColor(220, 53, 69); // Red background
+    pdf.rect(0, 0, 210, 25, 'F');
+    
+    // Add title
+    pdf.setTextColor(255, 255, 255); // White text
+    pdf.setFontSize(18);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('PAYMENT REPORT', 20, 15);
+    
+    // Add report date
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Generated on: ${format(new Date(), 'MMMM dd, yyyy')}`, 150, 15);
+
+    // Reset text color for body
+    pdf.setTextColor(0, 0, 0);
+    
+    // Add summary section
+    pdf.setFontSize(14);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('Payment Summary', 20, 40);
+    
+    // Calculate totals
+    const totalPayments = mockPaymentLogs.length;
+    const paidCount = mockPaymentLogs.filter(log => log.status === 'paid').length;
+    const notPaidCount = mockPaymentLogs.filter(log => log.status === 'not_paid').length;
+    const upcomingCount = mockPaymentLogs.filter(log => log.status === 'upcoming').length;
+    
+    // Calculate total revenue
+    const totalRevenue = mockPaymentLogs
+      .filter(log => log.status === 'paid')
+      .reduce((sum, log) => sum + parseInt(log.amount.replace('$', '')), 0);
+    
+    pdf.setFontSize(10);
+    pdf.setFont('helvetica', 'normal');
+    pdf.text(`Total Payments: ${totalPayments}`, 20, 50);
+    pdf.text(`Paid: ${paidCount}`, 20, 57);
+    pdf.text(`Not Paid: ${notPaidCount}`, 20, 64);
+    pdf.text(`Upcoming: ${upcomingCount}`, 20, 71);
+    pdf.text(`Total Revenue: $${totalRevenue.toLocaleString()}`, 20, 78);
+
+    // Prepare data for detailed table
+    const tableData = mockPaymentLogs.map(log => [
+      log.studentName,
+      log.amount,
+      log.status.charAt(0).toUpperCase() + log.status.slice(1).replace('_', ' '),
+      format(new Date(log.date), 'MMM dd, yyyy'),
+      log.method
+    ]);
+
+    // Add detailed payments table
+    autoTable(pdf, {
+      head: [['Student Name', 'Amount', 'Status', 'Date', 'Method']],
+      body: tableData,
+      startY: 90,
+      styles: {
+        fontSize: 9,
+        cellPadding: 3
+      },
+      headStyles: {
+        fillColor: [220, 53, 69],
+        textColor: [255, 255, 255],
+        fontStyle: 'bold',
+        fontSize: 10
+      },
+      bodyStyles: {
+        textColor: [50, 50, 50]
+      },
+      alternateRowStyles: {
+        fillColor: [248, 249, 250]
+      },
+      columnStyles: {
+        0: { cellWidth: 50 }, // Student Name
+        1: { cellWidth: 25, halign: 'right' }, // Amount
+        2: { cellWidth: 30, halign: 'center' }, // Status
+        3: { cellWidth: 30, halign: 'center' }, // Date
+        4: { cellWidth: 25, halign: 'center' } // Method
+      }
+    });
+
+    // Add footer
+    const pageHeight = pdf.internal.pageSize.height;
+    pdf.setFontSize(8);
+    pdf.setTextColor(128, 128, 128);
+    pdf.text('This is a computer-generated report', 20, pageHeight - 15);
+    pdf.text(`Page 1 of 1`, 180, pageHeight - 15);
+
+    // Save the PDF
+    pdf.save(`payment-report-${format(new Date(), 'yyyy-MM-dd')}.pdf`);
+    
+    toast({
+      title: "PDF Downloaded",
+      description: "Payment report has been downloaded successfully."
+    });
+  };
+
   const handleStartDateSelect = (date: Date | undefined) => {
     if (date) {
       setDateRange(prev => ({
