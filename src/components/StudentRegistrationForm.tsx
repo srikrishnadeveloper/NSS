@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -189,7 +188,6 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                             toYear={today.getFullYear() - 3}
                             captionLayout="dropdown-buttons"
                             initialFocus
-                            className="pointer-events-auto"
                           />
                         </PopoverContent>
                       </Popover>
