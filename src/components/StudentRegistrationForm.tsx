@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -68,6 +69,14 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
   const onSubmit = (data: FormData) => {
     const credentials = generateCredentials();
     
+    console.log('=== STUDENT REGISTRATION ===');
+    console.log('Student Name:', data.studentName);
+    console.log('Date of Birth:', data.dateOfBirth);
+    console.log('Sport Interest:', data.interestedGame);
+    console.log('Parent Credentials Generated:', credentials);
+    console.log('Registration Time:', new Date().toISOString());
+    console.log('===========================');
+    
     toast({
       title: "Student Added Successfully",
       description: `${data.studentName} has been registered`,
@@ -76,10 +85,13 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
     onSuccess(credentials);
   };
 
-  // Calculate date range: 3 years ago to today
+  // Calculate date range: 3 years ago to 18 years ago (reasonable age range for sports school)
   const today = new Date();
   const threeYearsAgo = new Date();
   threeYearsAgo.setFullYear(today.getFullYear() - 3);
+  
+  const eighteenYearsAgo = new Date();
+  eighteenYearsAgo.setFullYear(today.getFullYear() - 18);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4">
@@ -144,7 +156,7 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   name="dateOfBirth"
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
-                      <FormLabel className="text-sm font-medium">Date of Birth *</FormLabel>
+                      <FormLabel className="text-sm font-medium">Date of Birth * (Age 3-18)</FormLabel>
                       <Popover>
                         <PopoverTrigger asChild>
                           <FormControl>
@@ -170,8 +182,12 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                             selected={field.value}
                             onSelect={field.onChange}
                             disabled={(date) =>
-                              date > today || date < threeYearsAgo
+                              date > threeYearsAgo || date < eighteenYearsAgo
                             }
+                            defaultMonth={new Date(today.getFullYear() - 10, today.getMonth())}
+                            fromYear={today.getFullYear() - 18}
+                            toYear={today.getFullYear() - 3}
+                            captionLayout="dropdown-buttons"
                             initialFocus
                             className="pointer-events-auto"
                           />
