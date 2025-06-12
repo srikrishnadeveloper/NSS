@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -649,10 +648,10 @@ const AdminDashboard = () => {
           </TabsContent>
 
           {/* Enhanced Attendance Tab */}
-          <TabsContent value="attendance" className="space-y-3">
+          <TabsContent value="attendance" className="space-y-4">
             <Card className="shadow-sm">
-              <CardHeader className="pb-3">
-                <div className="space-y-3">
+              <CardHeader className="pb-4">
+                <div className="space-y-4">
                   <div>
                     <CardTitle className="flex items-center text-base sm:text-lg">
                       <CalendarIcon className="h-4 w-4 mr-2" />
@@ -663,15 +662,15 @@ const AdminDashboard = () => {
                     </CardDescription>
                   </div>
                   
-                  {/* Date Range Picker Controls */}
-                  <div className="space-y-3">
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="space-y-1">
-                        <label className="text-xs font-medium text-gray-700">Start Date</label>
+                  {/* Date Range Picker Controls - Improved Layout */}
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">Start Date</label>
                         <Popover open={isStartDatePickerOpen} onOpenChange={setIsStartDatePickerOpen}>
                           <PopoverTrigger asChild>
-                            <Button variant="outline" size="sm" className="w-full text-xs justify-start">
-                              <CalendarIcon className="h-3 w-3 mr-1" />
+                            <Button variant="outline" className="w-full h-11 justify-start text-sm">
+                              <CalendarIcon className="h-4 w-4 mr-2" />
                               {format(dateRange.from, 'MMM dd, yyyy')}
                             </Button>
                           </PopoverTrigger>
@@ -681,12 +680,12 @@ const AdminDashboard = () => {
                         </Popover>
                       </div>
                       
-                      <div className="space-y-1">
-                        <label className="text-xs font-medium text-gray-700">End Date</label>
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium text-gray-700">End Date</label>
                         <Popover open={isEndDatePickerOpen} onOpenChange={setIsEndDatePickerOpen}>
                           <PopoverTrigger asChild>
-                            <Button variant="outline" size="sm" className="w-full text-xs justify-start">
-                              <CalendarIcon className="h-3 w-3 mr-1" />
+                            <Button variant="outline" className="w-full h-11 justify-start text-sm">
+                              <CalendarIcon className="h-4 w-4 mr-2" />
                               {format(dateRange.to, 'MMM dd, yyyy')}
                             </Button>
                           </PopoverTrigger>
@@ -697,29 +696,44 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between">
-                      <div className="flex space-x-2">
-                        <Button onClick={() => setShowDrillHistory(!showDrillHistory)} size="sm" variant={showDrillHistory ? "default" : "outline"} className="text-xs px-[27px]">
-                          <Activity className="h-3 w-3 mr-1" />
-                          Drill History
-                        </Button>
-                        
-                        <Button onClick={downloadAttendancePDF} size="sm" className="bg-green-600 hover:bg-green-700 text-xs px-[17px]">
-                          <Download className="h-3 w-3 mr-1" />
-                          Download PDF
-                        </Button>
-                      </div>
+                    {/* Action Buttons - Improved Layout */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <Button 
+                        onClick={() => setShowDrillHistory(!showDrillHistory)} 
+                        variant={showDrillHistory ? "default" : "outline"} 
+                        className="h-11 text-sm font-medium"
+                      >
+                        <Activity className="h-4 w-4 mr-2" />
+                        Drill History
+                      </Button>
+                      
+                      <Button 
+                        onClick={downloadAttendancePDF} 
+                        className="h-11 bg-green-600 hover:bg-green-700 text-sm font-medium"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download PDF
+                      </Button>
                     </div>
                   </div>
 
+                  {/* Student/Coach Toggle - Only show when not in drill history */}
                   {!showDrillHistory && (
-                    <div className="flex space-x-2">
-                      <Button variant={attendanceView === 'student' ? 'default' : 'outline'} size="sm" onClick={() => setAttendanceView('student')} className="flex-1 text-xs">
-                        <Users className="h-3 w-3 mr-1" />
+                    <div className="grid grid-cols-2 gap-3">
+                      <Button 
+                        variant={attendanceView === 'student' ? 'default' : 'outline'} 
+                        onClick={() => setAttendanceView('student')} 
+                        className="h-11 text-sm font-medium"
+                      >
+                        <Users className="h-4 w-4 mr-2" />
                         Students
                       </Button>
-                      <Button variant={attendanceView === 'coach' ? 'default' : 'outline'} size="sm" onClick={() => setAttendanceView('coach')} className="flex-1 text-xs">
-                        <Clock className="h-3 w-3 mr-1" />
+                      <Button 
+                        variant={attendanceView === 'coach' ? 'default' : 'outline'} 
+                        onClick={() => setAttendanceView('coach')} 
+                        className="h-11 text-sm font-medium"
+                      >
+                        <Clock className="h-4 w-4 mr-2" />
                         Coaches
                       </Button>
                     </div>
