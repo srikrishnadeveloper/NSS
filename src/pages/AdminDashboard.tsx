@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -565,11 +566,19 @@ const AdminDashboard = () => {
           <TabsContent value="payments" className="space-y-3">
             <Card className="shadow-sm">
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-center text-base sm:text-lg">
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  Payment Logs
-                </CardTitle>
-                <CardDescription className="text-xs sm:text-sm">Stripe payment history ({mockPaymentLogs.length} total)</CardDescription>
+                <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                  <div>
+                    <CardTitle className="flex items-center text-base sm:text-lg">
+                      <CreditCard className="h-4 w-4 mr-2" />
+                      Payment Logs
+                    </CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">Stripe payment history ({mockPaymentLogs.length} total)</CardDescription>
+                  </div>
+                  <Button onClick={downloadPaymentsPDF} size="sm" className="bg-green-600 hover:bg-green-700 w-full sm:w-auto">
+                    <Download className="h-4 w-4 mr-2" />
+                    Download PDF
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="space-y-3 px-3 sm:px-6">
                 <div className="text-xs text-gray-500 mb-3">
