@@ -2,6 +2,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SimpleToaster } from "@/components/SimpleToaster";
+import { Toaster } from "@/components/ui/toaster";
 import Index from "./pages/Index";
 import AdminDashboard from "./pages/AdminDashboard";
 import CoachDashboard from "./pages/CoachDashboard";
@@ -14,6 +15,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <SimpleToaster />
+      <Toaster />
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
