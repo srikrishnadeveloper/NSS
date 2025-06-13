@@ -10,6 +10,9 @@ import CoachDashboard from "./pages/CoachDashboard";
 import ParentDashboard from "./pages/ParentDashboard";
 import NotFound from "./pages/NotFound";
 
+console.log('App.tsx loaded, React version:', React.version);
+console.log('React object in App:', React);
+
 const App = () => {
   // Create QueryClient inside the component to ensure React context is available
   const queryClient = React.useMemo(() => new QueryClient({
@@ -20,6 +23,8 @@ const App = () => {
       },
     },
   }), []);
+
+  console.log('App component rendering');
 
   return (
     <QueryClientProvider client={queryClient}>
