@@ -48,33 +48,58 @@ const Index = () => {
       borderColor: 'border-green-500',
     },
   ];
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedRole || !username || !password) return;
+    
+    // Validation with improved error messages
+    if (!selectedRole) {
+      toast({
+        variant: "destructive",
+        title: "Role Required",
+        description: "Please select your role before logging in",
+      });
+      return;
+    }
+    
+    if (!username || !password) {
+      toast({
+        variant: "destructive",
+        title: "Missing Information",
+        description: "Please enter both username and password",
+      });
+      return;
+    }
 
     setIsLoading(true);
     
-    // Simulate login process
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    console.log(`${selectedRole} login attempt:`, { username, password });
-    
-    toast({
-      title: "Login Successful",
-      description: `Welcome back, ${username}!`,
-    });
+    try {
+      // Simulate login process
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      console.log(`${selectedRole} login attempt:`, { username, password });
+      
+      toast({
+        title: "Login Successful",
+        description: `Welcome back, ${username}!`,
+      });
 
-    // Redirect based on user type
-    if (selectedRole === 'admin') {
-      navigate('/admin/dashboard');
-    } else if (selectedRole === 'coach') {
-      navigate('/coach/dashboard');
-    } else if (selectedRole === 'parent') {
-      navigate('/parent/dashboard');
+      // Redirect based on user type
+      if (selectedRole === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (selectedRole === 'coach') {
+        navigate('/coach/dashboard');
+      } else if (selectedRole === 'parent') {
+        navigate('/parent/dashboard');
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Login Failed",
+        description: "Please check your credentials and try again",
+      });
+    } finally {
+      setIsLoading(false);
     }
-    
-    setIsLoading(false);
   };
 
   const selectedRoleData = roles.find(role => role.id === selectedRole);
@@ -199,9 +224,7 @@ const Index = () => {
                 'Select Role to Continue'
               )}
             </Button>
-          </form>
-
-          {/* Helper Text */}
+          </form>          {/* Helper Text */}
           {!selectedRole && (
             <p className="text-center text-sm text-gray-600 mt-4">
               Please select your role above to enable the login form

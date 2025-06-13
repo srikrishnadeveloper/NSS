@@ -1,18 +1,20 @@
 
-import * as React from "react"
+import React from "react"
 import type {
   ToastActionElement,
   ToastProps,
 } from "@/components/ui/toast"
 
 const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
+const TOAST_REMOVE_DELAY = 1000 // 1 second for smooth removal animation
+const TOAST_AUTO_DISMISS_DELAY = 5000 // 5 seconds auto-dismiss
 
 type ToasterToast = ToastProps & {
   id: string
   title?: React.ReactNode
   description?: React.ReactNode
   action?: ToastActionElement
+  duration?: number
 }
 
 const actionTypes = {
@@ -158,6 +160,14 @@ function toast({ ...props }: Toast) {
       },
     },
   })
+
+  // Auto-dismiss after delay unless duration is set to 0 (persist)
+  if (props.duration !== 0) {
+    const autoDismissDelay = props.duration || TOAST_AUTO_DISMISS_DELAY
+    setTimeout(() => {
+      dismiss()
+    }, autoDismissDelay)
+  }
 
   return {
     id: id,
