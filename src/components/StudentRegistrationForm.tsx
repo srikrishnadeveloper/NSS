@@ -19,9 +19,7 @@ interface StudentRegistrationFormProps {
 
 const formSchema = z.object({
   studentName: z.string().min(1, 'Student name is required'),
-  dateOfBirth: z.date({
-    required_error: "Date of birth is required",
-  }),
+  dateOfBirth: z.string().min(1, 'Date of birth is required').regex(/^\d{2}\/\d{2}\/\d{4}$/, 'Date must be in dd/mm/yyyy format'),
   address: z.string().min(1, 'Address is required'),
   parentNumber: z.string().min(1, 'Parent number is required'),
   weight: z.string().min(1, 'Weight is required'),
@@ -43,6 +41,7 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
     resolver: zodResolver(formSchema),
     defaultValues: {
       studentName: '',
+      dateOfBirth: '',
       address: '',
       parentNumber: '',
       weight: '',
@@ -127,13 +126,10 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                     <FormItem>
                       <FormLabel className="text-sm font-medium">Date of Birth *</FormLabel>
                       <FormControl>
-                        <DatePicker
-                          value={field.value}
-                          onChange={field.onChange}
-                          placeholder="Select date of birth"
-                          disabled={(date) =>
-                            date > new Date() || date < new Date("1900-01-01")
-                          }
+                        <Input 
+                          placeholder="dd/mm/yyyy" 
+                          className="h-11"
+                          {...field} 
                         />
                       </FormControl>
                       <FormMessage />
