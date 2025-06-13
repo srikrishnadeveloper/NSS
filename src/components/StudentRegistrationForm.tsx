@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { DatePicker } from '@/components/ui/date-picker';
+import { DateInput } from '@/components/ui/date-input';
 import { ArrowLeft, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useForm } from 'react-hook-form';
@@ -81,132 +81,127 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4">
-      <div className="max-w-lg mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 p-4">
+      <div className="max-w-2xl mx-auto">
         <div className="flex items-center mb-6">
           <Button variant="ghost" size="sm" onClick={onBack} className="mr-3">
             <ArrowLeft className="h-4 w-4" />
           </Button>
-          <h1 className="text-xl font-bold text-gray-900">Add New Student</h1>
+          <h1 className="text-2xl font-bold text-foreground">Student Registration</h1>
         </div>
 
-        <Card className="shadow-lg border-0">
+        <Card className="shadow-lg">
           <CardHeader className="pb-6">
-            <CardTitle className="flex items-center text-lg">
-              <UserPlus className="h-5 w-5 mr-2 text-red-600" />
-              Student Registration
+            <CardTitle className="flex items-center text-xl">
+              <UserPlus className="h-5 w-5 mr-2 text-primary" />
+              Add New Student
             </CardTitle>
-            <CardDescription>Fill in all student details</CardDescription>
+            <CardDescription>Please fill in all the required information</CardDescription>
           </CardHeader>
           <CardContent className="px-6 pb-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="studentName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">Student Name *</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Enter student name" 
-                          className="h-11"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="dateOfBirth"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">Date of Birth *</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="dd/mm/yyyy" 
-                          className="h-11"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">Address *</FormLabel>
-                      <FormControl>
-                        <Textarea 
-                          placeholder="Enter full address" 
-                          rows={3} 
-                          className="resize-none"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="parentNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">Parent's Number *</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="tel" 
-                          placeholder="Enter parent's phone number" 
-                          className="h-11"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+                {/* Basic Information */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-foreground border-b pb-2">Basic Information</h3>
+                  
                   <FormField
                     control={form.control}
-                    name="weight"
+                    name="studentName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm font-medium">Weight (kg) *</FormLabel>
+                        <FormLabel>Student Name *</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="Weight" 
-                            className="h-11"
-                            {...field} 
+                          <Input placeholder="Enter student's full name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="dateOfBirth"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Date of Birth *</FormLabel>
+                        <FormControl>
+                          <DateInput 
+                            value={field.value}
+                            onChange={field.onChange}
                           />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="sex"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Gender *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select gender" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="male">Male</SelectItem>
+                              <SelectItem value="female">Female</SelectItem>
+                              <SelectItem value="other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="nationality"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Nationality *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter nationality" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+
+                {/* Contact & Address */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-foreground border-b pb-2">Contact Information</h3>
+                  
                   <FormField
                     control={form.control}
-                    name="height"
+                    name="address"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-sm font-medium">Height (cm) *</FormLabel>
+                        <FormLabel>Address *</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="number" 
-                            placeholder="Height" 
-                            className="h-11"
-                            {...field} 
-                          />
+                          <Textarea placeholder="Enter full address" rows={3} className="resize-none" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="parentNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Parent's Phone Number *</FormLabel>
+                        <FormControl>
+                          <Input type="tel" placeholder="Enter parent's phone number" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -214,143 +209,136 @@ const StudentRegistrationForm = ({ onBack, onSuccess }: StudentRegistrationFormP
                   />
                 </div>
 
-                <FormField
-                  control={form.control}
-                  name="interestedGame"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">Interested Game *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="h-11">
-                            <SelectValue placeholder="Select sport/game" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="football">Football</SelectItem>
-                          <SelectItem value="basketball">Basketball</SelectItem>
-                          <SelectItem value="tennis">Tennis</SelectItem>
-                          <SelectItem value="swimming">Swimming</SelectItem>
-                          <SelectItem value="cricket">Cricket</SelectItem>
-                          <SelectItem value="badminton">Badminton</SelectItem>
-                          <SelectItem value="volleyball">Volleyball</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {/* Physical Information */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-foreground border-b pb-2">Physical Information</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="weight"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Weight (kg) *</FormLabel>
+                          <FormControl>
+                            <Input type="number" placeholder="Weight in kg" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="height"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Height (cm) *</FormLabel>
+                          <FormControl>
+                            <Input type="number" placeholder="Height in cm" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
 
-                <FormField
-                  control={form.control}
-                  name="governmentSchool"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">Government School *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="h-11">
-                            <SelectValue placeholder="Select Yes or No" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="yes">Yes</SelectItem>
-                          <SelectItem value="no">No</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {/* Sports & Education */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold text-foreground border-b pb-2">Sports & Education</h3>
+                  
+                  <FormField
+                    control={form.control}
+                    name="interestedGame"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Interested Sport *</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select sport/game" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="football">Football</SelectItem>
+                            <SelectItem value="basketball">Basketball</SelectItem>
+                            <SelectItem value="tennis">Tennis</SelectItem>
+                            <SelectItem value="swimming">Swimming</SelectItem>
+                            <SelectItem value="cricket">Cricket</SelectItem>
+                            <SelectItem value="badminton">Badminton</SelectItem>
+                            <SelectItem value="volleyball">Volleyball</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="schoolName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">School Name *</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Enter school name" 
-                          className="h-11"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <FormField
+                    control={form.control}
+                    name="groupBatch"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Group/Batch *</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select group/batch" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="beginners">Beginners</SelectItem>
+                            <SelectItem value="intermediate">Intermediate</SelectItem>
+                            <SelectItem value="advanced">Advanced</SelectItem>
+                            <SelectItem value="junior">Junior (Under 12)</SelectItem>
+                            <SelectItem value="senior">Senior (12+)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                <FormField
-                  control={form.control}
-                  name="sex"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">Gender *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="h-11">
-                            <SelectValue placeholder="Select gender" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="male">Male</SelectItem>
-                          <SelectItem value="female">Female</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="governmentSchool"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Government School *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Yes or No" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="yes">Yes</SelectItem>
+                              <SelectItem value="no">No</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                <FormField
-                  control={form.control}
-                  name="nationality"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">Nationality *</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Enter nationality" 
-                          className="h-11"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                    <FormField
+                      control={form.control}
+                      name="schoolName"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>School Name *</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter school name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
 
-                <FormField
-                  control={form.control}
-                  name="groupBatch"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium">Group/Batch *</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger className="h-11">
-                            <SelectValue placeholder="Select group/batch" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="beginners">Beginners</SelectItem>
-                          <SelectItem value="intermediate">Intermediate</SelectItem>
-                          <SelectItem value="advanced">Advanced</SelectItem>
-                          <SelectItem value="junior">Junior (Under 12)</SelectItem>
-                          <SelectItem value="senior">Senior (12+)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <Button 
-                  type="submit" 
-                  className="w-full h-12 bg-red-600 hover:bg-red-700 text-white font-medium text-base mt-8"
-                >
+                <Button type="submit" className="w-full h-12 text-base font-medium mt-8">
                   Register Student
                 </Button>
               </form>
